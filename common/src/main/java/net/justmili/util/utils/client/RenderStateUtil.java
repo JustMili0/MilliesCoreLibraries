@@ -4,10 +4,6 @@ import net.justmili.corelibs.CoreLibs;
 
 public class RenderStateUtil {
 
-    public static void printUtilStatus() {
-        CoreLibs.LOGGER.info("{} is not available for this version of Minecraft. It will be available on version for 1.21.11", RenderStateUtil.class.getName());
-    }
-
     // RenderStateUtil code by BluSpring
 //    public static <S1, S2> void copyTo(S1 source, S2 destination) {
 //        var sourceClass = source.getClass();
