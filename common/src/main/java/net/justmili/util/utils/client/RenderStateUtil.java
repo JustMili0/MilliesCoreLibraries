@@ -1,7 +1,5 @@
 package net.justmili.util.utils.client;
 
-import net.justmili.corelibs.CoreLibs;
-
 public class RenderStateUtil {
 
     // RenderStateUtil code by BluSpring

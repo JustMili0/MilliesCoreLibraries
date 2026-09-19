@@ -20,32 +20,33 @@ public class Maths {
     public static final long MIN_LONG = Long.MIN_VALUE;
     public static final float MAX_FLOAT = Float.MAX_VALUE;
     public static final float MIN_FLOAT = -Float.MAX_VALUE;
+    public static final float FNaN = Float.NaN;
     public static final double MAX_DOUBLE = Double.MAX_VALUE;
     public static final double MIN_DOUBLE = -Double.MAX_VALUE;
+    public static final double DNaN = Double.NaN;
     public static final double POS_INFINITY = Double.POSITIVE_INFINITY;
-    public static final double NEG_INFINITY = -Double.NEGATIVE_INFINITY;
+    public static final double NEG_INFINITY = Double.NEGATIVE_INFINITY;
     public static final double PI = Math.PI;
-    public static final double TAU = Math.PI * 2.0;
+    public static final double TWO_PI = Mth.TWO_PI;
     public static final double HALF_PI = Mth.HALF_PI;
     public static final double QUARTER_PI = Math.PI / 4.0;
     public static final double E = Math.E;
     public static final double SQRT_2 = Mth.SQRT_OF_TWO;
-    public static final double SQRT_3 = 1.7320508075688772;
+    public static final double SQRT_3 = sqrt(3);
     public static final double GOLDEN_RATIO = 1.618033988749895;
     public static final double DEG_TO_RAD = Mth.DEG_TO_RAD;
     public static final double RAD_TO_DEG = Mth.RAD_TO_DEG;
     public static final double EPSILON = Mth.EPSILON;
-    public static final double NANOS_IN_A_MICRO = 1.0E-3;
-    public static final double NANOS_IN_A_MILLI = 1.0E-6;
-    public static final double NANOS_IN_A_SECOND = 1.0E-9;
-    public static final double MICROS_IN_A_MILLI = 1.0E-3;
-    public static final double MICROS_IN_A_SECOND = 1.0E-6;
-    public static final double MILLIS_IN_A_SECOND = 1.0E-3;
+    public static final double MICROS_PER_NANO = 1.0E-3;
+    public static final double MILLIS_PER_NANO = 1.0E-6;
+    public static final double SECONDS_PER_NANO = 1.0E-9;
+    public static final double MILLIS_PER_MICRO = 1.0E-3;
+    public static final double SECONDS_PER_MICRO = 1.0E-6;
+    public static final double SECONDS_PER_MILLI = 1.0E-3;
     public static final int TICKS_PER_SECOND = 20;
     public static final int TICKS_PER_MINUTE = TICKS_PER_SECOND * 60;
     public static final int TICKS_PER_HOUR = TICKS_PER_MINUTE * 60;
     public static final int TICKS_PER_DAY = TICKS_PER_HOUR * 24;
-
     public static RandomSource random = RandomSource.create();
 
     public static void setSeed(long seed) {
@@ -103,6 +104,14 @@ public class Maths {
 
     public static double randomGaussian(double mean, double standardDeviation) {
         return mean + random.nextGaussian() * standardDeviation;
+    }
+
+    public static boolean equal(float x, float y) {
+        return Math.abs(y - x) < 1.0E-5F;
+    }
+
+    public static boolean equal(double x, double y) {
+        return Math.abs(y - x) < (double) 1.0E-5F;
     }
 
     public static boolean chance(float chance) {
@@ -335,20 +344,12 @@ public class Maths {
         return BigDecimal.valueOf(value).setScale(pastDecimal, RoundingMode.HALF_EVEN).floatValue();
     }
 
-    public static float roundUp(double value, int pastDecimal) {
+    public static float roundAwayFromZero(double value, int pastDecimal) {
         return BigDecimal.valueOf(value).setScale(pastDecimal, RoundingMode.UP).floatValue();
     }
 
-    public static float roundDown(double value, int pastDecimal) {
+    public static float roundTowardZero(double value, int pastDecimal) {
         return BigDecimal.valueOf(value).setScale(pastDecimal, RoundingMode.DOWN).floatValue();
-    }
-
-    public static int roundIntUp(double value) {
-        return Mth.ceil(value);
-    }
-
-    public static int roundIntDown(double value) {
-        return Mth.floor(value);
     }
 
     public static int floorDiv(int dividend, int divisor) {
@@ -427,10 +428,6 @@ public class Maths {
         return value < 0? -1.0 : 1.0;
     }
 
-    public static int signum(double value) {
-        return Mth.sign(value);
-    }
-
     public static int addExact(int x, int y) {
         return Math.addExact(x, y);
     }
@@ -499,15 +496,7 @@ public class Maths {
         return Math.cbrt(value);
     }
 
-    public static double ftrt(double value) { // Fourth root
-        return Math.sqrt(Math.sqrt(value));
-    }
-
-    public static double ffrt(double value) { // Fifth root
-        return nthRoot(value, 5);
-    }
-
-    public static double nthRoot(double value, int degree) {
+    public static double nrt(double value, int degree) {
         if (degree == 0) throw new IllegalArgumentException("degree must not be 0");
         if (value < 0 && degree % 2 == 0) return Double.NaN;
         return Math.copySign(Math.pow(Math.abs(value), 1.0 / degree), value);
@@ -533,7 +522,7 @@ public class Maths {
         return Math.expm1(value);
     }
 
-    public static double ln(double value) {
+    public static double log(double value) {
         return Math.log(value);
     }
 
@@ -658,14 +647,14 @@ public class Maths {
     }
 
     public static double wrapRadians(double radians) {
-        return normalizeInRange(radians, -PI, PI);
+        return wrap(radians, -PI, PI);
     }
 
-    public static double angleDifference(double start, double end) {
+    public static double wrapDegreeDifference(double start, double end) {
         return Mth.wrapDegrees(end - start);
     }
 
-    public static double lerpAngle(double start, double end, double delta) {
+    public static double lerpDegreeAngle(double start, double end, double delta) {
         return start + Mth.wrapDegrees(end - start) * delta;
     }
 
@@ -697,11 +686,13 @@ public class Maths {
         return Mth.clampedLerp(start, end, delta);
     }
 
-    public static double lerp2(double firstDelta, double secondDelta, double firstStart, double firstEnd, double secondStart, double secondEnd) {
+    public static double bilerp(double firstDelta, double secondDelta, double firstStart, double firstEnd, double secondStart, double secondEnd) {
         return Mth.lerp2(firstDelta, secondDelta, firstStart, firstEnd, secondStart, secondEnd);
     }
 
-    public static double lerp3(double firstDelta, double secondDelta, double thirdDelta, double firstStart, double firstEnd, double secondStart, double secondEnd, double thirdStart, double thirdEnd, double fourthStart, double fourthEnd) {
+    public static double trilerp(double firstDelta, double secondDelta, double thirdDelta,
+                                 double firstStart, double firstEnd, double secondStart, double secondEnd,
+                                 double thirdStart, double thirdEnd, double fourthStart, double fourthEnd) {
         return Mth.lerp3(firstDelta, secondDelta, thirdDelta, firstStart, firstEnd, secondStart, secondEnd, thirdStart, thirdEnd, fourthStart, fourthEnd);
     }
 
@@ -775,15 +766,15 @@ public class Maths {
         return clamp(moveTowards(current, target, delta), min, max);
     }
 
-    public static int normalizeInRange(int value, int start, int end) {
+    public static int wrap(int value, int start, int end) {
         return Math.floorMod(value - start, end - start) + start;
     }
 
-    public static long normalizeInRange(long value, long start, long end) {
+    public static long wrap(long value, long start, long end) {
         return Math.floorMod(value - start, end - start) + start;
     }
 
-    public static double normalizeInRange(double value, double start, double end) {
+    public static double wrap(double value, double start, double end) {
         double range = end - start;
         double offset = value - start;
         return offset - Math.floor(offset / range) * range + start;
@@ -809,19 +800,19 @@ public class Maths {
         return max(x, y, z) - min(x, y, z) < tolerance;
     }
 
-    public static boolean approximately(double x, double y) {
-        return Mth.equal(x, y);
+    public static boolean approx(double x, double y) {
+        return equal(x, y);
     }
 
     public static boolean isFinite(double value) {
         return Double.isFinite(value);
     }
 
-    public static double lengthSquared(double x, double y) {
+    public static double lengthSqrd(double x, double y) {
         return Mth.lengthSquared(x, y);
     }
 
-    public static double lengthSquared(double x, double y, double z) {
+    public static double lengthSqrd(double x, double y, double z) {
         return Mth.lengthSquared(x, y, z);
     }
 
@@ -833,7 +824,7 @@ public class Maths {
         return Mth.length(x, y, z);
     }
 
-    public static double distanceSq(double startX, double startY, double endX, double endY) {
+    public static double distanceSqrd(double startX, double startY, double endX, double endY) {
         return Mth.lengthSquared(endX - startX, endY - startY);
     }
 
@@ -841,7 +832,7 @@ public class Maths {
         return Mth.length(endX - startX, endY - startY);
     }
 
-    public static double distanceSq(double startX, double startY, double startZ, double endX, double endY, double endZ) {
+    public static double distanceSqrd(double startX, double startY, double startZ, double endX, double endY, double endZ) {
         return Mth.lengthSquared(endX - startX, endY - startY, endZ - startZ);
     }
 
@@ -870,7 +861,7 @@ public class Maths {
     }
 
     public static double circleCircumference(double radius) {
-        return TAU * radius;
+        return TWO_PI * radius;
     }
 
     public static double sphereVolume(double radius) {
@@ -970,7 +961,7 @@ public class Maths {
     }
 
     public static double largest(double... numbers) {
-        double largest = Double.NEGATIVE_INFINITY;
+        double largest = NEG_INFINITY;
         for (double number : numbers) if (number > largest) largest = number;
         return largest;
     }
@@ -982,7 +973,7 @@ public class Maths {
     }
 
     public static double smallest(double... numbers) {
-        double smallest = Double.POSITIVE_INFINITY;
+        double smallest = POS_INFINITY;
         for (double number : numbers) if (number < smallest) smallest = number;
         return smallest;
     }
@@ -999,11 +990,11 @@ public class Maths {
         return total;
     }
 
-    public static double average(double... numbers) {
+    public static double avg(double... numbers) {
         return numbers.length == 0? 0 : sum(numbers) / numbers.length;
     }
 
-    public static double median(double... numbers) {
+    public static double med(double... numbers) {
         if (numbers.length == 0) return 0;
         double[] sorted = Arrays.copyOf(numbers, numbers.length);
         Arrays.sort(sorted);
@@ -1011,15 +1002,15 @@ public class Maths {
         return sorted.length % 2 == 0? (sorted[middle - 1] + sorted[middle]) / 2.0 : sorted[middle];
     }
 
-    public static double variance(double... numbers) {
+    public static double var(double... numbers) {
         if (numbers.length == 0) return 0;
-        double average = average(numbers);
+        double average = avg(numbers);
         double total = 0;
         for (double number : numbers) total += sqr(number - average);
         return total / numbers.length;
     }
 
     public static double standardDeviation(double... numbers) {
-        return Math.sqrt(variance(numbers));
+        return Math.sqrt(var(numbers));
     }
 }
