@@ -172,20 +172,36 @@ public class Maths {
         return ticks * 50L;
     }
 
-    public static long secondsToTicks(double seconds) {
-        return Math.round(seconds * TICKS_PER_SECOND);
+    public static int secondsToTicks(double seconds) {
+        return round(seconds * TICKS_PER_SECOND);
     }
 
-    public static long minutesToTicks(double minutes) {
-        return Math.round(minutes * TICKS_PER_MINUTE);
+    public static int minutesToTicks(double minutes) {
+        return round(minutes * TICKS_PER_MINUTE);
     }
 
-    public static long hoursToTicks(double hours) {
-        return Math.round(hours * TICKS_PER_HOUR);
+    public static int hoursToTicks(double hours) {
+        return round(hours * TICKS_PER_HOUR);
     }
 
-    public static long millisToTicks(long millis) {
-        return millis / 50L;
+    public static int millisToTicks(long millis) {
+        return toIntExact(millis / 50);
+    }
+
+    public static int toSecondsInTicks(double value) {
+        return (int) (value * TICKS_PER_SECOND);
+    }
+
+    public static int toMinutesInTicks(double value) {
+        return (int) (value * TICKS_PER_MINUTE);
+    }
+
+    public static int toHoursInTicks(double value) {
+        return (int) (value * TICKS_PER_HOUR);
+    }
+
+    public static int toDaysInTicks(double value) {
+        return (int) (value * TICKS_PER_DAY);
     }
 
     public static int abs(int value) {
