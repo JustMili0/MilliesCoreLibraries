@@ -51,13 +51,15 @@ public class ModUtil {
         });
     }
 
+    // CORELIBS: Only really made for mods licensed ARR, might expand
     public enum VersionBuildType {
+        EXPERIMENTAL("Experimental build! Unstable, do not redistribute."),
         EARLY_DEV_ALPHA("Dev-only build! Unstable, do not redistribute."),
         EARLY_DEV_BETA("Dev-only build! Unstable, do not redistribute."),
         ALPHA("Dev/Playtester build! Do not redistribute."),
         BETA("Dev/Playtester build! Do not redistribute."),
         PRERELEASE("Dev/Playtester build! Do not redistribute."),
-        SUPPORTER_RELEASE("Supporter build! Do not redistribute."),
+        SUPPORTER_RELEASE("Supporter-only build! Do not redistribute."),
         PUBLIC_RELEASE("");
 
         private final String warning;
