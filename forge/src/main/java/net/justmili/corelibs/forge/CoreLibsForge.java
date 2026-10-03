@@ -9,7 +9,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-@Mod(CoreLibs.MODID)
+@Mod(CoreLibs.ID)
 public final class CoreLibsForge {
     public static IEventBus EVENT_BUS;
 

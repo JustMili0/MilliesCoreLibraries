@@ -3,15 +3,16 @@ package net.justmili.util.utils;
 import net.justmili.api.events.server.ServerLevelEvents;
 import net.justmili.api.events.server.ServerLifecycleEvents;
 import net.justmili.corelibs.CoreLibs;
+import org.slf4j.Logger;
 
 public class ModUtil {
     // TODO: Add Javadoc
 
-    public static void markEndOfLife(String modName, String modId, boolean isDeadVersion, boolean shouldNotifyChat) {
+    public static void markEndOfSupport(String modName, String modId, boolean isDeadVersion, boolean shouldNotifyChat) {
         if (!isDeadVersion) return;
         ServerLifecycleEvents.STARTING.register(server -> {
             CoreLibs.LOGGER.warn("""
-                \nYou are using the last version of "{}" (ID: {}) that supports Minecraft {}!
+                \nYou are using the last version of "{}" ({}) that supports Minecraft {}!
                 This means that mod is no longer developed for this Minecraft version.
                 It is recommended you update to a newer Minecraft version for a more up-to-date experience.
               """, modName, modId, server.getServerVersion());
@@ -48,5 +49,37 @@ public class ModUtil {
                 This message will not appear in chat again.
               """, modName);
         });
+    }
+
+    public enum VersionBuildType {
+        EARLY_DEV_ALPHA("Dev-only build! Unstable, do not redistribute."),
+        EARLY_DEV_BETA("Dev-only build! Unstable, do not redistribute."),
+        ALPHA("Dev/Playtester build! Do not redistribute."),
+        BETA("Dev/Playtester build! Do not redistribute."),
+        PRERELEASE("Dev/Playtester build! Do not redistribute."),
+        SUPPORTER_RELEASE("Supporter build! Do not redistribute."),
+        PUBLIC_RELEASE("");
+
+        private final String warning;
+
+        VersionBuildType(String warning) {
+            this.warning = warning;
+        }
+
+        public String getWarning() {
+            return warning;
+        }
+
+        public boolean hasWarning() {
+            return !warning.isEmpty();
+        }
+    }
+
+    public static void specialInitMessage(Logger logger, String modName, String modId, String modVersion, VersionBuildType buildType) {
+        if (buildType.hasWarning()) {
+            logger.info("Initializing {} ({}) version {} ({})", modName, modId, modVersion, buildType.getWarning());
+        } else {
+            logger.info("Initializing {} ({}) version {}", modName, modId, modVersion);
+        }
     }
 }

@@ -9,19 +9,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class CoreLibs {
-    public static final String MODID = "corelibs";
-    public static final String MODNAME = "Millie's Core Libraries";
     public static final Logger LOGGER = LoggerFactory.getLogger(CoreLibs.class);
+    public static final String ID = "corelibs";
+    public static final String NAME = "Millie's Core Libraries";
+    public static final String BUILD = "";
 
     public static void init() {
         TickUtil.registerProcessQueue();
 
-        ModUtil.markEndOfLife(MODNAME, MODID, false, false);
-        ModUtil.markEndOfDevelopment(MODNAME, MODID, false, false);
+        ModUtil.specialInitMessage(LOGGER, NAME, ID, BUILD, ModUtil.VersionBuildType.EARLY_DEV_ALPHA);
+        ModUtil.markEndOfSupport(NAME, ID, false, false);
         ExampleConfig.register();
     }
 
     public static ResourceLocation asId(String path) {
-        return ResourceUtil.parse(MODID, path);
+        return ResourceUtil.parse(ID, path);
     }
 }
