@@ -53,6 +53,7 @@ public class ModUtil {
 
     // CORELIBS: Only really made for mods licensed ARR, might expand
     public enum VersionBuildType {
+        CORELIBS_INDEV("Integrated or WIP build!"), // CORELIBS: Temporary build flag
         EXPERIMENTAL("Experimental build! Unstable, do not redistribute."),
         EARLY_DEV_ALPHA("Dev-only build! Unstable, do not redistribute."),
         EARLY_DEV_BETA("Dev-only build! Unstable, do not redistribute."),

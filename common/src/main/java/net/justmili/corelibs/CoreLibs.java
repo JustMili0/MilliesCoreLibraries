@@ -12,7 +12,7 @@ public class CoreLibs {
     public static final Logger LOGGER = LoggerFactory.getLogger(CoreLibs.class);
     public static final String ID = "corelibs";
     public static final String NAME = "Millie's Core Libraries";
-    public static final String BUILD = "";
+    public static final String BUILD = "0.0.2a";
 
     public static void init() {
         TickUtil.registerProcessQueue();
