@@ -273,7 +273,7 @@ public class Maths {
     }
 
     public static int clamp(int value, int min, int max) {
-        return Mth.clamp(value, min, max);
+        return Math.min(Math.max(value, min), max);
     }
 
     public static long clamp(long value, long min, long max) {
@@ -281,11 +281,11 @@ public class Maths {
     }
 
     public static float clamp(float value, float min, float max) {
-        return Mth.clamp(value, min, max);
+        return value < min? min : Math.min(value, max);
     }
 
     public static double clamp(double value, double min, double max) {
-        return Mth.clamp(value, min, max);
+        return value < min? min : Math.min(value, max);
     }
 
     public static float clamp(float value) {
@@ -824,20 +824,20 @@ public class Maths {
         return Double.isFinite(value);
     }
 
-    public static double lengthSqrd(double x, double y) {
-        return Mth.lengthSquared(x, y);
+    public static double lengthSqrd(double xDistance, double yDistance) {
+        return xDistance * xDistance + yDistance * yDistance;
     }
 
-    public static double lengthSqrd(double x, double y, double z) {
-        return Mth.lengthSquared(x, y, z);
+    public static double lengthSqrd(double xDistance, double yDistance, double zDistance) {
+        return xDistance * xDistance + yDistance * yDistance + zDistance * zDistance;
     }
 
-    public static double length(double x, double y) {
-        return Mth.length(x, y);
+    public static double length(double xDistance, double yDistance) {
+        return Math.sqrt(lengthSqrd(xDistance, yDistance));
     }
 
-    public static double length(double x, double y, double z) {
-        return Mth.length(x, y, z);
+    public static double length(double xDistance, double yDistance, double zDistance) {
+        return Math.sqrt(lengthSqrd(xDistance, yDistance, zDistance));
     }
 
     public static double distanceSqrd(double startX, double startY, double endX, double endY) {
