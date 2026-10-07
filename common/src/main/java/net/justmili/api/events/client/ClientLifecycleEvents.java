@@ -8,10 +8,10 @@ public class ClientLifecycleEvents {
     }
 
     public static final Event<Started> STARTED = Event.create(Started.class, callbacks -> minecraft -> {
-        for (Started event : callbacks) event.onClientStarted(minecraft);
+        for (var event : callbacks) event.onClientStarted(minecraft);
     });
     public static final Event<Stopping> STOPPING = Event.create(Stopping.class, callbacks -> minecraft -> {
-        for (Stopping event : callbacks) event.onClientStopping(minecraft);
+        for (var event : callbacks) event.onClientStopping(minecraft);
     });
 
     @FunctionalInterface

@@ -36,16 +36,14 @@ public class PlayerEvents {
     });
     public static final Event<DropItem> DROP_ITEM = Event.create(DropItem.class, callbacks -> (player, itemDropped) -> {
         for (var event : callbacks) {
-            var result = event.onDropItem(player, itemDropped);
-            if (!result) return false;
+            if (!event.onDropItem(player, itemDropped)) return false;
         }
 
         return true;
     });
     public static final Event<CanPickupItem> CAN_PICKUP_ITEM = Event.create(CanPickupItem.class, callbacks -> (player, itemEntity, stack) -> {
         for (var event : callbacks) {
-            var result = event.canPickupItem(player, itemEntity, stack);
-            if (!result) return false;
+            if (!event.canPickupItem(player, itemEntity, stack)) return false;
         }
 
         return true;

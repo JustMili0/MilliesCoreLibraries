@@ -4,6 +4,7 @@ import net.justmili.api.events.base.Event;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -16,10 +17,10 @@ public class UseEvents {
 
     public static final Event<ItemPre> ITEM_PRE = Event.create(ItemPre.class, callbacks -> (level, player, hand) -> {
         for (var event : callbacks) {
-            InteractionResult result = event.onUseItemPre(level, player, hand);
-            if (result != InteractionResult.PASS) return result;
+            InteractionResultHolder<ItemStack> result = event.onUseItemPre(level, player, hand);
+            if (result.getResult() != InteractionResult.PASS) return result;
         }
-        return InteractionResult.PASS;
+        return InteractionResultHolder.pass(player.getItemInHand(hand));
     });
 
     public static final Event<ItemPost> ITEM_POST = Event.create(ItemPost.class, callbacks -> (level, player, hand, stack, result) -> {
@@ -36,7 +37,7 @@ public class UseEvents {
 
     @FunctionalInterface
     public interface ItemPre {
-        InteractionResult onUseItemPre(Level level, Player player, InteractionHand hand);
+        InteractionResultHolder<ItemStack> onUseItemPre(Level level, Player player, InteractionHand hand);
     }
 
     @FunctionalInterface

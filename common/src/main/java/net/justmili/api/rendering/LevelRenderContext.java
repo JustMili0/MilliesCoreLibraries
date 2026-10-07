@@ -10,11 +10,10 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
-
-import javax.swing.text.html.parser.Entity;
 
 public interface LevelRenderContext {
 
@@ -58,6 +57,6 @@ public interface LevelRenderContext {
 
         BlockPos position();
 
-        BlockState state();
+        BlockState blockState();
     }
 }
