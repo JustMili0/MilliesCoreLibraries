@@ -91,11 +91,15 @@ public final class NbtUtil {
     }
 
     public static boolean has(ItemStack stack, String key) {
-        return stack.hasTag() && stack.getTag().contains(key);
+        var tag = stack.getTag();
+        if (tag == null) return false;
+        return stack.hasTag() && tag.contains(key);
     }
 
     public static void remove(ItemStack stack, String key) {
-        if (stack.hasTag()) stack.getTag().remove(key);
+        var tag = stack.getTag();
+        if (tag == null) return;
+        if (stack.hasTag()) tag.remove(key);
     }
 
     private static CompoundTag tagOf(ItemStack stack) {
