@@ -12,7 +12,7 @@ import net.minecraft.world.level.Level;
 public class RenderingUtil {
 
     public static GameRenderer getGameRenderer() {
-        return ClientUtil.client().gameRenderer;
+        return GameUtil.client().gameRenderer;
     }
 
     public static Camera getMainCam() {
@@ -20,11 +20,11 @@ public class RenderingUtil {
     }
 
     public static ItemRenderer getItemRenderer() {
-        return ClientUtil.client().getItemRenderer();
+        return GameUtil.client().getItemRenderer();
     }
 
     public static BlockRenderDispatcher getBlockRenderer() {
-        return ClientUtil.client().getBlockRenderer();
+        return GameUtil.client().getBlockRenderer();
     }
 
     public static BakedModel getItemModel(ItemStack stack, Level level, LivingEntity entity, int seed) {

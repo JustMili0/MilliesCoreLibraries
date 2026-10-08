@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.justmili.api.rendering.BlockGroupOutlineContext;
 import net.justmili.api.rendering.LevelRenderContext;
 import net.justmili.util.utils.common.search.SearchAlgorithms;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -27,7 +28,7 @@ import java.util.function.Predicate;
  * so two outliners on the same block would end up sharing a shape.
  */
 @Environment(EnvType.CLIENT)
-public class BlockGroupOutliner {
+public class BlockGroupOutlineRenderer {
     private static BlockPos originCache;
     private static long tickBucketCache;
     private static VoxelShape shapeCache;
@@ -41,24 +42,25 @@ public class BlockGroupOutliner {
      *
      * @return true to let vanilla draw its own outline, false to cancel it.
      */
-    public static boolean render(LevelRenderContext context, LevelRenderContext.BlockOutlineContext outline, Player player, Predicate<BlockState> stateMatch,
-                                 int maxRadius, int maxSize, float a, float r, float g, float b, boolean renderVanillaOutline) {
-        var level = context.level();
-        var pose = context.poseStack();
-        var buffers = context.buffers();
+    public static boolean render(BlockGroupOutlineContext group, Player player, Predicate<BlockState> stateMatch, int maxRadius, int maxSize,
+                                 float a, float r, float g, float b, boolean renderVanillaOutline) {
+        var ctx = group.context();
+        var lines = group.outline();
+        var level = ctx.level();
+        var pose = ctx.poseStack();
+        var buffers = ctx.buffers();
         if (level == null || pose == null || buffers == null) return true;
 
-        var shape = getCachedShape(level, player, outline.position(), outline.state(), stateMatch, maxRadius, maxSize);
+        var shape = getCachedShape(level, player, lines.position(), lines.blockState(), stateMatch, maxRadius, maxSize);
         if (shape == null) return true; // single block, vanilla outline is fine
 
-        renderOutlineShape(pose, buffers.getBuffer(RenderType.lines()), shape, -outline.cameraX(), -outline.cameraY(), -outline.cameraZ(), a, r, g, b);
+        renderOutlineShape(pose, buffers.getBuffer(RenderType.lines()), shape, -lines.cameraX(), -lines.cameraY(), -lines.cameraZ(), a, r, g, b);
         return renderVanillaOutline;
     }
 
-    public static boolean render(LevelRenderContext context, LevelRenderContext.BlockOutlineContext outline, Player player, Predicate<BlockState> stateMatch,
-                                 int maxRadius, int maxSize, boolean renderVanillaOutline) {
+    public static boolean render(BlockGroupOutlineContext group, Player player, Predicate<BlockState> stateMatch, int maxRadius, int maxSize, boolean renderVanillaOutline) {
         // Render with default outline ARGB values
-        return render(context, outline, player, stateMatch, maxRadius, maxSize, 0.4f, 0f, 0f, 0f, renderVanillaOutline);
+        return render(group, player, stateMatch, maxRadius, maxSize, 0.4f, 0f, 0f, 0f, renderVanillaOutline);
     }
 
     // Get cached group shape, rebuild it every 10 ticks or if the targeted block changed

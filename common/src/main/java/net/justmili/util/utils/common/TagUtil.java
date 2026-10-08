@@ -12,6 +12,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.util.ArrayList;
 import java.util.function.Predicate;
 
 public class TagUtil {
@@ -20,16 +21,27 @@ public class TagUtil {
         return TagKey.create(registries, id);
     }
 
-    public static Predicate<BlockState> matchTags(BlockState state, String namespace, String endsWith) {
-        var tags = state.getTags().filter(tag -> tag.location().getNamespace().equals(namespace)
-            && tag.location().getPath().endsWith(endsWith)).toList();
-        if (tags.isEmpty()) return s -> s.is(state.getBlock());
-        return s -> tags.stream().anyMatch(s::is);
+    public static Predicate<BlockState> matchBlockTags(BlockState state, String namespace, String containsPath) {
+        var matchingTags = new ArrayList<TagKey<Block>>();
+        var tagIterator = state.getTags().iterator();
+        while (tagIterator.hasNext()) {
+            var tag = tagIterator.next();
+            var tagId = tag.location();
+            if (tagId.getNamespace().equals(namespace) && tagId.getPath().endsWith(containsPath)) matchingTags.add(tag);
+        }
+
+        if (matchingTags.isEmpty()) return s -> s.is(state.getBlock());
+        return s -> {
+            for (var tag : matchingTags) {
+                if (s.is(tag)) return true;
+            }
+            return false;
+        };
     }
 
-    public static Predicate<BlockState> matchOre(BlockState state) {
+    public static Predicate<BlockState> matchOreTags(BlockState state) {
         // 1.20.1 - ends with "ores", 1.21.1 - starts with "ores/"
-        return matchTags(state, "c", "ores");
+        return matchBlockTags(state, "c", "ores");
     }
 
     public static TagKey<Block> block(ResourceLocation id) {

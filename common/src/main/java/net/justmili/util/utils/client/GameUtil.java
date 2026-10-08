@@ -6,14 +6,15 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
 @Environment(EnvType.CLIENT)
-public class ClientUtil {
-    private static Minecraft client = Minecraft.getInstance();
+public class GameUtil {
+    private static final Minecraft client = Minecraft.getInstance();
 
     public static Minecraft client() {
         return client;
@@ -72,7 +73,7 @@ public class ClientUtil {
         return !isNotSurvival();
     }
 
-    public static Level level() {
+    public static ClientLevel level() {
         return client.level;
     }
 
