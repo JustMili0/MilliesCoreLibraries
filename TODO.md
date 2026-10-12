@@ -1,4 +1,6 @@
-*Note: keep TODO and README on the latest main branch you're working on
+### Notes
+- Keep TODO and README on the latest main branch you're working on
+- A lot of classes such as utils etc. can be copied from JustMili's other projects
 
 # TODO
 - (LIBS) Replicate Minecraft's newer DataComponents but for 1.20.1
