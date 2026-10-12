@@ -1,8 +1,11 @@
 package net.justmili.corelibs.components;
 
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+
 @Deprecated(since = "1.20.5")
-public final class TagComponents {
-    private TagComponents() {
+public final class CompoundTags {
+    private CompoundTags() {
     }
 
     public static final String ITEM_ID = "id";
@@ -92,5 +95,10 @@ public final class TagComponents {
 
         private HideFlags() {
         }
+    }
+
+    public boolean isAlwaysEdible(ItemStack stack) {
+        var props = stack.getItem().getFoodProperties();
+        return props != null && props.canAlwaysEat();
     }
 }

@@ -1,7 +1,6 @@
 package net.justmili.corelibs.config.writers.toml.ttomle;
 
 import net.justmili.corelibs.config.writers.toml.ttomle.data.TomlVariable;
-import net.justmili.config.writers.toml.ttomle.fields.*;
 import net.justmili.corelibs.config.writers.toml.ttomle.fields.*;
 import org.apache.commons.io.IOUtils;
 

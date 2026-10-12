@@ -1,6 +1,7 @@
 package net.justmili.corelibs.util.server;
 
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
@@ -10,12 +11,12 @@ import java.util.Optional;
 
 public class RegistryUtil {
 
-    public static <T> Registry<T> lookup(MinecraftServer server, ResourceKey<Registry<T>> registryResource) {
-        return server.registryAccess().lookupOrThrow(registryResource);
+    public static <T> HolderLookup.RegistryLookup<T> lookup(MinecraftServer server, ResourceKey<Registry<T>> registryKey) {
+        return server.registryAccess().lookupOrThrow(registryKey);
     }
 
-    public static <T> Registry<T> lookup(ServerLevel level, ResourceKey<Registry<T>> registryResource) {
-        return lookup(level.getServer(), registryResource);
+    public static <T> HolderLookup.RegistryLookup<T> lookup(ServerLevel level, ResourceKey<Registry<T>> registryKey) {
+        return lookup(level.getServer(), registryKey);
     }
 
     public static <T> Optional<Holder.Reference<T>> get(MinecraftServer server, ResourceKey<Registry<T>> registryResource, ResourceKey<T> key) {

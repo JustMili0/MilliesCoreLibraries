@@ -15,10 +15,10 @@ public class CoreLibs {
     public static final String BUILD = "0.0.2a";
 
     public static void init() {
-        TickUtil.registerProcessQueue();
-
         ModUtil.specialInitMessage(LOGGER, NAME, ID, BUILD, ModUtil.VersionBuildType.EARLY_DEV_ALPHA);
         ModUtil.markEndOfSupport(NAME, ID, false, false);
+
+        TickUtil.registerProcessQueue();
         ExampleConfig.register();
     }
 
