@@ -3,7 +3,6 @@
 - A lot of classes such as utils etc. can be copied from JustMili's other projects
 
 # TODO
-- (LIBS) Replicate Minecraft's newer DataComponents but for 1.20.1
 - (LIBS UTIL) Finish reworking data generation utils
 - [BLUSPRING'S JOB] (API NETWORK) Add cross-loader networking
 - [REQUIRES NETWORKING] (API EVENTS) Replicate every major useful Fabric/Forge event, sprinkle in some custom ones too and keep them grouped similarly to Architectury
