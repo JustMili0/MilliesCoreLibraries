@@ -22,7 +22,7 @@
       "net.justmili.corelibs.fabric.CoreLibsFabric"
     ],
     "client": [
-      "net.justmili.corelibs.client.fabric.FabricClient"
+      "net.justmili.corelibs.fabric.FabricClient"
     ],
     "modmenu": [
       "net.justmili.corelibs.fabric.ModMenuEntrypoint"

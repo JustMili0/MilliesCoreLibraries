@@ -5,7 +5,6 @@ parchment = "2023.09.03"
 # -- insert architectury docs link --
 arch_loom = "1.13-SNAPSHOT"
 arch_plugin = "3.4-SNAPSHOT"
-arch_api = "9.2.14"
 
 # https://files.minecraftforge.net/net/minecraftforge/forge/
 # You can bump the version up if you don't plan on keeping compatibility with NeoForge on 1.20.1

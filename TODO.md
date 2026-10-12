@@ -1,32 +1,21 @@
 *Note: keep TODO and README on the latest main branch you're working on
 
 # TODO
-- Start using the Stonecutter template for multi-version, split the mod into:
-  - `net.justmili.corelibs` (Main), 
-  - `net.justmili.utils` (utils and other unspecified stuff), 
-  - `net.justmili.config` and `net.justmili.configscreen`, 
-  - `net.justmili.api`
-  - (Similarly to how Fabric API is split into multiple jars in jar)
-- [AWAITING] (Cross-Loader API) Add cross-loader networking
-- Finish up datagen utils, fully implementing all blocks with special models
+- (LIBS) Replicate Minecraft's newer DataComponents but for 1.20.1
+- (LIBS UTIL) Finish reworking data generation utils
+- [BLUSPRING'S JOB] (API NETWORK) Add cross-loader networking
+- [REQUIRES NETWORKING] (API EVENTS) Replicate every major useful Fabric/Forge event, sprinkle in some custom ones too and keep them grouped similarly to Architectury
+- (LIBS CONFIG) Finish Config
+  - Make COMMON_SERVER_PRIORITY override client's in-memory values instead of on-file values
+  - Finish config sync across loaders
+  - Rewrite using CODECs if possible, wherever possible
+  - Add enum list/selector support, add ARGB color picker support
+  - Add full TOML support
+- (LIBS UTIL) Properly rework and finish all the util classes and give each even more functionality
+- (GRADLE) Switch to stonecutter template, port everything accordingly
+- [REQUIRES CONFIG] (LIBS CONF. SCREEN) Redo Config Screen to be more like HTML+CSS - highly customizable
+  - Should allow adding images
+  - It will be absolute pain to make, but it'll be so worth it
+- [REQUIRES EVENTS] (API REG) Add cross-loader registries
 
-- Finish base of the config library
-  - Rewrite if possible to use codecs
-  - ***Make COMMON_SERVER_PRIORITY only override in-memory rather than on-file***
-  - ***Make syncing COMMON_SERVER_PRIORITY files use the same system between Fabric and Forge***
-  - Fix large doubles with an exponent ex. "1.1E12" not being edited
-    - Probably a parsing issue
-  - Make each entry have its own selectable "section" so "Reset" know what to reset
-  - Give "Reset" button a proper function
-  - Let number entries and enum entries be sliders
-
-- (Config Lib) Add enum selector entry
-- (Config Lib) Add color picker entry
-- (Config Lib) Add ability to add custom images to entry descriptions (similar to YACL)
-
-- (Cross-Loader API) Add cross-loader events accordingly to `events/package-info.java`
-- (Cross-Loader API) Add cross-loader registries
-
-- (Config Lib) Add TOML support
-
-- Write full documentation
+- Add javadocs, comments and write full documentation

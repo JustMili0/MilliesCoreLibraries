@@ -2,8 +2,8 @@ package net.justmili.corelibs.fabric;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
-import net.justmili.configscreen.ConfigScreen;
-import net.justmili.corelibs.config.ExampleConfig;
+import net.justmili.corelibs.configscreen.ConfigScreen;
+import net.justmili.corelibs.core.config.ExampleConfig;
 import net.minecraft.network.chat.Component;
 
 import java.util.List;
