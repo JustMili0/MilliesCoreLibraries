@@ -23,6 +23,11 @@ public class Textures {
     public static final String FRONT_ON_SUFFIX = "_front_on";
     public static final String PARTIAL_TILT_SUFFIX = "_partial_tilt";
     public static final String FULL_TILT_SUFFIX = "_full_tilt";
+    public static final String STAGE0_SUFFIX = "_stage0";
+    public static final String STAGE1_SUFFIX = "_stage1";
+    public static final String STAGE2_SUFFIX = "_stage2";
+    public static final String TOP_STAGE_AFFIX = "_top_stage_";
+    public static final String DOWN_STAGE_AFFIX = "_bottom_stage_";
 
     public static ResourceLocation get(Block block) {
         return TextureMapping.getBlockTexture(block);
@@ -92,6 +97,18 @@ public class Textures {
 
     public static ResourceLocation fullTilt(Block block) {
         return get(block, FULL_TILT_SUFFIX);
+    }
+
+    public static ResourceLocation stage0(Block block) {
+        return get(block, STAGE0_SUFFIX);
+    }
+
+    public static ResourceLocation stage1(Block block) {
+        return get(block, STAGE1_SUFFIX);
+    }
+
+    public static ResourceLocation stage2(Block block) {
+        return get(block, STAGE2_SUFFIX);
     }
 
     // Chest texture suffixes

@@ -7,8 +7,12 @@ import net.minecraft.data.models.blockstates.*;
 import net.minecraft.data.models.model.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.PitcherCropBlock;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.properties.Tilt;
 
@@ -340,19 +344,28 @@ public class BlockAssetDatagen {
         create(multiVariant(block).with(BlockModelGenerators.createEmptyOrFullDispatch(BlockStateProperties.MOISTURE, 7, moist, dry)));
     }
 
-    public void dirtPath() {
+    public void dirtPath(Block block) {
+        create(BlockModelGenerators.createRotatedVariant(block, getModelId(block)));
     }
 
-    public void shortGrass() {
+    public void shortGrass(Block block) {
+        gen.createCrossBlockWithDefaultItem(block, BlockModelGenerators.TintState.TINTED);
     }
 
-    public void tallGrass() {
+    public void tallGrass(Block block) {
+        gen.createDoublePlant(block, BlockModelGenerators.TintState.TINTED);
     }
 
-    public void shortSeaGrass() {
+    public void shortSeaGrass(Block block) {
+        gen.createTrivialBlock(block, TexturedModel.SEAGRASS);
+        gen.createSimpleFlatItemModel(block.asItem());
     }
 
-    public void tallSeaGrass() {
+    public void tallSeaGrass(Block block) {
+        var top = gen.createSuffixedVariant(block, Textures.TOP_SUFFIX, ModelTemplates.SEAGRASS, TextureMapping::defaultTexture);
+        var bottom = gen.createSuffixedVariant(block, Textures.DOWN_SUFFIX, ModelTemplates.SEAGRASS, TextureMapping::defaultTexture);
+
+        gen.createDoubleBlock(block, top, bottom);
     }
 
     public void plant(Block block, BlockModelGenerators.TintState tint) {
@@ -363,14 +376,22 @@ public class BlockAssetDatagen {
         gen.createCrossBlockWithDefaultItem(block, tint, mapping);
     }
 
-    public void tallPlant() {
+    public void tallPlant(Block block, BlockModelGenerators.TintState tint) {
+        gen.createDoublePlant(block, tint);
     }
 
     public void pottedPlant(Block block, Block potted, BlockModelGenerators.TintState tint) {
         gen.createPlant(block, potted, tint);
     }
 
-    // Useful for foliage
+    public void sunflower(Block block) {
+        var top = Textures.top(block);
+        var bottom = gen.createSuffixedVariant(block, Textures.DOWN_SUFFIX, BlockModelGenerators.TintState.NOT_TINTED.getCross(), TextureMapping::cross);
+
+        gen.createSimpleFlatItemModel(block, Textures.FRONT_SUFFIX);
+        gen.createDoubleBlock(block, top, bottom);
+    }
+
     public void crossBlock(Block block, BlockModelGenerators.TintState tint, Property<Integer> property, int... propertyValues) {
         gen.createCrossBlock(block, tint, property, propertyValues);
     }
@@ -383,16 +404,53 @@ public class BlockAssetDatagen {
         gen.createCrossBlock(block, tint);
     }
 
-    public void flowerBed() {
+    public void flowerBed(Block block) {
+        gen.createFlowerBed(block);
     }
 
-    public void crop() {
+    public void crop(Block block, Property<Integer> ageProperty, int... ageToVisualStageMapping) {
+        gen.createCropBlock(block, ageProperty, ageToVisualStageMapping);
     }
 
-    public void cocoa() {
+    public void cocoa(Block block) {
+        gen.createSimpleFlatItemModel(Items.COCOA_BEANS);
+        create(multiVariant(block).with(PropertyDispatch.property(BlockStateProperties.AGE_2)
+            .select(0, Variant.variant().with(VariantProperties.MODEL, Textures.stage0(block)))
+            .select(1, Variant.variant().with(VariantProperties.MODEL, Textures.stage1(block)))
+            .select(2, Variant.variant().with(VariantProperties.MODEL, Textures.stage2(block)))
+        ).with(BlockModelGenerators.createHorizontalFacingDispatchAlt()));
     }
 
-    public void stem() {
+    public void stems(Block unattached, Block attached) {
+        gen.createStems(unattached, attached);
+    }
+
+    public void pitcherPotCrop(Block block) {
+        var properties = PropertyDispatch.properties(PitcherCropBlock.AGE, BlockStateProperties.DOUBLE_BLOCK_HALF).generate((integer, doubleBlockHalf) -> {
+            Variant variant;
+            switch (doubleBlockHalf) {
+                case UPPER -> variant = Variant.variant().with(VariantProperties.MODEL, getModelId(block, Textures.TOP_STAGE_AFFIX + integer));
+                case LOWER -> variant = Variant.variant().with(VariantProperties.MODEL, getModelId(block, Textures.DOWN_STAGE_AFFIX + integer));
+                default -> throw new IncompatibleClassChangeError();
+            }
+            return variant;
+        });
+
+        gen.createSimpleFlatItemModel(block.asItem());
+        create(multiVariant(block).with(properties));
+    }
+
+    public void pitcherPotPlant(Block block) {
+        var top = getModelId(block, Textures.TOP_SUFFIX);
+        var down = getModelId(block, Textures.DOWN_SUFFIX);
+
+        gen.createSimpleFlatItemModel(block.asItem());
+        gen.createDoubleBlock(block, top, down);
+    }
+
+    public void pitcherPot(Block crop, Block plant) {
+        pitcherPotCrop(crop);
+        pitcherPotPlant(plant);
     }
 
     public void bigDripleaf(Block block) {
@@ -405,16 +463,26 @@ public class BlockAssetDatagen {
             .select(Tilt.NONE, Variant.variant().with(VariantProperties.MODEL, dripleaf))
             .select(Tilt.UNSTABLE, Variant.variant().with(VariantProperties.MODEL, dripleaf))
             .select(Tilt.PARTIAL, Variant.variant().with(VariantProperties.MODEL, partial))
-            .select(Tilt.FULL, Variant.variant().with(VariantProperties.MODEL, full)))
-        );
+            .select(Tilt.FULL, Variant.variant().with(VariantProperties.MODEL, full))
+        ));
     }
 
-    public void smallDripleaf() {
+    public void smallDripleaf(Block block) {
+        gen.skipAutoItemBlock(block);
+        var top = getModelId(Blocks.SMALL_DRIPLEAF, Textures.TOP_SUFFIX);
+        var bottom = getModelId(Blocks.SMALL_DRIPLEAF, Textures.DOWN_SUFFIX);
+
+        create(multiVariant(block).with(BlockModelGenerators.createHorizontalFacingDispatch()).with(PropertyDispatch.property(BlockStateProperties.DOUBLE_BLOCK_HALF)
+            .select(DoubleBlockHalf.LOWER, Variant.variant().with(VariantProperties.MODEL, bottom))
+            .select(DoubleBlockHalf.UPPER, Variant.variant().with(VariantProperties.MODEL, top))
+        ));
     }
 
-    public void coralFans() {
+    public void coralFans(Block fan, Block fanWall) {
+        gen.createCoralFans(fan, fanWall);
     }
 
-    public void createCoralFamily() {
+    public void createCoralFamily(Block coralBlock, Block deadCoralBlock, Block coralFullBlock, Block deadCoralFullBlock, Block coralFanBlock, Block deadCoralFanBlock, Block coralWallFanBlock, Block deadCoralWallFanBlock) {
+        gen.createCoral(coralBlock, deadCoralBlock, coralFullBlock, deadCoralFullBlock, coralFanBlock, deadCoralFanBlock, coralWallFanBlock, deadCoralWallFanBlock);
     }
 }
