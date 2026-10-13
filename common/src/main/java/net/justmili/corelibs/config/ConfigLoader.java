@@ -1,14 +1,14 @@
 package net.justmili.corelibs.config;
 
-import net.justmili.corelibs.config.writers.FormatWriter;
-import net.justmili.corelibs.config.writers.json.Json5Writer;
-import net.justmili.corelibs.config.writers.json.JsonWriter;
-import net.justmili.corelibs.config.writers.properties.PropsWriter;
 import net.justmili.corelibs.CoreLibs;
 import net.justmili.corelibs.config.entry.ConfigEntry;
 import net.justmili.corelibs.config.entry.ListConfigEntry;
 import net.justmili.corelibs.config.items.CategoryItem;
 import net.justmili.corelibs.config.sync.SyncConfigCSP;
+import net.justmili.corelibs.config.writers.FormatWriter;
+import net.justmili.corelibs.config.writers.json.Json5Writer;
+import net.justmili.corelibs.config.writers.json.JsonWriter;
+import net.justmili.corelibs.config.writers.properties.PropsWriter;
 
 import java.io.File;
 import java.nio.file.Path;

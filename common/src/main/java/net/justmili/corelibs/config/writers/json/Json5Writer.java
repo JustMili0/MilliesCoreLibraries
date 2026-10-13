@@ -1,12 +1,12 @@
 package net.justmili.corelibs.config.writers.json;
 
-import net.justmili.corelibs.config.writers.FormatWriter;
 import net.justmili.corelibs.CoreLibs;
 import net.justmili.corelibs.config.entry.ConfigEntry;
 import net.justmili.corelibs.config.entry.ListConfigEntry;
 import net.justmili.corelibs.config.items.CategoryItem;
 import net.justmili.corelibs.config.items.CommentItem;
 import net.justmili.corelibs.config.items.ConfigItem;
+import net.justmili.corelibs.config.writers.FormatWriter;
 
 import java.io.*;
 import java.nio.file.Path;

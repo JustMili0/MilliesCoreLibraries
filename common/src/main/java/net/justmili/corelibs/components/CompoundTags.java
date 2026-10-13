@@ -1,6 +1,5 @@
 package net.justmili.corelibs.components;
 
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 @Deprecated(since = "1.20.5")

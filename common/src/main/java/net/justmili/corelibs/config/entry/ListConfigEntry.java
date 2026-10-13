@@ -1,7 +1,7 @@
 package net.justmili.corelibs.config.entry;
 
-import net.justmili.corelibs.config.ConfigLoader;
 import net.justmili.corelibs.CoreLibs;
+import net.justmili.corelibs.config.ConfigLoader;
 import net.justmili.corelibs.config.items.ConfigItem;
 
 import java.util.ArrayList;

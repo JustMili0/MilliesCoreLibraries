@@ -7,6 +7,9 @@ import net.minecraft.data.models.blockstates.*;
 import net.minecraft.data.models.model.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.block.state.properties.Tilt;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -66,16 +69,28 @@ public class BlockAssetDatagen {
         return getParentFrom(block).getMapping();
     }
 
+    public MultiVariantGenerator multiVariant(Block block) {
+        return MultiVariantGenerator.multiVariant(block, Variant.variant());
+    }
+
+    public MultiVariantGenerator multiVariant(Block block, Variant variant) {
+        return MultiVariantGenerator.multiVariant(block, variant);
+    }
+
+    public MultiVariantGenerator multiVariant(Block block, Variant... variants) {
+        return MultiVariantGenerator.multiVariant(block, variants);
+    }
+
     public MultiVariantGenerator simpleBlock(Block block, ResourceLocation modelId) {
         return BlockModelGenerators.createSimpleBlock(block, modelId);
     }
 
     private void nonTemplateModel(Block block, Block modelBlock) {
-        create(simpleBlock(block, getModelId(modelBlock)));
+        gen.createNonTemplateModelBlock(block, modelBlock);
     }
 
     private void nonTemplateModel(Block block) {
-        nonTemplateModel(block, block);
+        gen.createNonTemplateModelBlock(block);
     }
 
     public void cubeAll(Block block) {
@@ -92,13 +107,13 @@ public class BlockAssetDatagen {
 
     public void cube(Block block, ResourceLocation up, ResourceLocation down, ResourceLocation north, ResourceLocation south, ResourceLocation west, ResourceLocation east, ResourceLocation particle) {
         gen.createTrivialBlock(block, new TextureMapping()
-            .put(TextureSlot.DOWN, down)
-            .put(TextureSlot.UP, up)
-            .put(TextureSlot.NORTH, north)
-            .put(TextureSlot.SOUTH, south)
-            .put(TextureSlot.EAST, east)
-            .put(TextureSlot.WEST, west)
-            .put(TextureSlot.PARTICLE, particle),
+                .put(TextureSlot.DOWN, down)
+                .put(TextureSlot.UP, up)
+                .put(TextureSlot.NORTH, north)
+                .put(TextureSlot.SOUTH, south)
+                .put(TextureSlot.EAST, east)
+                .put(TextureSlot.WEST, west)
+                .put(TextureSlot.PARTICLE, particle),
             ModelTemplates.CUBE
         );
     }
@@ -107,23 +122,42 @@ public class BlockAssetDatagen {
         cube(block, up, down, north, south, west, east, TextureMap.side(block));
     }
 
-    public enum ColumnVariants {
-        HORIZONTAL_PILLAR,
-        AXIS_ALIGNED_PILLAR
-        // TODO: add in all the different pillar and column variants
+    public void doubleBlock(Block block, ResourceLocation topHalfModelId, ResourceLocation bottomHalfModelId) {
+        gen.createDoubleBlock(block, topHalfModelId, bottomHalfModelId);
     }
 
-    public void pillar(Block block, TextureMapping mapping, ColumnVariants type) {
-        // TODO: Based on ColumnVariants generate different pillar and column types
+    public enum PillarRotation {
+        NONE, // No rotation, just top, bottom and side textures
+        LOG_XYZ, // X/Y/Z rotation, one model rotated to fit the axis. Works for distinct end textures and for all 6 sides being the same texture
+        LOG_XYZ_HORIZONTAL, // Same as LOG_XYZ but with a separate model for side placement
+        LOG_XYZ_UV_LOCKED, // Same as LOG_XYZ but with a UV locked model per axis
+        LOG_XYZ_MIRRORED, // Same as LOG_XYZ but with randomly mirrored and rotated variants
+        ALL_DIRECTIONS // D/U/N/S/W/E facing, column shaped
+    }
+
+    public void pillar(Block block, TextureMapping mapping, PillarRotation rotation) {
+        switch (rotation) {
+            case NONE -> gen.createTrivialBlock(block, TexturedModel.COLUMN);
+            case LOG_XYZ -> create(BlockModelGenerators.createAxisAlignedPillarBlock(block,
+                ModelTemplates.CUBE_COLUMN.create(block, mapping, modelOutput)));
+            case LOG_XYZ_HORIZONTAL -> create(BlockModelGenerators.createRotatedPillarWithHorizontalVariant(block,
+                ModelTemplates.CUBE_COLUMN.create(block, mapping, modelOutput),
+                ModelTemplates.CUBE_COLUMN_HORIZONTAL.create(block, mapping, modelOutput)));
+            case LOG_XYZ_UV_LOCKED -> create(BlockModelGenerators.createPillarBlockUVLocked(block, mapping, modelOutput));
+            case LOG_XYZ_MIRRORED -> create(BlockModelGenerators.createMirroredColumnGenerator(block,
+                ModelTemplates.CUBE_COLUMN.create(block, mapping, modelOutput), mapping, modelOutput));
+            case ALL_DIRECTIONS -> create(multiVariant(block, Variant.variant().with(VariantProperties.MODEL,
+                ModelTemplates.CUBE_COLUMN.create(block, mapping, modelOutput))).with(gen.createColumnWithFacing()));
+        }
     }
 
     public void log(Block block) {
-        pillar(block, TextureMapping.logColumn(block), ColumnVariants.HORIZONTAL_PILLAR);
+        pillar(block, TextureMapping.logColumn(block), PillarRotation.LOG_XYZ_HORIZONTAL);
     }
 
     public void wood(Block block) {
         var logMapping = TextureMapping.logColumn(block);
-        pillar(block, logMapping.copyAndUpdate(TextureSlot.END, logMapping.get(TextureSlot.SIDE)), ColumnVariants.AXIS_ALIGNED_PILLAR);
+        pillar(block, logMapping.copyAndUpdate(TextureSlot.END, logMapping.get(TextureSlot.SIDE)), PillarRotation.LOG_XYZ);
     }
 
     public void stairs(Block parent, Block block) {
@@ -206,6 +240,9 @@ public class BlockAssetDatagen {
         // No item model for some reason
     }
 
+    public void weightedPressurePlate() {
+    }
+
     public void createWoodFamily(Block log, Block wood, Block planks, Block stairs, Block slab, Block fence, Block fenceGate, Block door, Block trapdoor, boolean trapdoorHasDirectionalTexture) {
         log(log);
         wood(wood);
@@ -236,9 +273,96 @@ public class BlockAssetDatagen {
     public void createPressableFamily(Block parent, Block button, Block pressurePlate) {
         button(parent, button);
         pressurePlate(parent, pressurePlate);
+        // Weighted pressure plate should be separate
+    }
+
+    public void glassBlock(Block block) {
+    }
+
+    public void glassPane(Block block) {
     }
 
     public void createGlassFamily(Block glass, Block pane) {
-        gen.createGlassBlocks(glass, pane);
+        glassBlock(glass);
+        glassPane(pane);
+    }
+
+    public void brushableBlock(Block block) {
+        gen.createBrushableBlock(block);
+    }
+
+    public void grassBlock(Block block, Block dirt) {
+        var mapping = new TextureMapping().put(TextureSlot.BOTTOM, TextureMap.getTexture(dirt)).copyForced(TextureSlot.BOTTOM, TextureSlot.PARTICLE)
+            .put(TextureSlot.TOP, TextureMap.getTexture(block, "_top"))
+            .put(TextureSlot.SIDE, TextureMap.getTexture(block, "_snow"));
+        var variant = Variant.variant().with(VariantProperties.MODEL, ModelTemplates.CUBE_BOTTOM_TOP.createWithSuffix(block, "_snow", mapping, modelOutput));
+        gen.createGrassLikeBlock(block, getModelId(block), variant);
+    }
+
+    public void dirtPath() {
+    }
+
+    public void shortGrass() {
+    }
+
+    public void tallGrass() {
+    }
+
+    public void shortSeaGrass() {
+    }
+
+    public void tallSeaGrass() {
+    }
+
+    public void plant(Block block, BlockModelGenerators.TintState tint) {
+        gen.createCrossBlockWithDefaultItem(block, tint);
+    }
+
+    public void plant(Block block, BlockModelGenerators.TintState tint, TextureMapping mapping) {
+        gen.createCrossBlockWithDefaultItem(block, tint, mapping);
+    }
+
+    public void pottedPlant(Block block, Block potted, BlockModelGenerators.TintState tint) {
+        gen.createPlant(block, potted, tint);
+    }
+
+    // Useful for foliage
+    public void crossBlock(Block block, BlockModelGenerators.TintState tint, Property<Integer> property, int... propertyValues) {
+        gen.createCrossBlock(block, tint, property, propertyValues);
+    }
+
+    public void crossBlock(Block block, BlockModelGenerators.TintState tint, TextureMapping mapping) {
+        gen.createCrossBlock(block, tint, mapping);
+    }
+
+    public void crossBlock(Block block, BlockModelGenerators.TintState tint) {
+        gen.createCrossBlock(block, tint);
+    }
+
+    public void flowerBed() {
+    }
+
+    public void bigDripleaf(Block block) {
+        gen.skipAutoItemBlock(block);
+        var dripleaf = getModelId(block);
+        var partial = getModelId(block, "_partial_tilt");
+        var full = getModelId(block, "_full_tilt");
+        create(multiVariant(block).with(BlockModelGenerators.createHorizontalFacingDispatch()).with(PropertyDispatch.property(BlockStateProperties.TILT)
+            .select(Tilt.NONE, Variant.variant().with(VariantProperties.MODEL, dripleaf))
+            .select(Tilt.UNSTABLE, Variant.variant().with(VariantProperties.MODEL, dripleaf))
+            .select(Tilt.PARTIAL, Variant.variant().with(VariantProperties.MODEL, partial))
+            .select(Tilt.FULL, Variant.variant().with(VariantProperties.MODEL, full))));
+    }
+
+    public void smallDripleaf() {
+    }
+
+    public void stem() {
+    }
+
+    public void coralFan() {
+    }
+
+    public void createCoralFamily() {
     }
 }
