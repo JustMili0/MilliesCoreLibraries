@@ -91,26 +91,6 @@ public class Textures {
         return get(block, MOIST_SUFFIX);
     }
 
-    public static ResourceLocation partialTilt(Block block) {
-        return get(block, PARTIAL_TILT_SUFFIX);
-    }
-
-    public static ResourceLocation fullTilt(Block block) {
-        return get(block, FULL_TILT_SUFFIX);
-    }
-
-    public static ResourceLocation stage0(Block block) {
-        return get(block, STAGE0_SUFFIX);
-    }
-
-    public static ResourceLocation stage1(Block block) {
-        return get(block, STAGE1_SUFFIX);
-    }
-
-    public static ResourceLocation stage2(Block block) {
-        return get(block, STAGE2_SUFFIX);
-    }
-
     // Chest texture suffixes
     public static ResourceLocation frontRight(Block block) {
         return get(block, FRONT_RIGHT_SUFFIX);

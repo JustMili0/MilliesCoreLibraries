@@ -385,7 +385,7 @@ public class BlockAssetDatagen {
     }
 
     public void sunflower(Block block) {
-        var top = Textures.top(block);
+        var top = getModelId(block, Textures.TOP_SUFFIX);
         var bottom = gen.createSuffixedVariant(block, Textures.DOWN_SUFFIX, BlockModelGenerators.TintState.NOT_TINTED.getCross(), TextureMapping::cross);
 
         gen.createSimpleFlatItemModel(block, Textures.FRONT_SUFFIX);
@@ -413,11 +413,11 @@ public class BlockAssetDatagen {
     }
 
     public void cocoa(Block block) {
-        gen.createSimpleFlatItemModel(Items.COCOA_BEANS);
+        gen.createSimpleFlatItemModel(block.asItem());
         create(multiVariant(block).with(PropertyDispatch.property(BlockStateProperties.AGE_2)
-            .select(0, Variant.variant().with(VariantProperties.MODEL, Textures.stage0(block)))
-            .select(1, Variant.variant().with(VariantProperties.MODEL, Textures.stage1(block)))
-            .select(2, Variant.variant().with(VariantProperties.MODEL, Textures.stage2(block)))
+            .select(0, Variant.variant().with(VariantProperties.MODEL, getModelId(block, Textures.STAGE0_SUFFIX)))
+            .select(1, Variant.variant().with(VariantProperties.MODEL, getModelId(block, Textures.STAGE1_SUFFIX)))
+            .select(2, Variant.variant().with(VariantProperties.MODEL, getModelId(block, Textures.STAGE2_SUFFIX)))
         ).with(BlockModelGenerators.createHorizontalFacingDispatchAlt()));
     }
 
@@ -426,15 +426,8 @@ public class BlockAssetDatagen {
     }
 
     public void pitcherPotCrop(Block block) {
-        var properties = PropertyDispatch.properties(PitcherCropBlock.AGE, BlockStateProperties.DOUBLE_BLOCK_HALF).generate((integer, doubleBlockHalf) -> {
-            Variant variant;
-            switch (doubleBlockHalf) {
-                case UPPER -> variant = Variant.variant().with(VariantProperties.MODEL, getModelId(block, Textures.TOP_STAGE_AFFIX + integer));
-                case LOWER -> variant = Variant.variant().with(VariantProperties.MODEL, getModelId(block, Textures.DOWN_STAGE_AFFIX + integer));
-                default -> throw new IncompatibleClassChangeError();
-            }
-            return variant;
-        });
+        var properties = PropertyDispatch.properties(PitcherCropBlock.AGE, BlockStateProperties.DOUBLE_BLOCK_HALF).generate((age, half) ->
+            Variant.variant().with(VariantProperties.MODEL, getModelId(block, (half == DoubleBlockHalf.UPPER? Textures.TOP_STAGE_AFFIX : Textures.DOWN_STAGE_AFFIX) + age)));
 
         gen.createSimpleFlatItemModel(block.asItem());
         create(multiVariant(block).with(properties));
@@ -456,8 +449,8 @@ public class BlockAssetDatagen {
     public void bigDripleaf(Block block) {
         gen.skipAutoItemBlock(block);
         var dripleaf = getModelId(block);
-        var partial = Textures.get(block, Textures.PARTIAL_TILT_SUFFIX);
-        var full = Textures.get(block, Textures.FULL_TILT_SUFFIX);
+        var partial = getModelId(block, Textures.PARTIAL_TILT_SUFFIX);
+        var full = getModelId(block, Textures.FULL_TILT_SUFFIX);
 
         create(multiVariant(block).with(BlockModelGenerators.createHorizontalFacingDispatch()).with(PropertyDispatch.property(BlockStateProperties.TILT)
             .select(Tilt.NONE, Variant.variant().with(VariantProperties.MODEL, dripleaf))
@@ -469,8 +462,8 @@ public class BlockAssetDatagen {
 
     public void smallDripleaf(Block block) {
         gen.skipAutoItemBlock(block);
-        var top = getModelId(Blocks.SMALL_DRIPLEAF, Textures.TOP_SUFFIX);
-        var bottom = getModelId(Blocks.SMALL_DRIPLEAF, Textures.DOWN_SUFFIX);
+        var top = getModelId(block, Textures.TOP_SUFFIX);
+        var bottom = getModelId(block, Textures.DOWN_SUFFIX);
 
         create(multiVariant(block).with(BlockModelGenerators.createHorizontalFacingDispatch()).with(PropertyDispatch.property(BlockStateProperties.DOUBLE_BLOCK_HALF)
             .select(DoubleBlockHalf.LOWER, Variant.variant().with(VariantProperties.MODEL, bottom))
