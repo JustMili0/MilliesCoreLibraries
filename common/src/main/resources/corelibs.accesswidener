@@ -51,6 +51,9 @@ accessible method net/minecraft/data/models/BlockModelGenerators createGlassBloc
 accessible method net/minecraft/data/models/BlockModelGenerators createBrushableBlock (Lnet/minecraft/world/level/block/Block;)V
 accessible method net/minecraft/data/models/BlockModelGenerators createDoubleBlock (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/resources/ResourceLocation;)V
 
+accessible method net/minecraft/data/models/BlockModelGenerators createCraftingTableLike (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/world/level/block/Block;Ljava/util/function/BiFunction;)V
+accessible method net/minecraft/data/models/BlockModelGenerators createFurnace (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/data/models/model/TexturedModel$Provider;)V
+
 accessible class net/minecraft/data/models/BlockModelGenerators$TintState
 accessible method net/minecraft/data/models/BlockModelGenerators createGrassLikeBlock (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/data/models/blockstates/Variant;)V
 accessible method net/minecraft/data/models/BlockModelGenerators createCrossBlock (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/data/models/BlockModelGenerators$TintState;Lnet/minecraft/world/level/block/state/properties/Property;[I)V
@@ -62,6 +65,7 @@ accessible method net/minecraft/data/models/BlockModelGenerators createPlant (Ln
 accessible method net/minecraft/data/models/BlockModelGenerators createDoublePlant (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/data/models/BlockModelGenerators$TintState;)V
 accessible method net/minecraft/data/models/BlockModelGenerators createFlowerBed (Lnet/minecraft/world/level/block/Block;)V
 accessible method net/minecraft/data/models/BlockModelGenerators createCropBlock (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/world/level/block/state/properties/Property;[I)V
+accessible method net/minecraft/data/models/BlockModelGenerators createPumpkinVariant (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/data/models/model/TextureMapping;)V
 accessible method net/minecraft/data/models/BlockModelGenerators createStems (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/world/level/block/Block;)V
 accessible method net/minecraft/data/models/BlockModelGenerators createCoralFans (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/world/level/block/Block;)V
 accessible method net/minecraft/data/models/BlockModelGenerators createCoral (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/world/level/block/Block;Lnet/minecraft/world/level/block/Block;Lnet/minecraft/world/level/block/Block;Lnet/minecraft/world/level/block/Block;Lnet/minecraft/world/level/block/Block;Lnet/minecraft/world/level/block/Block;Lnet/minecraft/world/level/block/Block;)V

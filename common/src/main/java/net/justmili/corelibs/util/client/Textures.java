@@ -13,6 +13,9 @@ public class Textures {
     public static final String LEFT_SUFFIX = "_left";
     public static final String RIGHT_SUFFIX = "_right";
     public static final String SIDE_SUFFIX = "_side";
+    public static final String SIDE1_SUFFIX = "_side1";
+    public static final String SIDE2_SUFFIX = "_side2";
+    public static final String SIDE3_SUFFIX = "_side3";
     public static final String SNOW_SUFFIX = "_snow";
     public static final String LIT_SUFFIX = "_on";
     public static final String MOIST_SUFFIX = "_moist";

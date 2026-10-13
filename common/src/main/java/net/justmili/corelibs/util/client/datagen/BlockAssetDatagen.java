@@ -7,7 +7,6 @@ import net.minecraft.data.models.blockstates.*;
 import net.minecraft.data.models.model.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.PitcherCropBlock;
@@ -17,6 +16,7 @@ import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.properties.Tilt;
 
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -421,8 +421,27 @@ public class BlockAssetDatagen {
         ).with(BlockModelGenerators.createHorizontalFacingDispatchAlt()));
     }
 
+    public void pumpkin(Block block) {
+        pillar(block, TextureMapping.column(block), PillarRotation.NONE);
+    }
+
+    public void pumpkinVariant(Block parent, Block block) {
+        gen.createPumpkinVariant(block, TextureMapping.column(parent));
+    }
+
     public void stems(Block unattached, Block attached) {
         gen.createStems(unattached, attached);
+    }
+
+    public void createPumpkinFamily(Block pumpkin, Block carvedPumpkin, Block stemUnattached, Block stemAttached) {
+        pumpkin(pumpkin);
+        pumpkinVariant(pumpkin, carvedPumpkin);
+        stems(stemUnattached, stemAttached);
+    }
+
+    public void createPumpkinFamily(Block pumpkin, Block carvedPumpkin, Block carvedJackOLantern, Block stemUnattached, Block stemAttached) {
+        createPumpkinFamily(pumpkin, carvedPumpkin, stemUnattached, stemAttached);
+        pumpkinVariant(pumpkin, carvedJackOLantern);
     }
 
     public void pitcherPotCrop(Block block) {
@@ -478,4 +497,58 @@ public class BlockAssetDatagen {
     public void createCoralFamily(Block coralBlock, Block deadCoralBlock, Block coralFullBlock, Block deadCoralFullBlock, Block coralFanBlock, Block deadCoralFanBlock, Block coralWallFanBlock, Block deadCoralWallFanBlock) {
         gen.createCoral(coralBlock, deadCoralBlock, coralFullBlock, deadCoralFullBlock, coralFanBlock, deadCoralFanBlock, coralWallFanBlock, deadCoralWallFanBlock);
     }
+
+    public void craftingTableLike(Block block, Block bottom, BiFunction<Block, Block, TextureMapping> mapping) {
+        gen.createCraftingTableLike(block, bottom, mapping);
+    }
+
+    public void craftingTable(Block block, Block bottom) {
+        craftingTableLike(block, bottom, TextureMapping::craftingTable);
+    }
+
+    public void fetchingTable(Block block, Block bottom) {
+        craftingTableLike(block, bottom, TextureMapping::fletchingTable);
+    }
+
+    public void cartographyTable(Block block, Block bottom) {
+        cube(block,
+            Textures.top(block),
+            Textures.get(bottom),
+            Textures.get(block, Textures.SIDE3_SUFFIX),
+            Textures.get(block, Textures.SIDE1_SUFFIX),
+            Textures.get(block, Textures.SIDE2_SUFFIX),
+            Textures.get(block, Textures.SIDE3_SUFFIX),
+            Textures.get(block, Textures.SIDE3_SUFFIX)
+        );
+    }
+
+    public void smithingTable(Block block, Block bottom) {
+        cube(block,
+            Textures.top(block),
+            Textures.get(bottom),
+            Textures.front(block),
+            Textures.front(block),
+            Textures.side(block),
+            Textures.side(block),
+            Textures.front(block)
+        );
+    }
+
+    public void furnace(Block block, TexturedModel.Provider texturedModel) {
+        gen.createFurnace(block, texturedModel);
+    }
+
+    /*TODO
+    Chest
+    Enchantment Table
+    Anvil
+    Grindstone
+    Cauldron
+    Dispenser
+    Dropper
+    Composter
+    Bell
+
+    And more O/-<
+     */
 }
