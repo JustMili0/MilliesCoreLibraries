@@ -18,6 +18,5 @@ dependencies {
     modImplementation(libs.fabric.loader.get())
 
     // Common (Common/Fabric) dependencies go here
-
     include(implementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-common:${libs.versions.mixinsquared.get()}")!!)!!)
 }
