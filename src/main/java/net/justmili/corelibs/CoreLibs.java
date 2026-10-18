@@ -2,12 +2,12 @@ package net.justmili.corelibs;
 
 import net.fabricmc.api.ModInitializer;
 import net.justmili.corelibs.config.ExampleConfig;
-import net.justmili.corelibs.libs.api.events.bridge.fabric.ServerEventsBridge;
-import net.justmili.corelibs.libs.config.sync.SyncPriorityConfigs;
-import net.justmili.corelibs.libs.util.ModUtil;
-import net.justmili.corelibs.libs.util.common.ResourceUtil;
-import net.justmili.corelibs.libs.util.common.TickUtil;
-import net.minecraft.resources.ResourceLocation;
+import net.justmili.corelibs.v1.api.events.bridge.ServerEventsBridge;
+import net.justmili.corelibs.v1.config.sync.SyncPriorityConfigs;
+import net.justmili.corelibs.v1.util.ModUtil;
+import net.justmili.corelibs.v1.util.common.ResourceUtil;
+import net.justmili.corelibs.v1.util.common.TickUtil;
+import net.minecraft.resources.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +29,7 @@ public class CoreLibs implements ModInitializer {
         ExampleConfig.register();
     }
 
-    public static ResourceLocation asId(String path) {
+    public static Identifier asId(String path) {
         return ResourceUtil.parse(ID, path);
     }
 }

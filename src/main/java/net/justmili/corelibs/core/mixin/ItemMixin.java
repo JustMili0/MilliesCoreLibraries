@@ -1,6 +1,6 @@
 package net.justmili.corelibs.core.mixin;
 
-import net.justmili.corelibs.libs.api.events.server.UseEvents;
+import net.justmili.corelibs.v1.api.events.server.UseEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;

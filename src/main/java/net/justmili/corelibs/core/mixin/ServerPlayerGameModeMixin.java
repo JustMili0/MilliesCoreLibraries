@@ -1,6 +1,6 @@
 package net.justmili.corelibs.core.mixin;
 
-import net.justmili.corelibs.libs.api.events.server.PlayerEvents;
+import net.justmili.corelibs.v1.api.events.server.PlayerEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;

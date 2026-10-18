@@ -1,7 +1,7 @@
 package net.justmili.corelibs.core.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import net.justmili.corelibs.libs.api.events.server.PlayerEvents;
+import net.justmili.corelibs.v1.api.events.server.PlayerEvents;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.item.ItemEntity;
 import org.spongepowered.asm.mixin.Mixin;

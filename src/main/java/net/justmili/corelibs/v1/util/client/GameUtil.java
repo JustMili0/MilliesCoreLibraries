@@ -1,0 +1,149 @@
+package net.justmili.corelibs.v1.util.client;
+
+import com.mojang.blaze3d.platform.Window;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.Camera;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+
+@Environment(EnvType.CLIENT)
+public class GameUtil {
+    private static final Minecraft client = Minecraft.getInstance();
+
+    public static Minecraft client() {
+        return client;
+    }
+
+    public static Gui gui() {
+        return client.gui;
+    }
+
+    public static Font font() {
+        return client.font;
+    }
+
+    public static Window window() {
+        return client.getWindow();
+    }
+
+    public static int width() {
+        return window().getGuiScaledWidth();
+    }
+
+    public static int height() {
+        return window().getGuiScaledHeight();
+    }
+
+    public static boolean isDebugScreenOn() {
+        return client.options.renderDebug;
+    }
+
+    public static boolean notSurvivalOrHideGui() {
+        return isNotSurvival() || shouldHideGui();
+    }
+
+    public static boolean isNotSurvival() {
+        if (client.gameMode == null) return false;
+        return !(client.gameMode.canHurtPlayer() && client.getCameraEntity() instanceof Player);
+    }
+
+    public static boolean shouldHideGui() {
+        return client.options.hideGui;
+    }
+
+    public static Player player() {
+        return client.player;
+    }
+
+    public static boolean isCreative() {
+        return player() != null && player().isCreative();
+    }
+
+    public static boolean isSpectator() {
+        return player() != null && player().isSpectator();
+    }
+
+    public static boolean isSurvival() {
+        return !isNotSurvival();
+    }
+
+    public static ClientLevel level() {
+        return client.level;
+    }
+
+    public static ResourceKey<Level> dimension() {
+        if (player() == null) return Level.OVERWORLD;
+        return player().level().dimension();
+    }
+
+    public static boolean inDimension(ResourceKey<Level> dimension) {
+        return dimension() == dimension;
+    }
+
+    public static void playSound(SoundEvent sound, float volume, float pitch) {
+        if (player() == null) return;
+        player().playSound(sound, volume, pitch);
+    }
+
+    public static boolean isPackLoaded(String pack) {
+        return client.getResourcePackRepository().isAvailable(pack);
+    }
+
+    public static boolean arePackLoaded(String... packs) {
+        for (String pack : packs) {
+            if (isPackLoaded(pack)) return true;
+        }
+        return false;
+    }
+
+    public static boolean addPackAndTell(String pack) {
+        // Add resource pack and tell if it was loaded or not
+        return client.getResourcePackRepository().addPack(pack);
+    }
+
+    public static void removePack(String pack) {
+        client.getResourcePackRepository().removePack(pack);
+        reloadPacks();
+    }
+
+    public static void reloadPacks() {
+        client.reloadResourcePacks();
+    }
+
+    public static GameRenderer getGameRenderer() {
+        return client.gameRenderer;
+    }
+
+    public static Camera getMainCam() {
+        return getGameRenderer().getMainCamera();
+    }
+
+    public static ItemRenderer getItemRenderer() {
+        return client.getItemRenderer();
+    }
+
+    public static BlockRenderDispatcher getBlockRenderer() {
+        return client.getBlockRenderer();
+    }
+
+    public static BakedModel getItemModel(ItemStack stack, Level level, LivingEntity entity, int seed) {
+        return getItemRenderer().getModel(stack, level, entity, seed);
+    }
+
+    public static BakedModel getItemModel(ItemStack stack) {
+        return getItemRenderer().getModel(stack, null, null, 0);
+    }
+}

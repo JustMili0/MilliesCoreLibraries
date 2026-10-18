@@ -1,7 +1,7 @@
 package net.justmili.corelibs.core.mixin.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.justmili.corelibs.libs.util.client.ItemRendererUtil;
+import net.justmili.corelibs.v1.util.client.ItemRendererUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;

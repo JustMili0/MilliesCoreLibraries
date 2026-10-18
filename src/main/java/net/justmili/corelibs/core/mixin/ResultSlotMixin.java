@@ -1,6 +1,6 @@
 package net.justmili.corelibs.core.mixin;
 
-import net.justmili.corelibs.libs.api.events.server.PlayerEvents;
+import net.justmili.corelibs.v1.api.events.server.PlayerEvents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.inventory.ResultSlot;

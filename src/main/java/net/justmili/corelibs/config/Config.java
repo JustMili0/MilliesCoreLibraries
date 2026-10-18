@@ -1,9 +1,9 @@
 package net.justmili.corelibs.config;
 
-import net.justmili.corelibs.libs.config.ConfigType;
-import net.justmili.corelibs.libs.config.FileType;
-import net.justmili.corelibs.libs.config.MConfigBuilder;
-import net.justmili.corelibs.libs.config.entry.ConfigEntry;
+import net.justmili.corelibs.v1.config.ConfigType;
+import net.justmili.corelibs.v1.config.FileType;
+import net.justmili.corelibs.v1.config.MConfigBuilder;
+import net.justmili.corelibs.v1.config.entry.ConfigEntry;
 
 public class Config {
     public static MConfigBuilder client = new MConfigBuilder("corelibs", ConfigType.CLIENT, FileType.JSON5, false);
