@@ -1,93 +1,180 @@
-import multiloader.baseName
-import multiloader.mcVersion
-import multiloader.modVersion
-import multiloader.root
-import net.fabricmc.loom.api.LoomGradleExtensionAPI
-import net.fabricmc.loom.api.fabricapi.FabricApiExtension
-import org.gradle.accessors.dm.LibrariesForLibs
-
 plugins {
-    java
-    alias(libs.plugins.arch.loom) apply false
-    alias(libs.plugins.arch.plugin)
-    alias(libs.plugins.shadow) apply false
-    id("multiloader-extensions")
+    // This plugin applies the correct loom variant based on the Minecraft version
+    id("dev.kikugie.loom-back-compat")
+    alias(libs.plugins.publish)
 }
 
-architectury {
-    minecraft = mcVersion
+// DO NOT set group = ...!
+version = "${property("mod.version")}+mc${sc.current.version}-Fabric"
+base.archivesName = property("mod.archives_base_name") as String
+
+val requiredJava: JavaVersion = when {
+    sc.current.parsed >= "26.1" -> JavaVersion.VERSION_25
+    sc.current.parsed >= "1.20.5" -> JavaVersion.VERSION_21
+    sc.current.parsed >= "1.18" -> JavaVersion.VERSION_17
+    sc.current.parsed >= "1.17" -> JavaVersion.VERSION_16
+    else -> JavaVersion.VERSION_1_8
 }
 
-allprojects {
-    apply(plugin = "multiloader-extensions")
+// Used for publishing on Modrinth and Curseforge
+val compatibleVersions: List<String> = sc.properties.rawOrNull("mod", "mc_releases")
+    ?.asList().orEmpty().map { it.toString() }
 
-    repositories {}
+// Versions before 26.1 are obfuscated (remapped), 26.1+ are not
+val obfuscated = sc.current.parsed < "26.1"
+
+repositories {
+    /**
+     * Restricts dependency search of the given [groups] to the [maven URL][url],
+     * improving the setup speed.
+     */
+    fun strictMaven(url: String, alias: String, vararg groups: String) = exclusiveContent {
+        forRepository { maven(url) { name = alias } }
+        filter { groups.forEach(::includeGroup) }
+    }
+    strictMaven("https://www.cursemaven.com", "CurseForge", "curse.maven")
+    strictMaven("https://api.modrinth.com/maven", "Modrinth", "maven.modrinth")
+    strictMaven("https://maven.terraformersmc.com/", "TerraformersMC", "com.terraformersmc") // Mod Menu
+    strictMaven("https://maven.bawnorton.com/releases", "Bawnorton", "com.github.bawnorton") // MixinSquared
+
+    mavenCentral()
+    maven("https://maven.fabricmc.net") // Fabric
+
+    maven("https://repo.spongepowered.org/repository/maven-public/")
+    maven("https://maven.enjarai.dev/mirrors") // MixinSquared mirror
+    maven("https://maven.lumynitystudios.net/") // Lumynity Studios' mods
 }
 
-subprojects {
-    apply(plugin = "java")
-    apply(plugin = "dev.architectury.loom")
-    apply(plugin = "architectury-plugin")
+dependencies {
+    minecraft("com.mojang:minecraft:${sc.current.version}")
+    // Applies Mojang Mappings on obfuscated versions
+    loomx.applyMojangMappings()
 
-    val libs = root.extensions.getByName<LibrariesForLibs>("libs")
-    base.archivesName.set(baseName)
+    // Use `mod{dependency type}` even on 26.1+ - loom-back-compat converts them
+    modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
 
-    // All repositories used should be listed here
-    repositories {
-        mavenCentral()
-        maven("https://maven.parchmentmc.org") // Mappings
-        maven("https://maven.fabricmc.net") // Fabric
-        maven("https://maven.neoforged.net/releases") // NeoForge
-        maven("https://maven.minecraftforge.net/") // Forge
+    // Fabric dependencies go here
 
-        maven("https://repo.spongepowered.org/repository/maven-public/")
-        maven("https://maven.bawnorton.com/releases") // MixinSqured
-        maven("https://maven.enjarai.dev/mirrors") // MixinSqured
+    // Other
+    modImplementation("com.terraformersmc:modmenu:${property("deps.mod_menu")}")
 
-        maven("https://maven.terraformersmc.com/") // Mod Menu
-        maven("https://api.modrinth.com/maven") // Modrinth
-        maven("https://maven.lumynitystudios.net/") // Lumynity Studios' mods
+    // Fabric Loader has MixinExtras built-in since 0.15.0 but not MixinSquared
+    val mixinSquared = "com.github.bawnorton.mixinsquared:mixinsquared-fabric:${libs.versions.mixinsquared.get()}"
+    if (obfuscated) {
+        // Annotation processor is only needed for refmap generation, which only exists on obfuscated versions
+        include(implementation(annotationProcessor(mixinSquared)!!)!!)
+    } else {
+        include(implementation(mixinSquared)!!)
+    }
+}
+
+fabricApi {
+    configureDataGeneration {
+        client.set(true)
+    }
+}
+
+loom {
+    fabricModJsonPath = rootProject.file("src/main/resources/fabric.mod.json") // Useful for interface injection
+    accessWidenerPath = sc.process(
+        rootProject.file("src/main/resources/corelibs.accesswidener"),
+        "build/processed.accesswidener"
+    )
+
+    decompilerOptions.named("vineflower") {
+        options.put("mark-corresponding-synthetics", "1") // Adds names to lambdas - useful for mixins
     }
 
-    val loom = project.extensions.getByName<LoomGradleExtensionAPI>("loom")
-    val fabricApi = project.extensions.getByName<FabricApiExtension>("fabricApi")
-    loom.silentMojangMappingsLicense()
+    runConfigs.all {
+        preferGradleTask = true
+        generateRunConfig = true
+        runDirectory = rootProject.file("run") // Shares the run directory between versions
+        jvmArguments.add("-Dmixin.debug.export=true") // Exports transformed classes for debugging
+    }
+}
 
-    dependencies {
-        "minecraft"(libs.minecraft.get())
+java {
+    targetCompatibility = requiredJava
+    sourceCompatibility = requiredJava
 
-        // Uncomment if you want datagen (fabric)
-        // IMPORTANT: Only for the sake of compiling - not to be used for anything else!
-        "modCompileOnly"(fabricApi.module("fabric-recipe-api-v1", libs.versions.fabric.api.get()))
+    toolchain {
+        vendor = JvmVendorSpec.ADOPTIUM
+        languageVersion = JavaLanguageVersion.of(requiredJava.majorVersion)
+    }
+}
 
-        "mappings"(loom.layered {
-            officialMojangMappings()
-            parchment("org.parchmentmc.data:parchment-${mcVersion}:${libs.versions.parchment.get()}@zip")
-        })
+tasks {
+    processResources {
+        fun MutableMap<String, String>.register(key: String, value: String) {
+            inputs.property(key, value)
+            set(key, value)
+        }
+
+        val props = buildMap {
+            register("mod_id", sc.properties["mod.id"])
+            register("mod_name", sc.properties["mod.name"])
+            register("mod_version", sc.properties["mod.version"])
+            register("mod_description", sc.properties["mod.description"])
+            register("mod_authors", sc.properties["mod.authors"])
+            register("mod_license", sc.properties["mod.license"])
+            register("fabric_loader_version", sc.properties["deps.fabric_loader"])
+            register("fabric_api_version", sc.properties["deps.fabric_api"])
+            register("minecraft_version_constraint", sc.properties["mod.mc_compat"])
+        }
+
+        filesMatching("fabric.mod.json") { expand(props) }
+
+        val mixinJava = "JAVA_${requiredJava.majorVersion}"
+        filesMatching("*.mixins.json") { expand("java" to mixinJava) }
     }
 
-    java {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+    // Includes the license file in the built mod
+    withType<Jar> {
+        from(rootProject.file("LICENSE")) { rename { it } }
     }
 
-    tasks.withType<JavaCompile>().configureEach {
-        options.release.set(17)
+    register<Copy>("buildAndCollect") {
+        group = "build"
+        description = "Builds mod jars and copies results to `build/libs/{mod version}/`"
+
+        inputs.property("version", project.property("mod.version"))
+        // loomx.modJar returns the jar task for the applied loom variant
+        from(loomx.modJar.flatMap { it.archiveFile })
+        into(rootProject.layout.buildDirectory.file("libs/${project.property("mod.version")}"))
+    }
+}
+
+publishMods {
+    file = loomx.modJar.flatMap { it.archiveFile }
+    modLoaders.add("fabric")
+
+    // TODO: bring back one build-logic is ported
+    // changelog = readChangelogFromBranch("origin/rep-info", ".Changelogs/${project.property("mod.version")}-Changelog.md")
+    changelog = "No changelog"
+
+    modrinth {
+        accessToken = providers.gradleProperty("modrinth_token")
+        projectId = "j6khQEIz"
+
+        minecraftVersions.addAll(compatibleVersions)
+        environment = CLIENT_AND_SERVER
+        // STABLE, BETA, ALPHA
+        type = STABLE
+
+        requires("fabric-api")
     }
 
-    val detectedPlatform = when {
-        project.name.contains("fabric", true) -> "Fabric"
-        project.name.contains("forge", true) -> "Forge"
-        else -> "Common"
-    }
-    project.version = "${modVersion}+mc${mcVersion}-${detectedPlatform}"
-
-    tasks.withType<Jar>().configureEach {
-        archiveBaseName.set(baseName)
-        archiveVersion.set(project.version.toString())
-    }
-
-    tasks.withType<Jar>().configureEach {
-        from(root.file("LICENSE"))
-    }
+//    curseforge {
+//        accessToken = providers.gradleProperty("curseforge_token")
+//        projectId = "abcdefg"
+//
+//        minecraftVersions.addAll(compatibleVersions)
+//        clientRequired = true
+//        serverRequired = true
+//        // STABLE, BETA, ALPHA
+//        type = STABLE
+//
+//        requires("fabric-api")
+//    }
 }
