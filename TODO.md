@@ -3,8 +3,10 @@
 - A lot of classes such as utils etc. can be copied from JustMili's other projects
 
 # FIRST-PRIORITY TODO (0.0.2a)
-- Finish all the events
-- Finish reworking data generation utils
+- [APPELS] Finish all the events
+- [MILLIE] Finish unfinished utils so you can actually run the dev env
+- [MILLIE] Finish reworking data generation utils
+- [BLUSPRING] Port `build-logic` for Stonecutter because it's still based on Arch Loom
 
 # TODO (0.0.2a)
 - Expand on config

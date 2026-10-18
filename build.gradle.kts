@@ -17,8 +17,7 @@ val requiredJava: JavaVersion = when {
 }
 
 // Used for publishing on Modrinth and Curseforge
-val compatibleVersions: List<String> = sc.properties.rawOrNull("mod", "mc_releases")
-    ?.asList().orEmpty().map { it.toString() }
+val compatibleVersions: List<String> = sc.properties.rawOrNull("mod", "mc_releases")?.asList().orEmpty().map { it.toString() }
 
 // Versions before 26.1 are obfuscated (remapped), 26.1+ are not
 val obfuscated = sc.current.parsed < "26.1"
@@ -38,8 +37,6 @@ repositories {
     strictMaven("https://maven.bawnorton.com/releases", "Bawnorton", "com.github.bawnorton") // MixinSquared
 
     mavenCentral()
-    maven("https://maven.fabricmc.net") // Fabric
-
     maven("https://repo.spongepowered.org/repository/maven-public/")
     maven("https://maven.enjarai.dev/mirrors") // MixinSquared mirror
     maven("https://maven.lumynitystudios.net/") // Lumynity Studios' mods
@@ -55,6 +52,7 @@ dependencies {
     modImplementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
 
     // Fabric dependencies go here
+    //include Fabric Language Kotlin
 
     // Other
     modImplementation("com.terraformersmc:modmenu:${property("deps.mod_menu")}")
