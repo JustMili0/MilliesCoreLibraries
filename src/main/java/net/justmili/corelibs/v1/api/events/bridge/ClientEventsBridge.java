@@ -16,7 +16,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 public class ClientEventsBridge {
 
     public static void init() {
-        //? if >= 1.21.11 {
+        //? if >=1.21.11 {
         /*/^? if >=26.1 {^//^LevelRenderEvents^//^?} else {^/WorldRenderEvents/^?}^/.BEFORE_BLOCK_OUTLINE.register((context, outline) -> BlockOutlineRenderEvent.RENDER_PRE.invoker().onStartRender(context, outline));
         /^? if >=26.2 {^//^LevelExtractionEvents^//^?} else if >=26.1 {^//^LevelRenderEvents^//^?} else {^/WorldRenderEvents/^?}^/.AFTER_BLOCK_OUTLINE_EXTRACTION.register((context, hitResult) -> BlockOutlineRenderEvent.EXTRACTION_POST.invoker().onEndExtraction(context, hitResult));
         *///?} else {

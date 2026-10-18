@@ -1,52 +1,65 @@
 package net.justmili.corelibs.v1.util;
 
+import com.mojang.serialization.Codec;
+import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.justmili.corelibs.CoreLibs;
+import net.justmili.corelibs.v1.util.common.FdaUtil;
+import net.justmili.corelibs.v1.util.common.ResourceUtil;
+import net.justmili.corelibs.v1.util.common.Text;
+import net.minecraft.server.level.ServerPlayer;
 import org.slf4j.Logger;
 
+@SuppressWarnings({"UnstableApiUsage"})
 public class ModUtil {
-    // TODO: Add Javadoc
 
-    public static void markEndOfSupport(String modName, String modId, boolean isDeadVersion, boolean shouldNotifyChat) {
-        if (!isDeadVersion) return;
-        ServerLifecycleEvents.STARTING.register(server -> {
+    public static void markEOS(String modName, String modId, boolean noFurtherVersionSupport, boolean shouldNotifyChat) {
+        if (!noFurtherVersionSupport) return;
+        ServerLifecycleEvents.SERVER_STARTED.register(server -> {
             CoreLibs.LOGGER.warn("""
-                \nYou are using the last version of "{}" ({}) that supports Minecraft {}!
-                This means that mod is no longer developed for this Minecraft version.
-                It is recommended you update to a newer Minecraft version for a more up-to-date experience.
-              """, modName, modId, server.getServerVersion());
+                  \nYou are using the last version of "{}" ({}) that supports Minecraft {}!
+                  This means that mod is no longer developed for this Minecraft version.
+                  It is recommended you update to a newer Minecraft version for a more up-to-date experience.
+                """, modName, modId, server.getServerVersion());
         });
-        ServerLevelEvents.LEVEL_LOAD.register((server, level) -> {
-            // TODO: Change to chat msg per-player and make it get sent only once ever
-            // TODO: Change to when client loads the world, otherwise it'll appear twice on servers
-            if (!shouldNotifyChat) return;
+
+        if (!shouldNotifyChat) return;
+        var notified = FdaUtil.createPersistent(ResourceUtil.parse(modId, "notified_of_eos"), false, Codec.BOOL);
+        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) ->
+            notifyOnce(handler.player, notified, """
+                  You are using the last version of "%s" that supports Minecraft %s!
+                  This means that mod is no longer developed for this Minecraft version.
+                  It is recommended you update to a newer Minecraft version for a more up-to-date experience.
+                
+                  This message will not appear in chat again.
+                """.formatted(modName, server.getServerVersion())));
+    }
+
+    public static void markEOD(String modName, String modId, boolean noFurtherDevelopment, boolean shouldNotifyChat) {
+        if (!noFurtherDevelopment) return;
+        ServerLifecycleEvents.SERVER_STARTED.register(server -> {
+            // TODO: Expand on message
             CoreLibs.LOGGER.warn("""
-                You are using the last version of "{}" that supports Minecraft {}!
-                This means that mod is no longer developed for this Minecraft version.
-                It is recommended you update to a newer Minecraft version for a more up-to-date experience.
-                \n
-                This message will not appear in chat again.
-              """, modName, server.getServerVersion());
+                  Mod "{}" is no longer in development!
+                """, modName);
+        });
+
+        if (!shouldNotifyChat) return;
+        var notified = FdaUtil.createPersistent(ResourceUtil.parse(modId, "notified_of_eod"), false, Codec.BOOL);
+        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
+            // TODO: Expand on message
+            notifyOnce(handler.player, notified, """
+                  Mod "%s" is no longer in development!
+                  This message will not appear in chat again.
+                """.formatted(modName));
         });
     }
-    public static void markEndOfDevelopment(String modName, String modId, boolean isDeadMod, boolean shouldNotifyChat) {
-        if (!isDeadMod) return;
-        ServerLifecycleEvents.STARTING.register(server -> {
-            // TODO: Expand on message
-            CoreLibs.LOGGER.warn("""
-                Mod "{}" is no longer in development!
-              """, modName);
-        });
-        ServerLevelEvents.LEVEL_LOAD.register((server, level) -> {
-            // TODO: Change to chat msg per-player and make it get sent only once ever
-            // TODO: Change to when client loads the world, otherwise it'll appear twice on servers
-            // TODO: Expand on message
-            if (!shouldNotifyChat) return;
-            CoreLibs.LOGGER.warn("""
-                Mod "{}" is no longer in development!
-                \n
-                This message will not appear in chat again.
-              """, modName);
-        });
+
+    private static void notifyOnce(ServerPlayer player, AttachmentType<Boolean> notified, String message) {
+        if (FdaUtil.getBool(player, notified)) return;
+        Text.sendOkTo(player, message.strip());
+        FdaUtil.set(player, notified, true);
     }
 
     // CORELIBS: Only really made for mods licensed ARR, might expand
