@@ -1,6 +1,6 @@
 package net.justmili.corelibs.libs.util.common;
 
-import net.justmili.corelibs.libs.api.events.server.ServerTickEvents;
+import net.justmili.corelibs.libs.api.events.server.TickEvents;
 import net.minecraft.server.MinecraftServer;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -19,7 +19,7 @@ public class TickUtil {
     }
 
     public static void registerProcessQueue() {
-        ServerTickEvents.SERVER_POST.register(server -> queue.removeIf(item -> {
+        TickEvents.SERVER_POST.register(server -> queue.removeIf(item -> {
             if (--item.processTicks <= 0) {
                 item.task.run();
                 return true;

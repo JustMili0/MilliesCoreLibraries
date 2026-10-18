@@ -5,7 +5,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.justmili.corelibs.CoreLibs;
-import net.justmili.corelibs.libs.config.sync.SyncConfigCSP.SyncCSPPayload;
+import net.justmili.corelibs.libs.config.sync.SyncPriorityConfigPacket.SyncCSPPayload;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
@@ -14,12 +14,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SyncCommonServerPriority {
-    public static final ResourceLocation CHANNEL = CoreLibs.asId("sync_common_sp_config");
+public class SyncPriorityConfigs {
+    public static final ResourceLocation CHANNEL = CoreLibs.asId("sync_priority_configs");
 
     public static void registerServer() {
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
-            List<SyncCSPPayload> payloads = SyncConfigCSP.buildAllPayloads();
+            List<SyncCSPPayload> payloads = SyncPriorityConfigPacket.buildAllPayloads();
             if (payloads.isEmpty()) return;
 
             FriendlyByteBuf buf = PacketByteBufs.create();
@@ -31,7 +31,7 @@ public class SyncCommonServerPriority {
     public static void registerClient() {
         ClientPlayNetworking.registerGlobalReceiver(CHANNEL, (client, handler, buf, responseSender) -> {
             List<SyncCSPPayload> payloads = readPayloads(buf);
-            client.execute(() -> SyncConfigCSP.applyPayloads(payloads));
+            client.execute(() -> SyncPriorityConfigPacket.applyPayloads(payloads));
         });
     }
 

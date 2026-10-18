@@ -24,6 +24,7 @@ public class PlayerEvents {
     public static final Event<Respawn> RESPAWN = Event.create(Respawn.class, callbacks -> (oldPlayer, newPlayer, alive) -> {
         for (var event : callbacks) event.onRespawn(oldPlayer, newPlayer, alive);
     });
+
     public static final Event<Clone> CLONE = Event.create(Clone.class, callbacks -> (oldPlayer, newPlayer, alive) -> {
         for (var event : callbacks) event.onClone(oldPlayer, newPlayer, alive);
     });
@@ -31,9 +32,11 @@ public class PlayerEvents {
     public static final Event<CraftItem> CRAFT_ITEM = Event.create(CraftItem.class, callbacks -> (player, itemCrafted, container) -> {
         for (var event : callbacks) event.onCraftItem(player, itemCrafted, container);
     });
+
     public static final Event<SmeltItem> SMELT_ITEM = Event.create(SmeltItem.class, callbacks -> (player, itemSmelted) -> {
         for (var event : callbacks) event.onSmeltItem(player, itemSmelted);
     });
+
     public static final Event<DropItem> DROP_ITEM = Event.create(DropItem.class, callbacks -> (player, itemDropped) -> {
         for (var event : callbacks) {
             if (!event.onDropItem(player, itemDropped)) return false;
@@ -41,6 +44,7 @@ public class PlayerEvents {
 
         return true;
     });
+
     public static final Event<CanPickupItem> CAN_PICKUP_ITEM = Event.create(CanPickupItem.class, callbacks -> (player, itemEntity, stack) -> {
         for (var event : callbacks) {
             if (!event.canPickupItem(player, itemEntity, stack)) return false;
@@ -48,6 +52,7 @@ public class PlayerEvents {
 
         return true;
     });
+
     public static final Event<PickupItemPre> PICKUP_ITEM_PRE = Event.create(PickupItemPre.class, callbacks -> (player, itemEntity, stack) -> {
         for (var event : callbacks) {
             var result = event.onStartPickupItem(player, itemEntity, stack);
@@ -56,6 +61,7 @@ public class PlayerEvents {
 
         return true;
     });
+
     public static final Event<PickupItemPost> PICKUP_ITEM_POST = Event.create(PickupItemPost.class, callbacks -> (player, itemEntity, stack) -> {
         for (var event : callbacks) event.onEndPickupItem(player, itemEntity, stack);
     }); // TODO: hook up
@@ -67,6 +73,7 @@ public class PlayerEvents {
     public static final Event<OpenMenu> OPEN_MENU = Event.create(OpenMenu.class, callbacks -> (player, menu) -> {
         for (var event : callbacks) event.onOpenMenu(player, menu);
     }); // TODO: hook up
+
     public static final Event<CloseMenu> CLOSE_MENU = Event.create(CloseMenu.class, callbacks -> (player, menu) -> {
         for (var event : callbacks) event.onCloseMenu(player, menu);
     }); // TODO: hook up
@@ -155,7 +162,7 @@ public class PlayerEvents {
     }
 
     @FunctionalInterface
-    public interface KillOtherEntityPost { // TODO: finish
-        InteractionResult onEndKillOtherEntity();
+    public interface KillOtherEntity { // TODO: finish
+        InteractionResult onKillOtherEntity();
     }
 }

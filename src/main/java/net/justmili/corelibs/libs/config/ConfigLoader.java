@@ -4,7 +4,7 @@ import net.justmili.corelibs.CoreLibs;
 import net.justmili.corelibs.libs.config.entry.ConfigEntry;
 import net.justmili.corelibs.libs.config.entry.ListConfigEntry;
 import net.justmili.corelibs.libs.config.items.CategoryItem;
-import net.justmili.corelibs.libs.config.sync.SyncConfigCSP;
+import net.justmili.corelibs.libs.config.sync.SyncPriorityConfigPacket;
 import net.justmili.corelibs.libs.config.writers.FormatWriter;
 import net.justmili.corelibs.libs.config.writers.json.Json5Writer;
 import net.justmili.corelibs.libs.config.writers.json.JsonWriter;
@@ -34,7 +34,7 @@ public class ConfigLoader {
             case COMMON_SERVER_PRIORITY -> "common-sp";
         };
         if (configType == ConfigType.COMMON_SERVER_PRIORITY) {
-            SyncConfigCSP.register(this);
+            SyncPriorityConfigPacket.register(this);
         }
         this.writer = resolveWriter(fileType);
 

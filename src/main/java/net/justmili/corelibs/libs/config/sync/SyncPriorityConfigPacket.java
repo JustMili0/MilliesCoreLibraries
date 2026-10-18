@@ -9,11 +9,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SyncConfigCSP {
+public class SyncPriorityConfigPacket {
     public record SyncCSPPayload(String modId, Map<String, String> entries, Map<String, String> lists) { }
     private static final Map<String, ConfigLoader> SYNCABLE = new HashMap<>();
 
-    private SyncConfigCSP() {}
+    private SyncPriorityConfigPacket() {}
 
     public static void register(ConfigLoader loader) {
         SYNCABLE.put(loader.modId, loader);

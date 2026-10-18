@@ -1,8 +1,6 @@
 package net.justmili.corelibs.libs.util;
 
 import net.justmili.corelibs.CoreLibs;
-import net.justmili.corelibs.libs.api.events.server.ServerLevelEvents;
-import net.justmili.corelibs.libs.api.events.server.ServerLifecycleEvents;
 import org.slf4j.Logger;
 
 public class ModUtil {

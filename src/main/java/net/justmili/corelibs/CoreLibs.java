@@ -1,9 +1,9 @@
 package net.justmili.corelibs;
 
 import net.fabricmc.api.ModInitializer;
-import net.justmili.corelibs.libs.api.events.bridge.fabric.ServerEventsBridge;
-import net.justmili.corelibs.libs.config.sync.SyncCommonServerPriority;
 import net.justmili.corelibs.config.ExampleConfig;
+import net.justmili.corelibs.libs.api.events.bridge.fabric.ServerEventsBridge;
+import net.justmili.corelibs.libs.config.sync.SyncPriorityConfigs;
 import net.justmili.corelibs.libs.util.ModUtil;
 import net.justmili.corelibs.libs.util.common.ResourceUtil;
 import net.justmili.corelibs.libs.util.common.TickUtil;
@@ -23,7 +23,7 @@ public class CoreLibs implements ModInitializer {
         ModUtil.markEndOfSupport(NAME, ID, false, false);
 
         ServerEventsBridge.init();
-        SyncCommonServerPriority.registerServer();
+        SyncPriorityConfigs.registerServer();
 
         TickUtil.registerProcessQueue();
         ExampleConfig.register();

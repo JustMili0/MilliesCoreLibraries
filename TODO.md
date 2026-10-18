@@ -4,6 +4,9 @@
 
 # FIRST-PRIORITY TODO
 - Clean up the project and make sure it's all fabric
+  - And port them to use Fabric's `EventFactory.createArrayBacked()`
+- Stop hooking events directly into Fabric API and just mixin into things yourself
+  - 
 
 # TODO
 - (LIBS UTIL) Finish reworking data generation utils
