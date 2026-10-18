@@ -2,8 +2,10 @@
 - Keep TODO and README on the latest main branch you're working on
 - A lot of classes such as utils etc. can be copied from JustMili's other projects
 
+# FIRST-PRIORITY TODO
+- Clean up the project and make sure it's all fabric
+
 # TODO
-- (GRADLE) Switch to Fabric-only Stonecutter template
 - (LIBS UTIL) Finish reworking data generation utils
 - (API EVENTS) Scrap most events and only keep ones Fabric doesn't have
 - (LIBS CONFIG) Finish Config

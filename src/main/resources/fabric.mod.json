@@ -22,10 +22,10 @@
       "net.justmili.corelibs.CoreLibs"
     ],
     "client": [
-      "net.justmili.corelibs.FabricClient"
+      "net.justmili.corelibs.client.FabricClient"
     ],
     "modmenu": [
-      "net.justmili.corelibs.ModMenuEntrypoint"
+      "net.justmili.corelibs.client.ModMenuEntrypoint"
     ]
   },
   "mixins": [

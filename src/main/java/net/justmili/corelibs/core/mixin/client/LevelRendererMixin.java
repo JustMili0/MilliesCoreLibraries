@@ -2,8 +2,8 @@ package net.justmili.corelibs.core.mixin.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.justmili.corelibs.api.events.client.LevelRenderEvents;
-import net.justmili.corelibs.api.events.impl.client.LevelRenderContextImpl;
+import net.justmili.corelibs.libs.api.events.client.LevelRenderEvents;
+import net.justmili.corelibs.libs.api.events.impl.client.LevelRenderContextImpl;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
