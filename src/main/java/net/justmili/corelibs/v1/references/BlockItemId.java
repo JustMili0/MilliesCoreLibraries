@@ -1,16 +1,16 @@
 //? if < 26.2 {
-/*package net.justmili.corelibs.v1.references;
+package net.justmili.corelibs.v1.references;
 
 import net.justmili.corelibs.v1.util.common.ResourceUtil;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
 public record BlockItemId(ResourceKey<Block> block, ResourceKey<Item> item) {
     // Copy of Minecraft 26.2 class BlockItemId for earlier Minecraft versions
-    public static BlockItemId create(final Identifier blockId, final Identifier itemId) {
+    public static BlockItemId create(final ResourceLocation blockId, final ResourceLocation itemId) {
         return new BlockItemId(ResourceKey.create(Registries.BLOCK, blockId), ResourceKey.create(Registries.ITEM, itemId));
     }
 
@@ -23,4 +23,4 @@ public record BlockItemId(ResourceKey<Block> block, ResourceKey<Item> item) {
         return create(id, id);
     }
 }
-*///?}
+//?}

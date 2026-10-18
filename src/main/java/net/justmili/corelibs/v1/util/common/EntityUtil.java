@@ -3,7 +3,7 @@ package net.justmili.corelibs.v1.util.common;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -145,14 +145,14 @@ public class EntityUtil {
         entity.addEffect(new MobEffectInstance(effects, duration, power, false, false, false));
     }
 
-    public static boolean hasAdvancement(ServerPlayer player, Identifier id) {
+    public static boolean hasAdvancement(ServerPlayer player, ResourceLocation id) {
         var advancement = getAdvancement(player.server, id);
         if (advancement == null) return false;
 
         return getOrStartProgress(player, id).isDone();
     }
 
-    public static void grantAdvancement(ServerPlayer player, Identifier id) {
+    public static void grantAdvancement(ServerPlayer player, ResourceLocation id) {
         var advancement = getAdvancement(player.server, id);
         if (advancement == null) return;
 
@@ -161,7 +161,7 @@ public class EntityUtil {
             player.getAdvancements().award(advancement, criteria);
     }
 
-    public static void revokeAdvancement(ServerPlayer player, Identifier id) {
+    public static void revokeAdvancement(ServerPlayer player, ResourceLocation id) {
         var advancement = getAdvancement(player.server, id);
         if (advancement == null) return;
 
@@ -170,11 +170,11 @@ public class EntityUtil {
             player.getAdvancements().revoke(advancement, criteria);
     }
 
-    private static Advancement getAdvancement(MinecraftServer server, Identifier id) {
+    private static Advancement getAdvancement(MinecraftServer server, ResourceLocation id) {
         return server.getAdvancements().getAdvancement(id);
     }
 
-    private static AdvancementProgress getOrStartProgress(ServerPlayer player, Identifier id) {
+    private static AdvancementProgress getOrStartProgress(ServerPlayer player, ResourceLocation id) {
         return player.getAdvancements().getOrStartProgress(getAdvancement(player.server, id));
     }
 

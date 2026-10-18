@@ -12,7 +12,7 @@ import net.minecraft.data.models.ItemModelGenerators;
 import net.minecraft.data.models.blockstates.BlockStateGenerator;
 import net.minecraft.data.models.model.DelegatedModel;
 import net.minecraft.data.models.model.ModelLocationUtils;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
@@ -52,9 +52,9 @@ public abstract class ImprovedModelProvider implements DataProvider {
             }
         };
 
-        Map<Identifier, Supplier<JsonElement>> models = Maps.newHashMap();
+        Map<ResourceLocation, Supplier<JsonElement>> models = Maps.newHashMap();
         Set<Item> simpleModels = Sets.newHashSet();
-        BiConsumer<Identifier, Supplier<JsonElement>> modelOutput = (resourceLocation, supplier) -> {
+        BiConsumer<ResourceLocation, Supplier<JsonElement>> modelOutput = (resourceLocation, supplier) -> {
             Supplier<JsonElement> prev = models.put(resourceLocation, supplier);
             if (prev != null) {
                 throw new IllegalStateException("Duplicate model definition for "+resourceLocation);
@@ -72,7 +72,7 @@ public abstract class ImprovedModelProvider implements DataProvider {
             throw new IllegalStateException("Missing blockstate definitions for: "+list);
         } else {
             BuiltInRegistries.BLOCK.forEach((block) -> {
-                Identifier blockId = BuiltInRegistries.BLOCK.getKey(block);
+                ResourceLocation blockId = BuiltInRegistries.BLOCK.getKey(block);
                 if (!blockId.getNamespace().equals(modId)) {
                     return;
                 }
@@ -82,7 +82,7 @@ public abstract class ImprovedModelProvider implements DataProvider {
                     if (simpleModels.contains(item)) {
                         return;
                     }
-                    Identifier modelId = ModelLocationUtils.getModelLocation(item);
+                    ResourceLocation modelId = ModelLocationUtils.getModelLocation(item);
                     if (!models.containsKey(modelId)) {
                         models.put(modelId, new DelegatedModel(ModelLocationUtils.getModelLocation(block)));
                     }

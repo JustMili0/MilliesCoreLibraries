@@ -1,37 +1,37 @@
 package net.justmili.corelibs.v1.util.common;
 
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 public class ResourceUtil {
-    public static Identifier parse(String modId, String path) {
-        return new Identifier(modId, path);
+    public static ResourceLocation parse(String modId, String path) {
+        return new ResourceLocation(modId, path);
     }
 
-    public static Identifier asPath(String path) {
-        return new Identifier(path);
+    public static ResourceLocation asPath(String path) {
+        return new ResourceLocation(path);
     }
 
-    public static Identifier asMinecraft(String path) {
+    public static ResourceLocation asMinecraft(String path) {
         return parse("minecraft", path);
     }
 
-    public static Identifier asCommon(String path) {
+    public static ResourceLocation asCommon(String path) {
         return parse("c", path);
     }
 
-    public static Identifier asFabric(String path) {
+    public static ResourceLocation asFabric(String path) {
         return parse("fabric", path);
     }
 
-    public static Identifier asQuilt(String path) {
+    public static ResourceLocation asQuilt(String path) {
         return parse("quilt", path);
     }
 
-    public static Identifier asForge(String path) {
+    public static ResourceLocation asForge(String path) {
         return parse("forge", path);
     }
 
-    public static Identifier asNeoForge(String path) {
+    public static ResourceLocation asNeoForge(String path) {
         return parse("neoforge", path);
     }
 }

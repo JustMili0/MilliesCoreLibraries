@@ -8,7 +8,7 @@ import net.minecraft.commands.arguments.ResourceArgument;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageType;
 
 public class DamageTypesArgumentType {
@@ -24,7 +24,7 @@ public class DamageTypesArgumentType {
         return getType(context, argName).key();
     }
 
-    public static Identifier getTypeId(CommandContext<CommandSourceStack> context, String argName) throws CommandSyntaxException {
+    public static ResourceLocation getTypeId(CommandContext<CommandSourceStack> context, String argName) throws CommandSyntaxException {
         return getTypeKey(context, argName).location();
     }
 }

@@ -5,7 +5,7 @@ import net.justmili.corelibs.v1.util.client.Textures;
 import net.minecraft.data.models.BlockModelGenerators;
 import net.minecraft.data.models.blockstates.*;
 import net.minecraft.data.models.model.*;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.PitcherCropBlock;
@@ -31,7 +31,7 @@ public class BlockAssetDatagen {
     public static final BlockRot X_R270 = new BlockRot(VariantProperties.X_ROT, VariantProperties.Rotation.R270);
 
     private final BlockModelGenerators gen;
-    private final BiConsumer<Identifier, Supplier<JsonElement>> modelOutput;
+    private final BiConsumer<ResourceLocation, Supplier<JsonElement>> modelOutput;
     private final Consumer<BlockStateGenerator> stateOutput;
 
     public BlockAssetDatagen(BlockModelGenerators modelGenerators) {
@@ -50,23 +50,23 @@ public class BlockAssetDatagen {
         stateOutput.accept(generator);
     }
 
-    public void create(Block block, Identifier template) {
+    public void create(Block block, ResourceLocation template) {
         gen.delegateItemModel(block, template);
     }
 
-    public Identifier getModelId(Block block) {
+    public ResourceLocation getModelId(Block block) {
         return ModelLocationUtils.getModelLocation(block);
     }
 
-    public Identifier getModelId(Block block, String suffix) {
+    public ResourceLocation getModelId(Block block, String suffix) {
         return ModelLocationUtils.getModelLocation(block, suffix);
     }
 
-    public Identifier getModelId(Item item) {
+    public ResourceLocation getModelId(Item item) {
         return ModelLocationUtils.getModelLocation(item);
     }
 
-    public Identifier getModelId(Item item, String suffix) {
+    public ResourceLocation getModelId(Item item, String suffix) {
         return ModelLocationUtils.getModelLocation(item, suffix);
     }
 
@@ -95,7 +95,7 @@ public class BlockAssetDatagen {
     }
 
     // Utils
-    public MultiVariantGenerator simpleBlock(Block block, Identifier modelId) {
+    public MultiVariantGenerator simpleBlock(Block block, ResourceLocation modelId) {
         return BlockModelGenerators.createSimpleBlock(block, modelId);
     }
 
@@ -111,7 +111,7 @@ public class BlockAssetDatagen {
         gen.createTrivialCube(block);
     }
 
-    public void cubeAll(Block block, Identifier texture) {
+    public void cubeAll(Block block, ResourceLocation texture) {
         gen.createTrivialBlock(block, TextureMapping.cube(texture), ModelTemplates.CUBE_ALL);
     }
 
@@ -119,7 +119,7 @@ public class BlockAssetDatagen {
         gen.createGenericCube(block);
     }
 
-    public void cube(Block block, Identifier up, Identifier down, Identifier north, Identifier south, Identifier west, Identifier east, Identifier particle) {
+    public void cube(Block block, ResourceLocation up, ResourceLocation down, ResourceLocation north, ResourceLocation south, ResourceLocation west, ResourceLocation east, ResourceLocation particle) {
         gen.createTrivialBlock(block, new TextureMapping()
                 .put(TextureSlot.DOWN, down)
                 .put(TextureSlot.UP, up)
@@ -132,11 +132,11 @@ public class BlockAssetDatagen {
         );
     }
 
-    public void cube(Block block, Identifier up, Identifier down, Identifier north, Identifier south, Identifier west, Identifier east) {
+    public void cube(Block block, ResourceLocation up, ResourceLocation down, ResourceLocation north, ResourceLocation south, ResourceLocation west, ResourceLocation east) {
         cube(block, up, down, north, south, west, east, Textures.front(block));
     }
 
-    public void doubleBlock(Block block, Identifier topHalfModelId, Identifier bottomHalfModelId) {
+    public void doubleBlock(Block block, ResourceLocation topHalfModelId, ResourceLocation bottomHalfModelId) {
         gen.createDoubleBlock(block, topHalfModelId, bottomHalfModelId);
     }
 

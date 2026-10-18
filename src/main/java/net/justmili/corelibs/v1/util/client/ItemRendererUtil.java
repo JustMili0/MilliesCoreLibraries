@@ -1,6 +1,6 @@
 package net.justmili.corelibs.v1.util.client;
 
-import net.minecraft.client.resources.model.ModelIdentifier;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 
@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.Set;
 
 public class ItemRendererUtil {
-    public record Entry(Item item, ModelIdentifier otherItemModel, List<ItemDisplay> displayAt) {
+    public record Entry(Item item, ModelResourceLocation otherItemModel, List<ItemDisplay> displayAt) {
     }
     public enum ItemDisplay {FIRST_PERSON, THIRD_PERSON, HEAD, GUI, FIXED, ON_SHELF, ON_GROUND}
     private static final Set<Entry> OVERRIDES = new HashSet<>();
 
-    public static void renderAs(Item item, ModelIdentifier otherItemModel, ItemDisplay... displayAt) {
+    public static void renderAs(Item item, ModelResourceLocation otherItemModel, ItemDisplay... displayAt) {
         OVERRIDES.add(new Entry(item, otherItemModel, List.of(displayAt)));
     }
 

@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentTarget;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.function.UnaryOperator;
 
@@ -62,18 +62,18 @@ public class FdaUtil {
     }
 
     // Creates values that will clear after a restart
-    public static <A> AttachmentType<A> createTransient(Identifier id, A defaultValue) {
+    public static <A> AttachmentType<A> createTransient(ResourceLocation id, A defaultValue) {
         return AttachmentRegistry.<A>builder().initializer(() -> defaultValue).copyOnDeath().buildAndRegister(id);
     }
 
     // Creates values that will not clear after a restart
-    public static <A> AttachmentType<A> createPersistent(Identifier id, A defaultValue, Codec<A> codec) {
+    public static <A> AttachmentType<A> createPersistent(ResourceLocation id, A defaultValue, Codec<A> codec) {
         return AttachmentRegistry.<A>builder().initializer(() -> defaultValue).copyOnDeath().persistent(codec).buildAndRegister(id);
     }
 
     // Creates values synced to the player and clear after restart
     // CORELIBS: synced added in 1.21.4, unavailable in 1.20.1
-//    public static <A> AttachmentType<A> createSynced(Identifier id, A defaultValue, StreamCodec<? super RegistryFriendlyByteBuf, A> streamCodec) {
+//    public static <A> AttachmentType<A> createSynced(ResourceLocation id, A defaultValue, StreamCodec<? super RegistryFriendlyByteBuf, A> streamCodec) {
 //        return AttachmentRegistry.<A>builder().initializer(() -> defaultValue).copyOnDeath(); // ???
 //        //return AttachmentRegistry.create(id, builder -> builder.initializer(() -> defaultValue).copyOnDeath().syncWith(streamCodec, AttachmentSyncPredicate.targetOnly()));
 //    }

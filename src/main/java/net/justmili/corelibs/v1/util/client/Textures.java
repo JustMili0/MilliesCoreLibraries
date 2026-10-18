@@ -2,7 +2,7 @@ package net.justmili.corelibs.v1.util.client;
 
 import net.justmili.corelibs.v1.util.common.ResourceUtil;
 import net.minecraft.data.models.model.TextureMapping;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
@@ -32,86 +32,86 @@ public class Textures {
     public static final String TOP_STAGE_AFFIX = "_top_stage_";
     public static final String DOWN_STAGE_AFFIX = "_bottom_stage_";
 
-    public static Identifier get(Block block) {
+    public static ResourceLocation get(Block block) {
         return TextureMapping.getBlockTexture(block);
     }
 
-    public static Identifier get(Block block, String textureSuffix) {
+    public static ResourceLocation get(Block block, String textureSuffix) {
         return TextureMapping.getBlockTexture(block, textureSuffix);
     }
 
-    public static Identifier get(Item item) {
+    public static ResourceLocation get(Item item) {
         return TextureMapping.getItemTexture(item);
     }
 
-    public static Identifier get(Item item, String textureSuffix) {
+    public static ResourceLocation get(Item item, String textureSuffix) {
         return TextureMapping.getItemTexture(item, textureSuffix);
     }
 
-    public static Identifier getBlockPath(String modId, String path) {
+    public static ResourceLocation getBlockPath(String modId, String path) {
         return ResourceUtil.parse(modId, "block/" + path);
     }
 
-    public static Identifier getItemPath(String modId, String path) {
+    public static ResourceLocation getItemPath(String modId, String path) {
         return ResourceUtil.parse(modId, "item/" + path);
     }
 
     // Blocks
-    public static Identifier top(Block block) {
+    public static ResourceLocation top(Block block) {
         return get(block, TOP_SUFFIX);
     }
 
-    public static Identifier down(Block block) {
+    public static ResourceLocation down(Block block) {
         return get(block, DOWN_SUFFIX);
     }
 
-    public static Identifier front(Block block) {
+    public static ResourceLocation front(Block block) {
         return get(block, FRONT_SUFFIX);
     }
 
-    public static Identifier left(Block block) {
+    public static ResourceLocation left(Block block) {
         return get(block, LEFT_SUFFIX);
     }
 
-    public static Identifier right(Block block) {
+    public static ResourceLocation right(Block block) {
         return get(block, RIGHT_SUFFIX);
     }
 
-    public static Identifier side(Block block) {
+    public static ResourceLocation side(Block block) {
         return get(block, SIDE_SUFFIX);
     }
 
     // Block variants
-    public static Identifier snow(Block block) {
+    public static ResourceLocation snow(Block block) {
         return get(block, SNOW_SUFFIX);
     }
 
-    public static Identifier lit(Block block) {
+    public static ResourceLocation lit(Block block) {
         return get(block, LIT_SUFFIX);
     }
 
-    public static Identifier moist(Block block) {
+    public static ResourceLocation moist(Block block) {
         return get(block, MOIST_SUFFIX);
     }
 
     // Chest texture suffixes
-    public static Identifier frontRight(Block block) {
+    public static ResourceLocation frontRight(Block block) {
         return get(block, FRONT_RIGHT_SUFFIX);
     }
 
-    public static Identifier frontLeft(Block block) {
+    public static ResourceLocation frontLeft(Block block) {
         return get(block, FRONT_LEFT_SUFFIX);
     }
 
-    public static Identifier backRight(Block block) {
+    public static ResourceLocation backRight(Block block) {
         return get(block, BACK_RIGHT_SUFFIX);
     }
 
-    public static Identifier backLeft(Block block) {
+    public static ResourceLocation backLeft(Block block) {
         return get(block, BACK_LEFT_SUFFIX);
     }
 
-    public static Identifier frontOn(Block block) {
+    public static ResourceLocation frontOn(Block block) {
         return get(block, FRONT_ON_SUFFIX);
     }
 }

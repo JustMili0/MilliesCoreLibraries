@@ -1,5 +1,5 @@
 //? if < 1.20.5 {
-/*package net.justmili.corelibs.v1.components;
+package net.justmili.corelibs.v1.components;
 
 import net.minecraft.world.item.ItemStack;
 
@@ -102,4 +102,4 @@ public final class CompoundTags {
         return props != null && props.canAlwaysEat();
     }
 }
-*///?}
+//?}

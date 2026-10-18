@@ -7,7 +7,7 @@ import net.justmili.corelibs.v1.config.sync.SyncPriorityConfigs;
 import net.justmili.corelibs.v1.util.ModUtil;
 import net.justmili.corelibs.v1.util.common.ResourceUtil;
 import net.justmili.corelibs.v1.util.common.TickUtil;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +29,7 @@ public class CoreLibs implements ModInitializer {
         ExampleConfig.register();
     }
 
-    public static Identifier asId(String path) {
+    public static ResourceLocation asId(String path) {
         return ResourceUtil.parse(ID, path);
     }
 }

@@ -6,7 +6,7 @@ import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.data.recipes.*;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -40,15 +40,15 @@ public final class RecipeDatagen {
         return RecipeProvider.getItemName(item);
     }
 
-    private Identifier output(Item item) {
+    private ResourceLocation output(Item item) {
         return ResourceUtil.parse(modId, getItemName(item));
     }
 
-    private Identifier outputFrom(Item input, Item output) {
+    private ResourceLocation outputFrom(Item input, Item output) {
         return ResourceUtil.parse(modId, getItemName(output) + "_from_" + getItemName(input));
     }
 
-    private Identifier outputFromProcess(Item input, Item output, String processType) {
+    private ResourceLocation outputFromProcess(Item input, Item output, String processType) {
         return ResourceUtil.parse(modId, getItemName(output) + "_from_" + getItemName(input) + processType);
     }
 

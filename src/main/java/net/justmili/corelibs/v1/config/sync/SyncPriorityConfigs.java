@@ -7,7 +7,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.justmili.corelibs.CoreLibs;
 import net.justmili.corelibs.v1.config.sync.SyncPriorityConfigPacket.SyncCSPPayload;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 public class SyncPriorityConfigs {
-    public static final Identifier CHANNEL = CoreLibs.asId("sync_priority_configs");
+    public static final ResourceLocation CHANNEL = CoreLibs.asId("sync_priority_configs");
 
     public static void registerServer() {
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {

@@ -1,9 +1,9 @@
-accessWidener v2 official
+accessWidener v2 named
 
 accessible field net/minecraft/data/models/BlockModelGenerators blockStateOutput Ljava/util/function/Consumer;
 accessible field net/minecraft/data/models/BlockModelGenerators modelOutput Ljava/util/function/BiConsumer;
-accessible method net/minecraft/data/models/BlockModelGenerators delegateItemModel (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/Identifier;)V
-accessible method net/minecraft/data/models/BlockModelGenerators delegateItemModel (Lnet/minecraft/world/item/Item;Lnet/minecraft/resources/Identifier;)V
+accessible method net/minecraft/data/models/BlockModelGenerators delegateItemModel (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/ResourceLocation;)V
+accessible method net/minecraft/data/models/BlockModelGenerators delegateItemModel (Lnet/minecraft/world/item/Item;Lnet/minecraft/resources/ResourceLocation;)V
 accessible method net/minecraft/data/models/BlockModelGenerators skipAutoItemBlock (Lnet/minecraft/world/level/block/Block;)V
 accessible method net/minecraft/data/models/BlockModelGenerators createSimpleFlatItemModel (Lnet/minecraft/world/item/Item;)V
 accessible method net/minecraft/data/models/BlockModelGenerators createSimpleFlatItemModel (Lnet/minecraft/world/level/block/Block;)V
@@ -13,49 +13,49 @@ accessible method net/minecraft/data/models/BlockModelGenerators createHorizonta
 accessible method net/minecraft/data/models/BlockModelGenerators createHorizontalFacingDispatchAlt ()Lnet/minecraft/data/models/blockstates/PropertyDispatch;
 accessible method net/minecraft/data/models/BlockModelGenerators createTorchHorizontalDispatch ()Lnet/minecraft/data/models/blockstates/PropertyDispatch;
 accessible method net/minecraft/data/models/BlockModelGenerators createFacingDispatch ()Lnet/minecraft/data/models/blockstates/PropertyDispatch;
-accessible method net/minecraft/data/models/BlockModelGenerators createEmptyOrFullDispatch (Lnet/minecraft/world/level/block/state/properties/Property;Ljava/lang/Comparable;Lnet/minecraft/resources/Identifier;Lnet/minecraft/resources/Identifier;)Lnet/minecraft/data/models/blockstates/PropertyDispatch;
-accessible method net/minecraft/data/models/BlockModelGenerators createRotatedVariant (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/Identifier;)Lnet/minecraft/data/models/blockstates/MultiVariantGenerator;
-accessible method net/minecraft/data/models/BlockModelGenerators createRotatedVariants (Lnet/minecraft/resources/Identifier;)[Lnet/minecraft/data/models/blockstates/Variant;
-accessible method net/minecraft/data/models/BlockModelGenerators createRotatedVariant (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/Identifier;Lnet/minecraft/resources/Identifier;)Lnet/minecraft/data/models/blockstates/MultiVariantGenerator;
-accessible method net/minecraft/data/models/BlockModelGenerators createBooleanModelDispatch (Lnet/minecraft/world/level/block/state/properties/BooleanProperty;Lnet/minecraft/resources/Identifier;Lnet/minecraft/resources/Identifier;)Lnet/minecraft/data/models/blockstates/PropertyDispatch;
+accessible method net/minecraft/data/models/BlockModelGenerators createEmptyOrFullDispatch (Lnet/minecraft/world/level/block/state/properties/Property;Ljava/lang/Comparable;Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/data/models/blockstates/PropertyDispatch;
+accessible method net/minecraft/data/models/BlockModelGenerators createRotatedVariant (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/data/models/blockstates/MultiVariantGenerator;
+accessible method net/minecraft/data/models/BlockModelGenerators createRotatedVariants (Lnet/minecraft/resources/ResourceLocation;)[Lnet/minecraft/data/models/blockstates/Variant;
+accessible method net/minecraft/data/models/BlockModelGenerators createRotatedVariant (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/data/models/blockstates/MultiVariantGenerator;
+accessible method net/minecraft/data/models/BlockModelGenerators createBooleanModelDispatch (Lnet/minecraft/world/level/block/state/properties/BooleanProperty;Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/data/models/blockstates/PropertyDispatch;
 accessible method net/minecraft/data/models/BlockModelGenerators createRotatedMirroredVariantBlock (Lnet/minecraft/world/level/block/Block;)V
 accessible method net/minecraft/data/models/BlockModelGenerators createRotatedVariantBlock (Lnet/minecraft/world/level/block/Block;)V
 
-accessible method net/minecraft/data/models/BlockModelGenerators createSimpleBlock (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/Identifier;)Lnet/minecraft/data/models/blockstates/MultiVariantGenerator;
+accessible method net/minecraft/data/models/BlockModelGenerators createSimpleBlock (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/data/models/blockstates/MultiVariantGenerator;
 accessible method net/minecraft/data/models/BlockModelGenerators createNonTemplateModelBlock (Lnet/minecraft/world/level/block/Block;)V
 accessible method net/minecraft/data/models/BlockModelGenerators createNonTemplateModelBlock (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/world/level/block/Block;)V
 transitive-accessible method net/minecraft/data/models/BlockModelGenerators	createTrivialBlock (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/data/models/model/TextureMapping;Lnet/minecraft/data/models/model/ModelTemplate;)V
 
-accessible method net/minecraft/data/models/BlockModelGenerators createAxisAlignedPillarBlock (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/Identifier;)Lnet/minecraft/data/models/blockstates/BlockStateGenerator;
-accessible method net/minecraft/data/models/BlockModelGenerators createRotatedPillarWithHorizontalVariant (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/Identifier;Lnet/minecraft/resources/Identifier;)Lnet/minecraft/data/models/blockstates/BlockStateGenerator;
+accessible method net/minecraft/data/models/BlockModelGenerators createAxisAlignedPillarBlock (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/data/models/blockstates/BlockStateGenerator;
+accessible method net/minecraft/data/models/BlockModelGenerators createRotatedPillarWithHorizontalVariant (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/data/models/blockstates/BlockStateGenerator;
 accessible method net/minecraft/data/models/BlockModelGenerators createRotatedPillarWithHorizontalVariant (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/data/models/model/TexturedModel$Provider;Lnet/minecraft/data/models/model/TexturedModel$Provider;)V
-accessible method net/minecraft/data/models/BlockModelGenerators createSuffixedVariant (Lnet/minecraft/world/level/block/Block;Ljava/lang/String;Lnet/minecraft/data/models/model/ModelTemplate;Ljava/util/function/Function;)Lnet/minecraft/resources/Identifier;
+accessible method net/minecraft/data/models/BlockModelGenerators createSuffixedVariant (Lnet/minecraft/world/level/block/Block;Ljava/lang/String;Lnet/minecraft/data/models/model/ModelTemplate;Ljava/util/function/Function;)Lnet/minecraft/resources/ResourceLocation;
 accessible method net/minecraft/data/models/BlockModelGenerators createPillarBlockUVLocked (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/data/models/model/TextureMapping;Ljava/util/function/BiConsumer;)Lnet/minecraft/data/models/blockstates/BlockStateGenerator;
-accessible method net/minecraft/data/models/BlockModelGenerators createMirroredCubeGenerator (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/Identifier;Lnet/minecraft/data/models/model/TextureMapping;Ljava/util/function/BiConsumer;)Lnet/minecraft/data/models/blockstates/BlockStateGenerator;
-accessible method net/minecraft/data/models/BlockModelGenerators createNorthWestMirroredCubeGenerator (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/Identifier;Lnet/minecraft/data/models/model/TextureMapping;Ljava/util/function/BiConsumer;)Lnet/minecraft/data/models/blockstates/BlockStateGenerator;
-accessible method net/minecraft/data/models/BlockModelGenerators createMirroredColumnGenerator (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/Identifier;Lnet/minecraft/data/models/model/TextureMapping;Ljava/util/function/BiConsumer;)Lnet/minecraft/data/models/blockstates/BlockStateGenerator;
+accessible method net/minecraft/data/models/BlockModelGenerators createMirroredCubeGenerator (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/data/models/model/TextureMapping;Ljava/util/function/BiConsumer;)Lnet/minecraft/data/models/blockstates/BlockStateGenerator;
+accessible method net/minecraft/data/models/BlockModelGenerators createNorthWestMirroredCubeGenerator (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/data/models/model/TextureMapping;Ljava/util/function/BiConsumer;)Lnet/minecraft/data/models/blockstates/BlockStateGenerator;
+accessible method net/minecraft/data/models/BlockModelGenerators createMirroredColumnGenerator (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/data/models/model/TextureMapping;Ljava/util/function/BiConsumer;)Lnet/minecraft/data/models/blockstates/BlockStateGenerator;
 accessible method net/minecraft/data/models/BlockModelGenerators createColumnWithFacing ()Lnet/minecraft/data/models/blockstates/PropertyDispatch;
 
-accessible method net/minecraft/data/models/BlockModelGenerators createStairs (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/Identifier;Lnet/minecraft/resources/Identifier;Lnet/minecraft/resources/Identifier;)Lnet/minecraft/data/models/blockstates/BlockStateGenerator;
-accessible method net/minecraft/data/models/BlockModelGenerators createSlab (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/Identifier;Lnet/minecraft/resources/Identifier;Lnet/minecraft/resources/Identifier;)Lnet/minecraft/data/models/blockstates/BlockStateGenerator;
-accessible method net/minecraft/data/models/BlockModelGenerators createFence (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/Identifier;Lnet/minecraft/resources/Identifier;)Lnet/minecraft/data/models/blockstates/BlockStateGenerator;
-accessible method net/minecraft/data/models/BlockModelGenerators createFenceGate (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/Identifier;Lnet/minecraft/resources/Identifier;Lnet/minecraft/resources/Identifier;Lnet/minecraft/resources/Identifier;Z)Lnet/minecraft/data/models/blockstates/BlockStateGenerator;
-accessible method net/minecraft/data/models/BlockModelGenerators createWall (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/Identifier;Lnet/minecraft/resources/Identifier;Lnet/minecraft/resources/Identifier;)Lnet/minecraft/data/models/blockstates/BlockStateGenerator;
+accessible method net/minecraft/data/models/BlockModelGenerators createStairs (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/data/models/blockstates/BlockStateGenerator;
+accessible method net/minecraft/data/models/BlockModelGenerators createSlab (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/data/models/blockstates/BlockStateGenerator;
+accessible method net/minecraft/data/models/BlockModelGenerators createFence (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/data/models/blockstates/BlockStateGenerator;
+accessible method net/minecraft/data/models/BlockModelGenerators createFenceGate (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/resources/ResourceLocation;Z)Lnet/minecraft/data/models/blockstates/BlockStateGenerator;
+accessible method net/minecraft/data/models/BlockModelGenerators createWall (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/data/models/blockstates/BlockStateGenerator;
 accessible method net/minecraft/data/models/BlockModelGenerators createDoor (Lnet/minecraft/world/level/block/Block;)V
 accessible method net/minecraft/data/models/BlockModelGenerators createOrientableTrapdoor (Lnet/minecraft/world/level/block/Block;)V
 accessible method net/minecraft/data/models/BlockModelGenerators createTrapdoor (Lnet/minecraft/world/level/block/Block;)V
-accessible method net/minecraft/data/models/BlockModelGenerators createButton (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/Identifier;Lnet/minecraft/resources/Identifier;)Lnet/minecraft/data/models/blockstates/BlockStateGenerator;
-accessible method net/minecraft/data/models/BlockModelGenerators createPressurePlate (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/Identifier;Lnet/minecraft/resources/Identifier;)Lnet/minecraft/data/models/blockstates/BlockStateGenerator;
+accessible method net/minecraft/data/models/BlockModelGenerators createButton (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/data/models/blockstates/BlockStateGenerator;
+accessible method net/minecraft/data/models/BlockModelGenerators createPressurePlate (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/data/models/blockstates/BlockStateGenerator;
 accessible method net/minecraft/data/models/BlockModelGenerators createWeightedPressurePlate (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/world/level/block/Block;)V
 accessible method net/minecraft/data/models/BlockModelGenerators createGlassBlocks (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/world/level/block/Block;)V
 accessible method net/minecraft/data/models/BlockModelGenerators createBrushableBlock (Lnet/minecraft/world/level/block/Block;)V
-accessible method net/minecraft/data/models/BlockModelGenerators createDoubleBlock (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/Identifier;Lnet/minecraft/resources/Identifier;)V
+accessible method net/minecraft/data/models/BlockModelGenerators createDoubleBlock (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/resources/ResourceLocation;)V
 
 accessible method net/minecraft/data/models/BlockModelGenerators createCraftingTableLike (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/world/level/block/Block;Ljava/util/function/BiFunction;)V
 accessible method net/minecraft/data/models/BlockModelGenerators createFurnace (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/data/models/model/TexturedModel$Provider;)V
 
 accessible class net/minecraft/data/models/BlockModelGenerators$TintState
-accessible method net/minecraft/data/models/BlockModelGenerators createGrassLikeBlock (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/Identifier;Lnet/minecraft/data/models/blockstates/Variant;)V
+accessible method net/minecraft/data/models/BlockModelGenerators createGrassLikeBlock (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/data/models/blockstates/Variant;)V
 accessible method net/minecraft/data/models/BlockModelGenerators createCrossBlock (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/data/models/BlockModelGenerators$TintState;Lnet/minecraft/world/level/block/state/properties/Property;[I)V
 accessible method net/minecraft/data/models/BlockModelGenerators createCrossBlock (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/data/models/BlockModelGenerators$TintState;Lnet/minecraft/data/models/model/TextureMapping;)V
 accessible method net/minecraft/data/models/BlockModelGenerators createCrossBlock (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/data/models/BlockModelGenerators$TintState;)V

@@ -6,21 +6,21 @@ package net.justmili.corelibs.v1.items.client;
 //import net.minecraft.core.component.DataComponentPatch;
 //import net.minecraft.core.component.DataComponents;
 //import net.minecraft.core.registries.BuiltInRegistries;
-//import net.minecraft.resources.Identifier;
+//import net.minecraft.resources.ResourceLocation;
 //import net.minecraft.world.item.ItemStack;
 
 public final class VisualItem {
-//    private final Identifier id;
+//    private final ResourceLocation id;
 //    private final DataComponentPatch patch;
 //    private final int seed;
 //    private final int count;
 //    private ItemStack stack = null;
 //
-//    public VisualItem(Identifier id) {
+//    public VisualItem(ResourceLocation id) {
 //        this(id, DataComponentPatch.EMPTY, 0, 1);
 //    }
 //
-//    public VisualItem(Identifier id, DataComponentPatch patch, int seed, int count) {
+//    public VisualItem(ResourceLocation id, DataComponentPatch patch, int seed, int count) {
 //        this.id = id;
 //        this.patch = patch;
 //        this.seed = seed;
@@ -48,7 +48,7 @@ public final class VisualItem {
 //        return this.stack;
 //    }
 //
-//    public Identifier id() {
+//    public ResourceLocation id() {
 //        return this.id;
 //    }
 }
