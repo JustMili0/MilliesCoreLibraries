@@ -20,7 +20,7 @@ public class CoreLibs implements ModInitializer {
     @Override
     public void onInitialize() {
         ModUtil.specialInitMessage(LOGGER, NAME, ID, BUILD, ModUtil.VersionBuildType.EARLY_DEV_ALPHA);
-        ModUtil.markEOS(NAME, ID, true, true);
+        ModUtil.markEOS(NAME, ID, false, false);
 
         ServerEventsBridge.init();
         SyncPriorityConfigs.registerServer();
