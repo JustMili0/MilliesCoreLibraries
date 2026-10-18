@@ -1,6 +1,7 @@
 package net.justmili.corelibs.libs.api.events.server;
 
-import net.justmili.corelibs.libs.api.events.Event;
+import net.fabricmc.fabric.api.event.Event;
+import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -27,7 +28,7 @@ public class UseEvents {
      *
      * <p>TODO: Finish this javadoc
      */
-    public static final Event<ItemPre> ITEM_PRE = Event.create(ItemPre.class, callbacks -> (level, player, hand) -> {
+    public static final Event<ItemPre> ITEM_PRE = EventFactory.createArrayBacked(ItemPre.class, callbacks -> (level, player, hand) -> {
         for (var event : callbacks) {
             var result = event.onUseItemPre(level, player, hand);
             if (result.getResult() != InteractionResult.PASS) return result;
@@ -35,15 +36,15 @@ public class UseEvents {
         return InteractionResultHolder.pass(player.getItemInHand(hand));
     });
 
-    public static final Event<ItemPost> ITEM_POST = Event.create(ItemPost.class, callbacks -> (level, player, hand, stack) -> {
+    public static final Event<ItemPost> ITEM_POST = EventFactory.createArrayBacked(ItemPost.class, callbacks -> (level, player, hand, stack) -> {
         for (var event : callbacks) event.onUseItemPost(level, player, hand, stack);
     });
 
-    public static final Event<BlockPost> BLOCK_POST = Event.create(BlockPost.class, callbacks -> (level, player, hand, pos, state, result) -> {
+    public static final Event<BlockPost> BLOCK_POST = EventFactory.createArrayBacked(BlockPost.class, callbacks -> (level, player, hand, pos, state, result) -> {
         for (var event : callbacks) event.onUseBlockPost(level, player, hand, pos, state, result);
     });
 
-    public static final Event<EntityPost> ENTITY_POST = Event.create(EntityPost.class, callbacks -> (level, player, hand, entity, result) -> {
+    public static final Event<EntityPost> ENTITY_POST = EventFactory.createArrayBacked(EntityPost.class, callbacks -> (level, player, hand, entity, result) -> {
         for (var event : callbacks) event.onUseEntityPost(level, player, hand, entity, result);
     });
 

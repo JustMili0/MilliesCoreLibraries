@@ -1,7 +1,10 @@
 package net.justmili.corelibs.libs.api.events.server;
 
-import net.justmili.corelibs.libs.api.events.Event;
+import net.fabricmc.fabric.api.event.Event;
+import net.fabricmc.fabric.api.event.EventFactory;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
@@ -12,6 +15,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import org.jetbrains.annotations.NotNull;
@@ -21,64 +25,63 @@ public class PlayerEvents {
     private PlayerEvents() {
     }
 
-    public static final Event<Respawn> RESPAWN = Event.create(Respawn.class, callbacks -> (oldPlayer, newPlayer, alive) -> {
+    public static final Event<Respawn> RESPAWN = EventFactory.createArrayBacked(Respawn.class, callbacks -> (oldPlayer, newPlayer, alive) -> {
         for (var event : callbacks) event.onRespawn(oldPlayer, newPlayer, alive);
     });
 
-    public static final Event<Clone> CLONE = Event.create(Clone.class, callbacks -> (oldPlayer, newPlayer, alive) -> {
+    public static final Event<Clone> CLONE = EventFactory.createArrayBacked(Clone.class, callbacks -> (oldPlayer, newPlayer, alive) -> {
         for (var event : callbacks) event.onClone(oldPlayer, newPlayer, alive);
     });
 
-    public static final Event<CraftItem> CRAFT_ITEM = Event.create(CraftItem.class, callbacks -> (player, itemCrafted, container) -> {
+    public static final Event<CraftItem> CRAFT_ITEM = EventFactory.createArrayBacked(CraftItem.class, callbacks -> (player, itemCrafted, container) -> {
         for (var event : callbacks) event.onCraftItem(player, itemCrafted, container);
     });
 
-    public static final Event<SmeltItem> SMELT_ITEM = Event.create(SmeltItem.class, callbacks -> (player, itemSmelted) -> {
+    public static final Event<SmeltItem> SMELT_ITEM = EventFactory.createArrayBacked(SmeltItem.class, callbacks -> (player, itemSmelted) -> {
         for (var event : callbacks) event.onSmeltItem(player, itemSmelted);
     });
 
-    public static final Event<DropItem> DROP_ITEM = Event.create(DropItem.class, callbacks -> (player, itemDropped) -> {
+    public static final Event<DropItem> DROP_ITEM = EventFactory.createArrayBacked(DropItem.class, callbacks -> (player, itemDropped) -> {
         for (var event : callbacks) {
             if (!event.onDropItem(player, itemDropped)) return false;
         }
-
         return true;
     });
 
-    public static final Event<CanPickupItem> CAN_PICKUP_ITEM = Event.create(CanPickupItem.class, callbacks -> (player, itemEntity, stack) -> {
+    public static final Event<CanPickupItem> CAN_PICKUP_ITEM = EventFactory.createArrayBacked(CanPickupItem.class, callbacks -> (player, itemEntity, stack) -> {
         for (var event : callbacks) {
             if (!event.canPickupItem(player, itemEntity, stack)) return false;
         }
-
         return true;
     });
 
-    public static final Event<PickupItemPre> PICKUP_ITEM_PRE = Event.create(PickupItemPre.class, callbacks -> (player, itemEntity, stack) -> {
+    public static final Event<PickupItemPre> PICKUP_ITEM_PRE = EventFactory.createArrayBacked(PickupItemPre.class, callbacks -> (player, itemEntity, stack) -> {
         for (var event : callbacks) {
             var result = event.onStartPickupItem(player, itemEntity, stack);
             if (!result) return false;
         } // TODO: hook up
-
         return true;
     });
 
-    public static final Event<PickupItemPost> PICKUP_ITEM_POST = Event.create(PickupItemPost.class, callbacks -> (player, itemEntity, stack) -> {
+    public static final Event<PickupItemPost> PICKUP_ITEM_POST = EventFactory.createArrayBacked(PickupItemPost.class, callbacks -> (player, itemEntity, stack) -> {
         for (var event : callbacks) event.onEndPickupItem(player, itemEntity, stack);
     }); // TODO: hook up
 
-    public static final Event<ChangeDimension> CHANGED_DIMENSION = Event.create(ChangeDimension.class, callbacks -> (player, fromLevel, toLevel) -> {
+    public static final Event<ChangeDimension> CHANGED_DIMENSION = EventFactory.createArrayBacked(ChangeDimension.class, callbacks -> (player, fromLevel, toLevel) -> {
         for (var event : callbacks) event.onChangedDimension(player, fromLevel, toLevel);
     }); // TODO: hook up
 
-    public static final Event<OpenMenu> OPEN_MENU = Event.create(OpenMenu.class, callbacks -> (player, menu) -> {
-        for (var event : callbacks) event.onOpenMenu(player, menu);
-    }); // TODO: hook up
+    public static final Event<BreakBlock> BREAK_BLOCK = EventFactory.createArrayBacked(BreakBlock.class, callbacks -> (level, player, oldState, newState, pos, wasDestroyed) -> {
+        for (var event : callbacks) {
+            var result = event.onBlockBroken(level, player, oldState, newState, pos, wasDestroyed);
+            if (!result) return false;
+        }
+        return true;
+    });
 
-    public static final Event<CloseMenu> CLOSE_MENU = Event.create(CloseMenu.class, callbacks -> (player, menu) -> {
-        for (var event : callbacks) event.onCloseMenu(player, menu);
-    }); // TODO: hook up
+    // TODO: add block place event
 
-    public static final Event<FillBucket> FILL_BUCKET = Event.create(FillBucket.class, callbacks -> (player, bucket, hitResult) -> {
+    public static final Event<FillBucket> FILL_BUCKET = EventFactory.createArrayBacked(FillBucket.class, callbacks -> (player, bucket, hitResult) -> {
         for (var event : callbacks) {
             var result = event.onFillBucket(player, bucket, hitResult);
             if (result != InteractionResult.PASS) return result; // CORELIBS: Should it default to PASS??
@@ -87,14 +90,21 @@ public class PlayerEvents {
         return InteractionResult.PASS;
     }); // TODO: hook up
 
-    public static final Event<AttackEntity> ATTACK_ENTITY = Event.create(AttackEntity.class, callbacks -> (player, level, target, hand, hitResult) -> {
+    public static final Event<AttackEntity> ATTACK_ENTITY = EventFactory.createArrayBacked(AttackEntity.class, callbacks -> (player, level, target, hand, hitResult) -> {
         for (var event : callbacks) {
             var result = event.onAttackedEntity(player, level, target, hand, hitResult);
             if (result != InteractionResult.PASS) return result;
         }
-
         return InteractionResult.PASS;
     });
+
+    public static final Event<OpenMenu> OPEN_MENU = EventFactory.createArrayBacked(OpenMenu.class, callbacks -> (player, menu) -> {
+        for (var event : callbacks) event.onOpenMenu(player, menu);
+    }); // TODO: hook up
+
+    public static final Event<CloseMenu> CLOSE_MENU = EventFactory.createArrayBacked(CloseMenu.class, callbacks -> (player, menu) -> {
+        for (var event : callbacks) event.onCloseMenu(player, menu);
+    }); // TODO: hook up
 
     @FunctionalInterface
     public interface Respawn {
@@ -142,13 +152,8 @@ public class PlayerEvents {
     }
 
     @FunctionalInterface
-    public interface OpenMenu {
-        void onOpenMenu(Player player, AbstractContainerMenu menu);
-    }
-
-    @FunctionalInterface
-    public interface CloseMenu {
-        void onCloseMenu(Player player, AbstractContainerMenu menu);
+    public interface BreakBlock {
+        boolean onBlockBroken(ServerLevel level, ServerPlayer player, BlockState oldState, BlockState newState, BlockPos pos, boolean wasDestroyed);
     }
 
     @FunctionalInterface
@@ -164,5 +169,15 @@ public class PlayerEvents {
     @FunctionalInterface
     public interface KillOtherEntity { // TODO: finish
         InteractionResult onKillOtherEntity();
+    }
+
+    @FunctionalInterface
+    public interface OpenMenu {
+        void onOpenMenu(Player player, AbstractContainerMenu menu);
+    }
+
+    @FunctionalInterface
+    public interface CloseMenu {
+        void onCloseMenu(Player player, AbstractContainerMenu menu);
     }
 }

@@ -2,23 +2,24 @@
 - Keep TODO and README on the latest main branch you're working on
 - A lot of classes such as utils etc. can be copied from JustMili's other projects
 
-# FIRST-PRIORITY TODO
-- Clean up the project and make sure it's all fabric
-  - And port them to use Fabric's `EventFactory.createArrayBacked()`
-- Stop hooking events directly into Fabric API and just mixin into things yourself
-  - 
+# FIRST-PRIORITY TODO (0.0.2a)
+- Finish all the events
+- Finish reworking data generation utils
 
-# TODO
-- (LIBS UTIL) Finish reworking data generation utils
-- (API EVENTS) Scrap most events and only keep ones Fabric doesn't have
-- (LIBS CONFIG) Finish Config
-  - Make COMMON_SERVER_PRIORITY override client's in-memory values instead of on-file values
+# TODO (0.0.2a)
+- Expand on config
+  - Rework priority config syncing and make COMMON_SERVER_PRIORITY override client's in-memory values instead of on-file values
   - Finish config sync across loaders
   - Rewrite using CODECs if possible, wherever possible
   - Add enum list/selector support, add ARGB color picker support
+- Include `Fabric Language Kotlin` in build (will be mostly used for utils)
+- Rework most util classes, attempt optimizations, add a bit more functionality to all
+- Add javadocs, comments and write full documentation
+
+# TODO (0.0.1b)
+- Finish Config
   - Add full TOML support
-- (LIBS UTIL) Properly rework and finish all the util classes and give each even more functionality
-- [REQUIRES CONFIG] (LIBS CONF. SCREEN) Redo Config Screen to be more like HTML+CSS - highly customizable
+- [REQUIRES CONFIG] Redo Config Screen to be more like HTML+CSS - highly customizable
   - Should allow adding images
   - It will be absolute pain to make, but it'll be so worth it
-- Add javadocs, comments and write full documentation
+- Complete utils by adding as much functionality as possible by turning repetitive code from across multiple projects into utils

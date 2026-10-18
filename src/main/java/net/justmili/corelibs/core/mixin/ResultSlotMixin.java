@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ResultSlot.class)
 public abstract class ResultSlotMixin {
+
     @Shadow
     @Final
     private Player player;
@@ -22,8 +23,7 @@ public abstract class ResultSlotMixin {
     @Final
     private CraftingContainer craftSlots;
 
-    @Inject(method = "checkTakeAchievements", at = @At(value = "INVOKE",
-        target = "Lnet/minecraft/world/item/ItemStack;onCraftedBy(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;I)V", shift = At.Shift.AFTER))
+    @Inject(method = "checkTakeAchievements", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;onCraftedBy(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;I)V", shift = At.Shift.AFTER))
     private void corelibs$craft(ItemStack stack, CallbackInfo ci) {
         PlayerEvents.CRAFT_ITEM.invoker().onCraftItem(player, stack, craftSlots);
     }

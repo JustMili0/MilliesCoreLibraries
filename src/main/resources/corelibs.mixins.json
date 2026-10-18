@@ -7,14 +7,14 @@
     "minVersion": "0.5.0"
   },
   "client": [
-    "client.ItemRendererMixin",
-    "client.LevelRendererMixin"
+    "client.ItemRendererMixin"
   ],
   "mixins": [
     "FurnaceResultSlotMixin",
     "ItemEntityMixin",
     "ItemMixin",
     "ResultSlotMixin",
+    "ServerPlayerGameModeMixin",
     "ServerPlayerMixin",
     "SharedSuggestionProviderMixin"
   ],
