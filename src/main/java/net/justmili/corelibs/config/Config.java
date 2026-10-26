@@ -12,7 +12,7 @@ import net.justmili.corelibs.v2.config.flags.FileTypes;
 //public class Config {
 //    public static MConfigBuilder client = new MConfigBuilder("corelibs", ConfigType.CLIENT, FileType.JSON5, false);
 public class Config implements MConfigInitializer {
-    public static MConfigBuilder client = new MConfigBuilder("corelibs", ConfigTypes.CLIENT, FileTypes.JSON5, true);
+    public static MConfigBuilder client = new MConfigBuilder("corelibs", "icons", ConfigTypes.CLIENT, FileTypes.JSON5, true);
 
 //    public static ConfigEntry<Boolean> alwaysPride;
 //    public static ConfigEntry<Boolean> alwaysDefault;
@@ -31,8 +31,8 @@ public class Config implements MConfigInitializer {
 //
 //        cfg.build();
 
-        client.create(
-            // Options and Categories
-        );
+        client.create().addCategory("Icon Type", client.create() // do smth so you don't constantly use client.create()
+                .addOption("alwaysUsePrideIcons", false) // do smth to allow chaining like that
+                .addOption("alwaysUseDefaultIcons", false));
     }
 }
