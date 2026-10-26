@@ -74,8 +74,7 @@ public class ConfigLoader {
         return switch (fileType) {
             case JSON -> new JsonWriter();
             case JSON5 -> new Json5Writer();
-            case TOML -> throw new UnsupportedOperationException("TOML support is not yet implemented.");
-            default -> new PropsWriter();
+            case PROPERTIES -> new PropsWriter();
         };
     }
 
@@ -83,8 +82,7 @@ public class ConfigLoader {
         return switch (fileType) {
             case JSON -> ".json";
             case JSON5 -> ".json5";
-            case TOML -> ".toml";
-            default -> ".properties";
+            case PROPERTIES -> ".properties";
         };
     }
 }

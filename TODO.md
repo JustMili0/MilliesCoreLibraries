@@ -10,19 +10,26 @@
   - Additionally exclude some files from being included in some jars at all
 
 # TODO (0.0.2a)
-- Expand on config
-  - Rework priority config syncing and make COMMON_SERVER_PRIORITY override client's in-memory values instead of on-file values
-  - Finish config sync across loaders
-  - Rewrite using CODECs if possible, wherever possible
-  - Add enum list/selector support, add ARGB color picker support
+- Rewrite config from `v1.config` to `v2.config` (deprecate `v1.config` after)
+  - Completely different config builder style
+  - No more `ConfigEntry<?>`, `ListConfigEntry` etc., just plain `int`, `boolean`, `String` and so on
+  - Rewrite using Codecs
+  - Support for more entry types (Base [String, Numbers, boolean], Enum, Color, Lists [List, Set])
+  - Support for "attaching" images to config values (usable via `v2.configscreen`)
+  - Support for converting old config file(s) and their entries into new ones
 - Include `Fabric Language Kotlin` in build (will be mostly used for utils)
 - Rework most util classes, attempt optimizations, add a bit more functionality to all
-- Add javadocs, comments and write full documentation
+- Add Javadocs, proper comments, write documentation
+  - For documentation create `docs.lumynitystudios.net`
+  - [MILLIE] Maybe hire someone to write it all🧍‍♀️
 
 # TODO (0.0.1b)
 - Finish Config
   - Add full TOML support
-- [REQUIRES CONFIG] Redo Config Screen to be more like HTML+CSS - highly customizable
-  - Should allow adding images
+- [REQUIRES CONFIG] Redo Config Screen to be more like HTML+CSS in `v2` - highly customizable
   - It will be absolute pain to make, but it'll be so worth it
 - Complete utils by adding as much functionality as possible by turning repetitive code from across multiple projects into utils
+
+# TODO (0.0.2b)
+- Code own version of Fabric Data Attachments API
+  - With support for converting from FDAAPI and from whatever the fuck True End uses

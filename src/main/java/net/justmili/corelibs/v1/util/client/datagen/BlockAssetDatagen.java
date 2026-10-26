@@ -1,12 +1,14 @@
 package net.justmili.corelibs.v1.util.client.datagen;
 
 import com.google.gson.JsonElement;
-import net.justmili.corelibs.v1.util.client.Textures;
+import net.justmili.corelibs.v1.util.client.Assets;
 import net.minecraft.data.models.BlockModelGenerators;
 import net.minecraft.data.models.blockstates.*;
-import net.minecraft.data.models.model.*;
+import net.minecraft.data.models.model.ModelTemplates;
+import net.minecraft.data.models.model.TextureMapping;
+import net.minecraft.data.models.model.TextureSlot;
+import net.minecraft.data.models.model.TexturedModel;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.PitcherCropBlock;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -54,32 +56,16 @@ public class BlockAssetDatagen {
         gen.delegateItemModel(block, template);
     }
 
-    public ResourceLocation getModelId(Block block) {
-        return ModelLocationUtils.getModelLocation(block);
-    }
-
-    public ResourceLocation getModelId(Block block, String suffix) {
-        return ModelLocationUtils.getModelLocation(block, suffix);
-    }
-
-    public ResourceLocation getModelId(Item item) {
-        return ModelLocationUtils.getModelLocation(item);
-    }
-
-    public ResourceLocation getModelId(Item item, String suffix) {
-        return ModelLocationUtils.getModelLocation(item, suffix);
-    }
-
     public Variant getPlainVariantId(Block block, String suffix) {
-        return Variant.variant().with(VariantProperties.MODEL, getModelId(block, suffix));
+        return Variant.variant().with(VariantProperties.MODEL, Assets.getModelId(block, suffix));
     }
 
-    private TexturedModel getParentFrom(Block block) {
+    private TexturedModel getCubeParent(Block block) {
         return TexturedModel.CUBE.get(block);
     }
 
-    private TextureMapping getParentMapping(Block block) {
-        return getParentFrom(block).getMapping();
+    private TextureMapping getCubeParentMapping(Block block) {
+        return getCubeParent(block).getMapping();
     }
 
     public MultiVariantGenerator multiVariant(Block block) {
@@ -133,7 +119,7 @@ public class BlockAssetDatagen {
     }
 
     public void cube(Block block, ResourceLocation up, ResourceLocation down, ResourceLocation north, ResourceLocation south, ResourceLocation west, ResourceLocation east) {
-        cube(block, up, down, north, south, west, east, Textures.front(block));
+        cube(block, up, down, north, south, west, east, Assets.front(block));
     }
 
     public void doubleBlock(Block block, ResourceLocation topHalfModelId, ResourceLocation bottomHalfModelId) {
@@ -175,7 +161,7 @@ public class BlockAssetDatagen {
     }
 
     public void stairs(Block parent, Block block) {
-        var mapping = getParentMapping(parent);
+        var mapping = getCubeParentMapping(parent);
         var straight = ModelTemplates.STAIRS_STRAIGHT.create(block, mapping, modelOutput);
         var inner = ModelTemplates.STAIRS_INNER.create(block, mapping, modelOutput);
         var outer = ModelTemplates.STAIRS_OUTER.create(block, mapping, modelOutput);
@@ -185,17 +171,17 @@ public class BlockAssetDatagen {
     }
 
     public void slab(Block parent, Block block) {
-        var mapping = getParentMapping(parent);
+        var mapping = getCubeParentMapping(parent);
         var bottom = ModelTemplates.SLAB_BOTTOM.create(block, mapping, modelOutput);
         var top = ModelTemplates.SLAB_TOP.create(block, mapping, modelOutput);
-        var full = getParentFrom(parent).create(parent, modelOutput);
+        var full = getCubeParent(parent).create(parent, modelOutput);
 
         create(BlockModelGenerators.createSlab(block, bottom, top, full));
         create(block, bottom);
     }
 
     public void fence(Block parent, Block block) {
-        var mapping = getParentMapping(parent);
+        var mapping = getCubeParentMapping(parent);
         var fencePost = ModelTemplates.FENCE_POST.create(block, mapping, modelOutput);
         var fenceSide = ModelTemplates.FENCE_SIDE.create(block, mapping, modelOutput);
 
@@ -204,7 +190,7 @@ public class BlockAssetDatagen {
     }
 
     public void fenceGate(Block parent, Block block) {
-        var mapping = getParentMapping(parent);
+        var mapping = getCubeParentMapping(parent);
         var open = ModelTemplates.FENCE_GATE_OPEN.create(block, mapping, modelOutput);
         var closed = ModelTemplates.FENCE_GATE_CLOSED.create(block, mapping, modelOutput);
         var wallOpen = ModelTemplates.FENCE_GATE_WALL_OPEN.create(block, mapping, modelOutput);
@@ -215,7 +201,7 @@ public class BlockAssetDatagen {
     }
 
     public void wall(Block parent, Block block) {
-        var mapping = getParentMapping(parent);
+        var mapping = getCubeParentMapping(parent);
         var wallPost = ModelTemplates.WALL_POST.create(block, mapping, modelOutput);
         var wallLow = ModelTemplates.WALL_LOW_SIDE.create(block, mapping, modelOutput);
         var wallTall = ModelTemplates.WALL_TALL_SIDE.create(block, mapping, modelOutput);
@@ -237,7 +223,7 @@ public class BlockAssetDatagen {
     }
 
     public void button(Block parent, Block block) {
-        var mapping = getParentMapping(parent);
+        var mapping = getCubeParentMapping(parent);
         var button = ModelTemplates.BUTTON.create(block, mapping, modelOutput);
         var pressed = ModelTemplates.BUTTON_PRESSED.create(block, mapping, modelOutput);
 
@@ -246,7 +232,7 @@ public class BlockAssetDatagen {
     }
 
     public void pressurePlate(Block parent, Block block) {
-        var mapping = getParentMapping(parent);
+        var mapping = getCubeParentMapping(parent);
         var plate = ModelTemplates.PRESSURE_PLATE_UP.create(block, mapping, modelOutput);
         var pressed = ModelTemplates.PRESSURE_PLATE_DOWN.create(block, mapping, modelOutput);
 
@@ -302,7 +288,7 @@ public class BlockAssetDatagen {
         var sideAlt = ModelTemplates.STAINED_GLASS_PANE_SIDE_ALT.create(block, mapping, modelOutput);
         var noSide = ModelTemplates.STAINED_GLASS_PANE_NOSIDE.create(block, mapping, modelOutput);
         var noSideAlt = ModelTemplates.STAINED_GLASS_PANE_NOSIDE_ALT.create(block, mapping, modelOutput);
-        ModelTemplates.FLAT_ITEM.create(getModelId(block.asItem()), TextureMapping.layer0(parent), modelOutput);
+        ModelTemplates.FLAT_ITEM.create(Assets.getModelId(block.asItem()), TextureMapping.layer0(parent), modelOutput);
 
         create(MultiPartGenerator.multiPart(block).with(Variant.variant().with(VariantProperties.MODEL, post))
             .with(Condition.condition().term(BlockStateProperties.NORTH, true), Variant.variant().with(VariantProperties.MODEL, side))
@@ -326,25 +312,25 @@ public class BlockAssetDatagen {
     }
 
     public void grassBlock(Block block, Block dirt) {
-        var mapping = new TextureMapping().put(TextureSlot.BOTTOM, Textures.get(dirt)).copyForced(TextureSlot.BOTTOM, TextureSlot.PARTICLE)
-            .put(TextureSlot.TOP, Textures.top(block))
-            .put(TextureSlot.SIDE, Textures.snow(block));
-        var variant = Variant.variant().with(VariantProperties.MODEL, ModelTemplates.CUBE_BOTTOM_TOP.createWithSuffix(block, Textures.SNOW_SUFFIX, mapping, modelOutput));
+        var mapping = new TextureMapping().put(TextureSlot.BOTTOM, Assets.get(dirt)).copyForced(TextureSlot.BOTTOM, TextureSlot.PARTICLE)
+            .put(TextureSlot.TOP, Assets.top(block))
+            .put(TextureSlot.SIDE, Assets.snow(block));
+        var variant = Variant.variant().with(VariantProperties.MODEL, ModelTemplates.CUBE_BOTTOM_TOP.createWithSuffix(block, Assets.SNOW_SUFFIX, mapping, modelOutput));
 
-        gen.createGrassLikeBlock(block, getModelId(block), variant);
+        gen.createGrassLikeBlock(block, Assets.getModelId(block), variant);
     }
 
     public void farmland(Block block, Block dirt) {
-        var mappingDry = new TextureMapping().put(TextureSlot.DIRT, Textures.get(dirt)).put(TextureSlot.TOP, Textures.get(block));
-        var mappingMoist = new TextureMapping().put(TextureSlot.DIRT, Textures.get(dirt)).put(TextureSlot.TOP, Textures.moist(block));
+        var mappingDry = new TextureMapping().put(TextureSlot.DIRT, Assets.get(dirt)).put(TextureSlot.TOP, Assets.get(block));
+        var mappingMoist = new TextureMapping().put(TextureSlot.DIRT, Assets.get(dirt)).put(TextureSlot.TOP, Assets.moist(block));
         var dry = ModelTemplates.FARMLAND.create(block, mappingDry, modelOutput);
-        var moist = ModelTemplates.FARMLAND.create(Textures.moist(block), mappingMoist, modelOutput);
+        var moist = ModelTemplates.FARMLAND.create(Assets.moist(block), mappingMoist, modelOutput);
 
         create(multiVariant(block).with(BlockModelGenerators.createEmptyOrFullDispatch(BlockStateProperties.MOISTURE, 7, moist, dry)));
     }
 
     public void dirtPath(Block block) {
-        create(BlockModelGenerators.createRotatedVariant(block, getModelId(block)));
+        create(BlockModelGenerators.createRotatedVariant(block, Assets.getModelId(block)));
     }
 
     public void shortGrass(Block block) {
@@ -361,8 +347,8 @@ public class BlockAssetDatagen {
     }
 
     public void tallSeaGrass(Block block) {
-        var top = gen.createSuffixedVariant(block, Textures.TOP_SUFFIX, ModelTemplates.SEAGRASS, TextureMapping::defaultTexture);
-        var bottom = gen.createSuffixedVariant(block, Textures.DOWN_SUFFIX, ModelTemplates.SEAGRASS, TextureMapping::defaultTexture);
+        var top = gen.createSuffixedVariant(block, Assets.TOP_SUFFIX, ModelTemplates.SEAGRASS, TextureMapping::defaultTexture);
+        var bottom = gen.createSuffixedVariant(block, Assets.DOWN_SUFFIX, ModelTemplates.SEAGRASS, TextureMapping::defaultTexture);
 
         gen.createDoubleBlock(block, top, bottom);
     }
@@ -384,10 +370,10 @@ public class BlockAssetDatagen {
     }
 
     public void sunflower(Block block) {
-        var top = getModelId(block, Textures.TOP_SUFFIX);
-        var bottom = gen.createSuffixedVariant(block, Textures.DOWN_SUFFIX, BlockModelGenerators.TintState.NOT_TINTED.getCross(), TextureMapping::cross);
+        var top = Assets.getModelId(block, Assets.TOP_SUFFIX);
+        var bottom = gen.createSuffixedVariant(block, Assets.DOWN_SUFFIX, BlockModelGenerators.TintState.NOT_TINTED.getCross(), TextureMapping::cross);
 
-        gen.createSimpleFlatItemModel(block, Textures.FRONT_SUFFIX);
+        gen.createSimpleFlatItemModel(block, Assets.FRONT_SUFFIX);
         gen.createDoubleBlock(block, top, bottom);
     }
 
@@ -414,9 +400,9 @@ public class BlockAssetDatagen {
     public void cocoa(Block block) {
         gen.createSimpleFlatItemModel(block.asItem());
         create(multiVariant(block).with(PropertyDispatch.property(BlockStateProperties.AGE_2)
-            .select(0, Variant.variant().with(VariantProperties.MODEL, getModelId(block, Textures.STAGE0_SUFFIX)))
-            .select(1, Variant.variant().with(VariantProperties.MODEL, getModelId(block, Textures.STAGE1_SUFFIX)))
-            .select(2, Variant.variant().with(VariantProperties.MODEL, getModelId(block, Textures.STAGE2_SUFFIX)))
+            .select(0, Variant.variant().with(VariantProperties.MODEL, Assets.getModelId(block, Assets.STAGE0_SUFFIX)))
+            .select(1, Variant.variant().with(VariantProperties.MODEL, Assets.getModelId(block, Assets.STAGE1_SUFFIX)))
+            .select(2, Variant.variant().with(VariantProperties.MODEL, Assets.getModelId(block, Assets.STAGE2_SUFFIX)))
         ).with(BlockModelGenerators.createHorizontalFacingDispatchAlt()));
     }
 
@@ -445,15 +431,15 @@ public class BlockAssetDatagen {
 
     public void pitcherPotCrop(Block block) {
         var properties = PropertyDispatch.properties(PitcherCropBlock.AGE, BlockStateProperties.DOUBLE_BLOCK_HALF).generate((age, half) ->
-            Variant.variant().with(VariantProperties.MODEL, getModelId(block, (half == DoubleBlockHalf.UPPER? Textures.TOP_STAGE_AFFIX : Textures.DOWN_STAGE_AFFIX) + age)));
+            Variant.variant().with(VariantProperties.MODEL, Assets.getModelId(block, (half == DoubleBlockHalf.UPPER? Assets.TOP_STAGE_AFFIX : Assets.DOWN_STAGE_AFFIX) + age)));
 
         gen.createSimpleFlatItemModel(block.asItem());
         create(multiVariant(block).with(properties));
     }
 
     public void pitcherPotPlant(Block block) {
-        var top = getModelId(block, Textures.TOP_SUFFIX);
-        var down = getModelId(block, Textures.DOWN_SUFFIX);
+        var top = Assets.getModelId(block, Assets.TOP_SUFFIX);
+        var down = Assets.getModelId(block, Assets.DOWN_SUFFIX);
 
         gen.createSimpleFlatItemModel(block.asItem());
         gen.createDoubleBlock(block, top, down);
@@ -466,9 +452,9 @@ public class BlockAssetDatagen {
 
     public void bigDripleaf(Block block) {
         gen.skipAutoItemBlock(block);
-        var dripleaf = getModelId(block);
-        var partial = getModelId(block, Textures.PARTIAL_TILT_SUFFIX);
-        var full = getModelId(block, Textures.FULL_TILT_SUFFIX);
+        var dripleaf = Assets.getModelId(block);
+        var partial = Assets.getModelId(block, Assets.PARTIAL_TILT_SUFFIX);
+        var full = Assets.getModelId(block, Assets.FULL_TILT_SUFFIX);
 
         create(multiVariant(block).with(BlockModelGenerators.createHorizontalFacingDispatch()).with(PropertyDispatch.property(BlockStateProperties.TILT)
             .select(Tilt.NONE, Variant.variant().with(VariantProperties.MODEL, dripleaf))
@@ -480,8 +466,8 @@ public class BlockAssetDatagen {
 
     public void smallDripleaf(Block block) {
         gen.skipAutoItemBlock(block);
-        var top = getModelId(block, Textures.TOP_SUFFIX);
-        var bottom = getModelId(block, Textures.DOWN_SUFFIX);
+        var top = Assets.getModelId(block, Assets.TOP_SUFFIX);
+        var bottom = Assets.getModelId(block, Assets.DOWN_SUFFIX);
 
         create(multiVariant(block).with(BlockModelGenerators.createHorizontalFacingDispatch()).with(PropertyDispatch.property(BlockStateProperties.DOUBLE_BLOCK_HALF)
             .select(DoubleBlockHalf.LOWER, Variant.variant().with(VariantProperties.MODEL, bottom))
@@ -511,25 +497,25 @@ public class BlockAssetDatagen {
 
     public void cartographyTable(Block block, Block bottom) {
         cube(block,
-            Textures.top(block),
-            Textures.get(bottom),
-            Textures.get(block, Textures.SIDE3_SUFFIX),
-            Textures.get(block, Textures.SIDE1_SUFFIX),
-            Textures.get(block, Textures.SIDE2_SUFFIX),
-            Textures.get(block, Textures.SIDE3_SUFFIX),
-            Textures.get(block, Textures.SIDE3_SUFFIX)
+            Assets.top(block),
+            Assets.get(bottom),
+            Assets.get(block, Assets.SIDE3_SUFFIX),
+            Assets.get(block, Assets.SIDE1_SUFFIX),
+            Assets.get(block, Assets.SIDE2_SUFFIX),
+            Assets.get(block, Assets.SIDE3_SUFFIX),
+            Assets.get(block, Assets.SIDE3_SUFFIX)
         );
     }
 
     public void smithingTable(Block block, Block bottom) {
         cube(block,
-            Textures.top(block),
-            Textures.get(bottom),
-            Textures.front(block),
-            Textures.front(block),
-            Textures.side(block),
-            Textures.side(block),
-            Textures.front(block)
+            Assets.top(block),
+            Assets.get(bottom),
+            Assets.front(block),
+            Assets.front(block),
+            Assets.side(block),
+            Assets.side(block),
+            Assets.front(block)
         );
     }
 

@@ -19,10 +19,10 @@ import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 
 public class BlockOutlineRenderEvent {
 
-    public static final Event<RenderPre> RENDER_PRE = EventFactory.createArrayBacked(RenderPre.class, (context, hit) -> true, callbacks -> (context, hit) -> {
+    public static final Event<RenderPre> RENDER_PRE = EventFactory.createArrayBacked(RenderPre.class, (context, hitResult) -> true, callbacks -> (context, hitResult) -> {
         boolean shouldRender = true;
         for (var event : callbacks) {
-            if (!event.onStartRender(context, hit)) shouldRender = false;
+            if (!event.onStartRender(context, hitResult)) shouldRender = false;
         }
         return shouldRender;
     });

@@ -1,12 +1,13 @@
 package net.justmili.corelibs.v1.util.client;
 
 import net.justmili.corelibs.v1.util.common.ResourceUtil;
+import net.minecraft.data.models.model.ModelLocationUtils;
 import net.minecraft.data.models.model.TextureMapping;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
-public class Textures {
+public class Assets {
     public static final String TOP_SUFFIX = "_top";
     public static final String DOWN_SUFFIX = "_bottom";
     public static final String FRONT_SUFFIX = "_front";
@@ -46,6 +47,22 @@ public class Textures {
 
     public static ResourceLocation get(Item item, String textureSuffix) {
         return TextureMapping.getItemTexture(item, textureSuffix);
+    }
+
+    public static ResourceLocation getModelId(Block block) {
+        return ModelLocationUtils.getModelLocation(block);
+    }
+
+    public static ResourceLocation getModelId(Block block, String suffix) {
+        return ModelLocationUtils.getModelLocation(block, suffix);
+    }
+
+    public static ResourceLocation getModelId(Item item) {
+        return ModelLocationUtils.getModelLocation(item);
+    }
+
+    public static ResourceLocation getModelId(Item item, String suffix) {
+        return ModelLocationUtils.getModelLocation(item, suffix);
     }
 
     public static ResourceLocation getBlockPath(String modId, String path) {
