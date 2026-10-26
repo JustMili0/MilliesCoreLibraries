@@ -1,9 +1,8 @@
 package net.justmili.corelibs;
 
 import net.fabricmc.api.ModInitializer;
-import net.justmili.corelibs.config.ExampleConfig;
 import net.justmili.corelibs.v1.api.events.bridge.ServerEventsBridge;
-import net.justmili.corelibs.v1.config.sync.SyncPriorityConfigs;
+import net.justmili.corelibs.v2.config.sync.SyncPriorityConfigs;
 import net.justmili.corelibs.v1.util.ModUtil;
 import net.justmili.corelibs.v1.util.common.ResourceUtil;
 import net.justmili.corelibs.v1.util.common.TickUtil;
@@ -23,10 +22,9 @@ public class CoreLibs implements ModInitializer {
         ModUtil.markEOS(NAME, ID, false, false);
 
         ServerEventsBridge.init();
-        SyncPriorityConfigs.registerServer();
+        SyncPriorityConfigs.initS2C();
 
         TickUtil.registerProcessQueue();
-        ExampleConfig.register();
     }
 
     public static ResourceLocation asId(String path) {
