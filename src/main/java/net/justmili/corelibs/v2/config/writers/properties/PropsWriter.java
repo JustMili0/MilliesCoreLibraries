@@ -6,6 +6,7 @@ import net.justmili.corelibs.v1.config.entry.ListConfigEntry;
 import net.justmili.corelibs.v1.config.items.CategoryItem;
 import net.justmili.corelibs.v1.config.items.CommentItem;
 import net.justmili.corelibs.v1.config.items.ConfigItem;
+import net.justmili.corelibs.v2.config.flags.CommentType;
 import net.justmili.corelibs.v2.config.writers.FormatWriter;
 
 import java.io.*;
@@ -22,7 +23,7 @@ public class PropsWriter implements FormatWriter {
         file.getParentFile().mkdirs();
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            writer.write("# "+path.getFileName()+"\n\n");
+            writer.write("# " + path.getFileName() + "\n\n");
             writeItems(writer, root.children(), false);
         } catch (IOException e) {
             CoreLibs.LOGGER.error("Failed to write config: {}", e.getMessage());
@@ -39,15 +40,15 @@ public class PropsWriter implements FormatWriter {
                 writeItems(writer, categoryItem.children(), warnedAboutCategories);
 
             } else if (item instanceof CommentItem commentItem) {
-                for (String line : commentItem.comment().split("\n")) writer.write("# "+line+"\n");
+                for (String line : commentItem.comment().split("\n")) writer.write("# " + line + "\n");
 
             } else if (item instanceof ListConfigEntry listEntry) {
-                writer.write(listHint(listEntry, CommentStyle.TAG)+"\n");
-                writer.write(listEntry.key()+"="+listEntry.serialize()+"\n\n");
+                writer.write(listHint(listEntry, CommentType.POUND) + "\n");
+                writer.write(listEntry.key() + "=" + listEntry.serialize() + "\n\n");
 
             } else if (item instanceof ConfigEntry<?> entry) {
-                writer.write(hint(entry, CommentStyle.TAG)+"\n");
-                writer.write(entry.key()+"="+entry.serialize()+"\n\n");
+                writer.write(hint(entry, CommentType.POUND) + "\n");
+                writer.write(entry.key() + "=" + entry.serialize() + "\n\n");
             }
         }
     }

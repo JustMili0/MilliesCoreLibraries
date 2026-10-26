@@ -6,6 +6,7 @@ import net.justmili.corelibs.v1.config.entry.ListConfigEntry;
 import net.justmili.corelibs.v1.config.items.CategoryItem;
 import net.justmili.corelibs.v1.config.items.CommentItem;
 import net.justmili.corelibs.v1.config.items.ConfigItem;
+import net.justmili.corelibs.v2.config.flags.CommentType;
 import net.justmili.corelibs.v2.config.writers.FormatWriter;
 
 import java.io.*;
@@ -39,19 +40,19 @@ public class JsonWriter implements FormatWriter {
                 // JSON doesn't support comments, skip silently
 
             } else if (item instanceof ListConfigEntry listEntry) {
-                writer.write(indent+"\"_h"+hintCounter[0]+++"\": \""+listHint(listEntry, CommentStyle.NONE)+"\",\n");
-                writer.write(indent+"\""+listEntry.key()+"\": "+listEntry.serializeJson(indent)+(last ? "\n" : ",\n"));
+                writer.write(indent + "\"_h" + hintCounter[0]++ + "\": \"" + listHint(listEntry, CommentType.NONE) + "\",\n");
+                writer.write(indent + "\"" + listEntry.key() + "\": " + listEntry.serializeJson(indent) + (last? "\n" : ",\n"));
                 if (!last) writer.write("\n");
 
             } else if (item instanceof ConfigEntry<?> entry) {
-                writer.write(indent+"\"_h"+hintCounter[0]+++"\": \""+hint(entry, CommentStyle.NONE)+"\",\n");
-                writer.write(indent+"\""+entry.key()+"\": "+ SharedJson.jsonValue(entry)+(last ? "\n" : ",\n"));
+                writer.write(indent + "\"_h" + hintCounter[0]++ + "\": \"" + hint(entry, CommentType.NONE) + "\",\n");
+                writer.write(indent + "\"" + entry.key() + "\": " + SharedJson.jsonValue(entry) + (last? "\n" : ",\n"));
                 if (!last) writer.write("\n");
 
             } else if (item instanceof CategoryItem category) {
-                writer.write(indent+"\""+category.name()+"\": {\n");
-                writeItems(writer, category.children(), indent+"  ", hintCounter);
-                writer.write(indent+"}"+(last ? "\n" : ",\n"));
+                writer.write(indent + "\"" + category.name() + "\": {\n");
+                writeItems(writer, category.children(), indent + "  ", hintCounter);
+                writer.write(indent + "}" + (last? "\n" : ",\n"));
                 if (!last) writer.write("\n");
             }
         }

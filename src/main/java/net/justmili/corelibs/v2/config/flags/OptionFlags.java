@@ -6,7 +6,6 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.Locale;
 
 public enum OptionFlags {
-    NONE,
     REQUIRES_GAME_RESTART,
     REQUIRES_LEVEL_RELOAD,
     REQUIRES_ASSETS_RELOAD,
@@ -15,9 +14,9 @@ public enum OptionFlags {
     REQUIRES_RENDERER_UPDATE,
     REQUIRES_VIDEOMODE_RELOAD;
 
-    private final ResourceLocation id = new ResourceLocation(CoreLibs.ID, "config_option_flag." + this.name().toLowerCase(Locale.ROOT));
+    private final ResourceLocation id = CoreLibs.asId("config_option_flag." + this.name().toLowerCase(Locale.ROOT));
 
     public ResourceLocation getId() {
-        return this.id;
+        return id;
     }
 }

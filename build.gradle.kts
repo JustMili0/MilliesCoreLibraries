@@ -50,6 +50,7 @@ dependencies {
     // Use `mod{dependency type}` even on 26.1+ - loom-back-compat converts them
     modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
     modImplementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
+    modImplementation("net.fabricmc:fabric-language-kotlin:${property("deps.kotlin")}") // Mostly only for utils and whatnot
 
     // Fabric dependencies go here
     //include Fabric Language Kotlin
@@ -118,6 +119,7 @@ tasks {
             register("mod_license", sc.properties["mod.license"])
             register("fabric_loader_version", sc.properties["deps.fabric_loader"])
             register("fabric_api_version", sc.properties["deps.fabric_api"])
+            register("kotlin_version", sc.properties["deps.kotlin"])
             register("minecraft_version_constraint", sc.properties["mod.mc_compat"])
         }
 

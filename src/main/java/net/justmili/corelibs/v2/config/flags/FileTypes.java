@@ -1,7 +1,6 @@
 package net.justmili.corelibs.v2.config.flags;
 
 public enum FileTypes {
-    TEXT("txt"), // CORELIBS: .txt configs would pretty much look like eula.txt
     JSON("json"),
     JSON5("json5"),
     PROPERTIES("properties"),
@@ -9,8 +8,8 @@ public enum FileTypes {
 
     private final String extension;
 
-    FileTypes(String ext) {
-        this.extension = ext;
+    FileTypes(String extension) {
+        this.extension = extension;
     }
 
     public String extension() {

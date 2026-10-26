@@ -6,6 +6,7 @@ import net.justmili.corelibs.v1.config.entry.ListConfigEntry;
 import net.justmili.corelibs.v1.config.items.CategoryItem;
 import net.justmili.corelibs.v1.config.items.CommentItem;
 import net.justmili.corelibs.v1.config.items.ConfigItem;
+import net.justmili.corelibs.v2.config.flags.CommentType;
 import net.justmili.corelibs.v2.config.writers.FormatWriter;
 
 import java.io.*;
@@ -36,26 +37,26 @@ public class Json5Writer implements FormatWriter {
             boolean last = i == lastReal;
 
             if (item instanceof CommentItem commentItem) {
-                for (String line : commentItem.comment().split("\n")) writer.write(indent+"// "+line+"\n");
+                for (String line : commentItem.comment().split("\n")) writer.write(indent + "// " + line + "\n");
 
             } else if (item instanceof ListConfigEntry listEntry) {
-                writer.write(indent+"// "+listHint(listEntry, CommentStyle.NONE)+"\n");
-                writer.write(indent+"\""+listEntry.key()+"\": "+listEntry.serializeJson(indent)+(last ? "\n" : ",\n"));
+                writer.write(indent + "// " + listHint(listEntry, CommentType.NONE) + "\n");
+                writer.write(indent + "\"" + listEntry.key() + "\": " + listEntry.serializeJson(indent) + (last? "\n" : ",\n"));
                 if (!last) writer.write("\n");
 
             } else if (item instanceof ConfigEntry<?> entry) {
-                writer.write(indent+"// "+hint(entry, CommentStyle.NONE)+"\n");
-                writer.write(indent+"\""+entry.key()+"\": "+ SharedJson.jsonValue(entry)+(last ? "\n" : ",\n"));
+                writer.write(indent + "// " + hint(entry, CommentType.NONE) + "\n");
+                writer.write(indent + "\"" + entry.key() + "\": " + SharedJson.jsonValue(entry) + (last? "\n" : ",\n"));
                 if (!last) writer.write("\n");
 
             } else if (item instanceof CategoryItem category) {
                 if (category.comment() != null) {
-                    for (String line : category.comment().split("\n")) writer.write(indent+"// "+line+"\n");
+                    for (String line : category.comment().split("\n")) writer.write(indent + "// " + line + "\n");
                 }
 
-                writer.write(indent+"\""+category.name()+"\": {\n");
-                writeItems(writer, category.children(), indent+"  ");
-                writer.write(indent+"}"+(last ? "\n" : ",\n"));
+                writer.write(indent + "\"" + category.name() + "\": {\n");
+                writeItems(writer, category.children(), indent + "  ");
+                writer.write(indent + "}" + (last? "\n" : ",\n"));
 
                 if (!last) writer.write("\n");
             }
@@ -68,7 +69,7 @@ public class Json5Writer implements FormatWriter {
             StringBuilder stringBuilder = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {
-                String stripped = line.contains("//") ? line.substring(0, line.indexOf("//")) : line;
+                String stripped = line.contains("//")? line.substring(0, line.indexOf("//")) : line;
                 stringBuilder.append(stripped).append("\n");
             }
 

@@ -9,5 +9,7 @@ public class FabricClient implements ClientModInitializer {
     public void onInitializeClient() {
         ClientEventsBridge.init();
         SyncPriorityConfigs.registerClient();
+
+        //Config.initClient();
     }
 }

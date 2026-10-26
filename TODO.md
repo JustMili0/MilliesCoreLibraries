@@ -11,12 +11,13 @@
 
 # TODO (0.0.2a)
 - Rewrite config from `v1.config` to `v2.config` (deprecate `v1.config` after)
-  - Completely different config builder style
+  - Completely new (hopefully better) config builder
   - No more `ConfigEntry<?>`, `ListConfigEntry` etc., just plain `int`, `boolean`, `String` and so on
   - Rewrite using Codecs
   - Support for more entry types (Base [String, Numbers, boolean], Enum, Color, Lists [List, Set])
   - Support for "attaching" images to config values (usable via `v2.configscreen`)
   - Support for converting old config file(s) and their entries into new ones
+  - Fix, rework and improve priority config synchronization
 - Include `Fabric Language Kotlin` in build (will be mostly used for utils)
 - Rework most util classes, attempt optimizations, add a bit more functionality to all
 - Add Javadocs, proper comments, write documentation
