@@ -26,7 +26,7 @@ public class Json5IO implements FileWriter {
     }
 
     private void writeItems(BufferedWriter writer, List<ConfigItem> items, JsonObject json, String indent) throws IOException {
-        int lastReal = SharedJsonIO.lastRealIndex(items, true);
+        int lastReal = SharedJsonIO.lastRealIndex(items);
         for (int i = 0; i < items.size(); i++) {
             var item = items.get(i);
             boolean last = i == lastReal;
@@ -37,13 +37,13 @@ public class Json5IO implements FileWriter {
             } else if (item instanceof ConfigOption<?> option) {
                 writeComment(writer, option.comment(), CommentType.SLASH, indent);
                 writer.write(indent + hint(option, CommentType.SLASH) + "\n");
-                writer.write(indent + "\"" + option.key() + "\": " + SharedJsonIO.getValue(json, option.key()) + (last? "\n" : ",\n"));
+                writer.write(indent + SharedJsonIO.quote(option.key()) + ": " + SharedJsonIO.getValue(json, option.key()) + (last? "\n" : ",\n"));
                 if (!last) writer.write("\n");
 
-            } else if (item instanceof CategoryItem category) {
-                writeComment(writer, category.comment(), CommentType.SLASH, indent);
-                writer.write(indent + "\"" + category.name() + "\": {\n");
-                writeItems(writer, category.children(), SharedJsonIO.isChild(json, category.name()), indent + "  ");
+            } else if (item instanceof CategoryItem cat) {
+                writeComment(writer, cat.comment(), CommentType.SLASH, indent);
+                writer.write(indent + SharedJsonIO.quote(cat.name()) + ": {\n");
+                writeItems(writer, cat.children(), SharedJsonIO.getChild(json, cat.name()), indent + "  ");
                 writer.write(indent + "}" + (last? "\n" : ",\n"));
 
                 if (!last) writer.write("\n");

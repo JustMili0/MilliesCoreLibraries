@@ -37,7 +37,7 @@ public class SharedJsonIO {
         return obj.has(key)? obj.get(key).toString() : "null";
     }
 
-    public static JsonObject isChild(JsonObject obj, String name) {
+    public static JsonObject getChild(JsonObject obj, String name) {
         return obj.get(name) instanceof JsonObject child? child : new JsonObject();
     }
 
@@ -45,9 +45,9 @@ public class SharedJsonIO {
         return new JsonPrimitive(text).toString();
     }
 
-    public static int lastRealIndex(List<ConfigItem> items, boolean hasComments) {
+    public static int lastRealIndex(List<ConfigItem> items) {
         for (int i = items.size() - 1; i >= 0; i--) {
-            if (hasComments || !(items.get(i) instanceof CommentItem)) return i;
+            if (!(items.get(i) instanceof CommentItem)) return i;
         }
         return -1;
     }

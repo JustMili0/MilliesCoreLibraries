@@ -31,12 +31,12 @@ public class JsonIO implements FileWriter {
             } else if (item instanceof ConfigOption<?> option) {
                 addComment(lines, option.comment(), indent, commentIndex);
                 addComment(lines, hint(option, CommentType.NONE), indent, commentIndex);
-                lines.add(indent + "\"" + option.key() + "\": " + SharedJsonIO.getValue(json, option.key()));
+                lines.add(indent + SharedJsonIO.quote(option.key()) + ": " + SharedJsonIO.getValue(json, option.key()));
 
-            } else if (item instanceof CategoryItem category) {
-                addComment(lines, category.comment(), indent, commentIndex);
-                var children = render(category.children(), SharedJsonIO.isChild(json, category.name()), indent + "  ", commentIndex);
-                lines.add(indent + "\"" + category.name() + "\": {\n" + String.join(",\n\n", children) + "\n" + indent + "}");
+            } else if (item instanceof CategoryItem cat) {
+                addComment(lines, cat.comment(), indent, commentIndex);
+                var children = render(cat.children(), SharedJsonIO.getChild(json, cat.name()), indent + "  ", commentIndex);
+                lines.add(indent + SharedJsonIO.quote(cat.name()) + ": {\n" + String.join(",\n\n", children) + "\n" + indent + "}");
             }
 
             if (!lines.isEmpty()) blocks.add(String.join(",\n", lines));

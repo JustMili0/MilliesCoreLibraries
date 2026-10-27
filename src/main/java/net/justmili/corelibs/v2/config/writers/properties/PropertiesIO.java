@@ -34,13 +34,13 @@ public class PropertiesIO implements FileWriter {
 
     private void writeItems(BufferedWriter writer, List<ConfigItem> items, JsonObject obj, boolean warnedAboutCategories) throws IOException {
         for (var item : items) {
-            if (item instanceof CategoryItem categoryItem) {
+            if (item instanceof CategoryItem cat) {
                 if (!warnedAboutCategories && Platform.IS_DEV_ENV) {
                     CoreLibs.LOGGER.warn("Categories not supported in .properties format - flattening.");
                     warnedAboutCategories = true;
                 }
-                writeComment(writer, categoryItem.comment(), CommentType.POUND, "");
-                writeItems(writer, categoryItem.children(), SharedJsonIO.isChild(obj, categoryItem.name()), warnedAboutCategories);
+                writeComment(writer, cat.comment(), CommentType.POUND, "");
+                writeItems(writer, cat.children(), SharedJsonIO.getChild(obj, cat.name()), warnedAboutCategories);
 
             } else if (item instanceof CommentItem commentItem) {
                 writeComment(writer, commentItem.comment(), CommentType.POUND, "");
@@ -69,8 +69,8 @@ public class PropertiesIO implements FileWriter {
     private JsonObject toJson(Properties properties, List<ConfigItem> items) {
         var obj = new JsonObject();
         for (var item : items) {
-            if (item instanceof CategoryItem category) {
-                obj.add(category.name(), toJson(properties, category.children()));
+            if (item instanceof CategoryItem cat) {
+                obj.add(cat.name(), toJson(properties, cat.children()));
             } else if (item instanceof ConfigOption<?> option) {
                 var raw = properties.getProperty(option.key());
                 if (raw != null) obj.add(option.key(), toElement(option, raw));
