@@ -1,29 +1,36 @@
 package net.justmili.corelibs.v2.config;
 
 import net.fabricmc.loader.api.FabricLoader;
-import net.justmili.corelibs.v2.config.writers.FormatWriter;
-import net.justmili.corelibs.v2.config.writers.json.Json5Writer;
-import net.justmili.corelibs.v2.config.writers.json.JsonWriter;
-import net.justmili.corelibs.v2.config.writers.properties.PropsWriter;
+import net.justmili.corelibs.CoreLibs;
 import net.justmili.corelibs.v2.config.flags.ConfigTypes;
 import net.justmili.corelibs.v2.config.flags.FileTypes;
+import net.justmili.corelibs.v2.config.items.CategoryItem;
+import net.justmili.corelibs.v2.config.writers.BaseWriter;
+import net.justmili.corelibs.v2.config.writers.json.Json5IO;
+import net.justmili.corelibs.v2.config.writers.json.JsonIO;
+import net.justmili.corelibs.v2.config.writers.properties.PropertiesIO;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MConfigLoader {
+    private static final Set<Path> CLAIMED_PATHS = new HashSet<>();
+    private final CategoryItem root = new CategoryItem("root", null);
     private final String modId;
     private final String fileName;
     private final String suffix;
-    private final FormatWriter writer;
+    private final BaseWriter writer;
     private final Path path;
-
 
     public MConfigLoader(String modId, String customFileName, ConfigTypes configType, FileTypes fileType, boolean createSubDirectory) {
         var configDir = getConfigDir();
 
         this.modId = modId;
         this.fileName = customFileName == null? modId : customFileName;
-        this.suffix = configType.suffix();
         this.writer = getWriter(fileType);
 
         if (configType == ConfigTypes.COMMON_CLIENT_PRIORITY) {
@@ -32,22 +39,59 @@ public class MConfigLoader {
             // Server -> Client
         }
 
+        var directory = createSubDirectory? configDir.resolve(modId) : configDir;
         var extension = fileType.extension();
-        var file = createSubDirectory? suffix : modId + "-" + suffix; // It's gotten confusing with the custom file name, idk man
+        var prefixWithFileName = customFileName != null || !createSubDirectory;
 
-        // TODO: "File name matches COMMON unless a COMMON config already exists." -Priority Config Types
-        //configType.altSuffix();
+        var primaryPath = getPath(directory, configType.suffix(), extension, prefixWithFileName);
+        var alternativePath = getPath(directory, configType.altSuffix(), extension, prefixWithFileName);
 
-        path = createSubDirectory
-            ? configDir.resolve(modId).resolve(file + extension)
-            : configDir.resolve(file + extension);
+        // Uses alternative suffix for Common Priority config files if a regular common config exists
+        var usesAltSuffix = CLAIMED_PATHS.contains(primaryPath) && !primaryPath.equals(alternativePath);
+        this.suffix = usesAltSuffix? configType.altSuffix() : configType.suffix();
+        this.path = usesAltSuffix? alternativePath : primaryPath;
+
+        if (!CLAIMED_PATHS.add(path)) CoreLibs.LOGGER.warn("Config file '{}' is already used by another config of the same mod, they will overwrite each other.", path);
     }
 
-    private FormatWriter getWriter(FileTypes fileType) {
+    public CategoryItem root() {
+        return root;
+    }
+
+    public void buildOrLoad() {
+        if (!path.toFile().exists()) {
+            writer.write(path, root);
+            return;
+        }
+
+        if (!writer.load(path, root)) backupIfBroken();
+        writer.write(path, root);
+    }
+
+    public void save() {
+        writer.write(path, root);
+    }
+
+    private void backupIfBroken() {
+        var backupPath = path.resolveSibling(path.getFileName() + ".mclb"); // MCLB - MConfigLoader Backup
+        try {
+            Files.move(path, backupPath, StandardCopyOption.REPLACE_EXISTING);
+            CoreLibs.LOGGER.warn("Config '{}' could not be read, it was moved to '{}' and defaults will be used.", path, backupPath);
+        } catch (IOException e) {
+            CoreLibs.LOGGER.error("Failed to back up unreadable config: {}", e.getMessage());
+        }
+    }
+
+    private Path getPath(Path directory, String suffix, String extension, boolean prefixWithFileName) {
+        var file = prefixWithFileName? this.fileName + "-" + suffix : suffix;
+        return directory.resolve(file + extension);
+    }
+
+    private BaseWriter getWriter(FileTypes fileType) {
         return switch (fileType) {
-            case JSON -> new JsonWriter();
-            case JSON5 -> new Json5Writer();
-            case PROPERTIES -> new PropsWriter();
+            case JSON -> new JsonIO();
+            case JSON5 -> new Json5IO();
+            case PROPERTIES -> new PropertiesIO();
             case TOML -> throw new UnsupportedOperationException("TOML support is not yet fully implemented.");
         };
     }

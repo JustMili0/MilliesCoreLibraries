@@ -15,11 +15,11 @@ public class Text {
     }
 
     public static MutableComponent text(String text, Object... args) {
-        return Component.literal(String.format(text, args));
+        return Component.literal(text.formatted(args));
     }
 
     public static MutableComponent obfuscate(String text, Object... args) {
-        return Component.literal(String.format(text, args)).withStyle(ChatFormatting.OBFUSCATED);
+        return Component.literal(text.formatted(args)).withStyle(ChatFormatting.OBFUSCATED);
     }
 
     public static MutableComponent toList(String text) {

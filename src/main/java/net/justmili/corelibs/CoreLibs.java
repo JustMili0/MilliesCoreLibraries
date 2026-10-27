@@ -2,10 +2,10 @@ package net.justmili.corelibs;
 
 import net.fabricmc.api.ModInitializer;
 import net.justmili.corelibs.v1.api.events.bridge.ServerEventsBridge;
-import net.justmili.corelibs.v2.config.sync.SyncPriorityConfigs;
 import net.justmili.corelibs.v1.util.ModUtil;
 import net.justmili.corelibs.v1.util.common.ResourceUtil;
 import net.justmili.corelibs.v1.util.common.TickUtil;
+import net.justmili.corelibs.v2.config.sync.SyncPriorityConfigs;
 import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

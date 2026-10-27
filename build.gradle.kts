@@ -49,11 +49,10 @@ dependencies {
 
     // Use `mod{dependency type}` even on 26.1+ - loom-back-compat converts them
     modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
-    modImplementation("net.fabricmc:fabric-language-kotlin:${property("deps.kotlin")}") // Mostly only for utils and whatnot
 
     // Fabric dependencies go here
-    //include Fabric Language Kotlin
+    modImplementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
+    modImplementation("net.fabricmc:fabric-language-kotlin:${property("deps.kotlin")}") // Mostly only for utils and whatnot
 
     // Other
     modImplementation("com.terraformersmc:modmenu:${property("deps.mod_menu")}")
@@ -150,7 +149,7 @@ publishMods {
     modLoaders.add("fabric")
 
     // TODO: bring back one build-logic is ported
-    // changelog = readChangelogFromBranch("origin/rep-info", ".Changelogs/${project.property("mod.version")}-Changelog.md")
+    //changelog = readChangelogFromBranch("origin/rep-info", ".Changelogs/${project.property("mod.version")}-Changelog.md")
     changelog = "No changelog"
 
     modrinth {
@@ -158,7 +157,7 @@ publishMods {
         projectId = "j6khQEIz"
 
         minecraftVersions.addAll(compatibleVersions)
-        environment = CLIENT_AND_SERVER
+        environment = CLIENT_OR_SERVER
         // STABLE, BETA, ALPHA
         type = STABLE
 
