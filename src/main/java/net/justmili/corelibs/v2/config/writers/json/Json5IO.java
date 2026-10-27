@@ -7,14 +7,14 @@ import net.justmili.corelibs.v2.config.items.CategoryItem;
 import net.justmili.corelibs.v2.config.items.CommentItem;
 import net.justmili.corelibs.v2.config.items.ConfigItem;
 import net.justmili.corelibs.v2.config.items.ConfigOption;
-import net.justmili.corelibs.v2.config.writers.BaseWriter;
+import net.justmili.corelibs.v2.config.writers.FileWriter;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
-public class Json5IO implements BaseWriter {
+public class Json5IO implements FileWriter {
 
     @Override
     public void write(Path path, CategoryItem root) {
@@ -37,13 +37,13 @@ public class Json5IO implements BaseWriter {
             } else if (item instanceof ConfigOption<?> option) {
                 writeComment(writer, option.comment(), CommentType.SLASH, indent);
                 writer.write(indent + hint(option, CommentType.SLASH) + "\n");
-                writer.write(indent + "\"" + option.key() + "\": " + SharedJsonIO.jsonValue(json, option.key()) + (last? "\n" : ",\n"));
+                writer.write(indent + "\"" + option.key() + "\": " + SharedJsonIO.getValue(json, option.key()) + (last? "\n" : ",\n"));
                 if (!last) writer.write("\n");
 
             } else if (item instanceof CategoryItem category) {
                 writeComment(writer, category.comment(), CommentType.SLASH, indent);
                 writer.write(indent + "\"" + category.name() + "\": {\n");
-                writeItems(writer, category.children(), SharedJsonIO.child(json, category.name()), indent + "  ");
+                writeItems(writer, category.children(), SharedJsonIO.isChild(json, category.name()), indent + "  ");
                 writer.write(indent + "}" + (last? "\n" : ",\n"));
 
                 if (!last) writer.write("\n");

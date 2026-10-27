@@ -11,7 +11,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-public interface BaseWriter {
+public interface FileWriter {
 
     void write(Path path, CategoryItem root);
 

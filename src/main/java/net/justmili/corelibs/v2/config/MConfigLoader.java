@@ -2,10 +2,11 @@ package net.justmili.corelibs.v2.config;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.justmili.corelibs.CoreLibs;
+import net.justmili.corelibs.v1.util.Platform;
 import net.justmili.corelibs.v2.config.flags.ConfigTypes;
 import net.justmili.corelibs.v2.config.flags.FileTypes;
 import net.justmili.corelibs.v2.config.items.CategoryItem;
-import net.justmili.corelibs.v2.config.writers.BaseWriter;
+import net.justmili.corelibs.v2.config.writers.FileWriter;
 import net.justmili.corelibs.v2.config.writers.json.Json5IO;
 import net.justmili.corelibs.v2.config.writers.json.JsonIO;
 import net.justmili.corelibs.v2.config.writers.properties.PropertiesIO;
@@ -23,11 +24,11 @@ public class MConfigLoader {
     private final String modId;
     private final String fileName;
     private final String suffix;
-    private final BaseWriter writer;
+    private final FileWriter writer;
     private final Path path;
 
     public MConfigLoader(String modId, String customFileName, ConfigTypes configType, FileTypes fileType, boolean createSubDirectory) {
-        var configDir = getConfigDir();
+        var configDir = Platform.getConfigDir();
 
         this.modId = modId;
         this.fileName = customFileName == null? modId : customFileName;
@@ -58,18 +59,18 @@ public class MConfigLoader {
         return root;
     }
 
+    public void save() {
+        writer.write(path, root);
+    }
+
     public void buildOrLoad() {
         if (!path.toFile().exists()) {
-            writer.write(path, root);
+            save();
             return;
         }
 
         if (!writer.load(path, root)) backupIfBroken();
-        writer.write(path, root);
-    }
-
-    public void save() {
-        writer.write(path, root);
+        save();
     }
 
     private void backupIfBroken() {
@@ -82,12 +83,7 @@ public class MConfigLoader {
         }
     }
 
-    private Path getPath(Path directory, String suffix, String extension, boolean prefixWithFileName) {
-        var file = prefixWithFileName? this.fileName + "-" + suffix : suffix;
-        return directory.resolve(file + extension);
-    }
-
-    private BaseWriter getWriter(FileTypes fileType) {
+    private FileWriter getWriter(FileTypes fileType) {
         return switch (fileType) {
             case JSON -> new JsonIO();
             case JSON5 -> new Json5IO();
@@ -96,7 +92,12 @@ public class MConfigLoader {
         };
     }
 
-    public static Path getConfigDir() {
-        return FabricLoader.getInstance().getConfigDir();
+    private Path getPath(Path directory, String suffix, String extension, boolean prefixWithFileName) {
+        var file = prefixWithFileName? this.fileName + "-" + suffix : suffix;
+        return directory.resolve(file + extension);
+    }
+
+    public static void loadError(String e) {
+        CoreLibs.LOGGER.error("Failed to load config: {}", e);
     }
 }

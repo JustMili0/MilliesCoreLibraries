@@ -99,6 +99,20 @@ public class MConfigBuilder {
         }
     }
 
+    public static class CategoryBuilder extends ConfigBuilder {
+        private final CategoryItem child;
+
+        public CategoryBuilder(MConfigLoader loader, CategoryItem category, CategoryItem child) {
+            super(loader, category);
+            this.child = child;
+        }
+
+        public CategoryBuilder comment(String comment) {
+            child.comment(comment);
+            return this;
+        }
+    }
+
     public static class OptionBuilder extends ConfigBuilder {
         private final ConfigOption<?> option;
 
@@ -114,20 +128,6 @@ public class MConfigBuilder {
 
         public void attachImage(Path path) {
             // TODO: Add optional attaching image paths for use in v2.configscreen
-        }
-    }
-
-    public static class CategoryBuilder extends ConfigBuilder {
-        private final CategoryItem child;
-
-        public CategoryBuilder(MConfigLoader loader, CategoryItem category, CategoryItem child) {
-            super(loader, category);
-            this.child = child;
-        }
-
-        public CategoryBuilder comment(String comment) {
-            child.comment(comment);
-            return this;
         }
     }
 }

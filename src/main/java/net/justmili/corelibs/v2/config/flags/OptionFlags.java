@@ -6,26 +6,21 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.Locale;
 
 public enum OptionFlags {
-    REQUIRES_GAME_RESTART("game restart"),
-    REQUIRES_LEVEL_RELOAD("level reload"),
-    REQUIRES_ASSETS_RELOAD("assets reload"),
-    REQUIRES_DATA_RELOAD("datapack reload"),
-    REQUIRES_RENDERER_RELOAD("renderer reload"),
-    REQUIRES_RENDERER_UPDATE("renderer update"),
-    REQUIRES_VIDEOMODE_RELOAD("videomode reload");
+    REQUIRES_GAME_RESTART,
+    REQUIRES_LEVEL_RELOAD,
+    REQUIRES_ASSETS_RELOAD,
+    REQUIRES_DATA_RELOAD,
+    REQUIRES_RENDERER_RELOAD,
+    REQUIRES_RENDERER_UPDATE,
+    REQUIRES_VIDEOMODE_RELOAD;
 
     private final ResourceLocation id = CoreLibs.asId("config_option_flag." + this.name().toLowerCase(Locale.ROOT));
-    private final String descName;
-
-    OptionFlags(String name) {
-        this.descName = name;
-    }
 
     public ResourceLocation id() {
         return id;
     }
 
     public String descName() {
-        return descName;
+        return name().toLowerCase(Locale.ROOT).replace("requires_", "").replace("_", " ");
     }
 }

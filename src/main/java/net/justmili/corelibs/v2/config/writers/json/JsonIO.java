@@ -7,13 +7,13 @@ import net.justmili.corelibs.v2.config.items.CategoryItem;
 import net.justmili.corelibs.v2.config.items.CommentItem;
 import net.justmili.corelibs.v2.config.items.ConfigItem;
 import net.justmili.corelibs.v2.config.items.ConfigOption;
-import net.justmili.corelibs.v2.config.writers.BaseWriter;
+import net.justmili.corelibs.v2.config.writers.FileWriter;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JsonIO implements BaseWriter {
+public class JsonIO implements FileWriter {
 
     @Override
     public void write(Path path, CategoryItem root) {
@@ -31,11 +31,11 @@ public class JsonIO implements BaseWriter {
             } else if (item instanceof ConfigOption<?> option) {
                 addComment(lines, option.comment(), indent, commentIndex);
                 addComment(lines, hint(option, CommentType.NONE), indent, commentIndex);
-                lines.add(indent + "\"" + option.key() + "\": " + SharedJsonIO.jsonValue(json, option.key()));
+                lines.add(indent + "\"" + option.key() + "\": " + SharedJsonIO.getValue(json, option.key()));
 
             } else if (item instanceof CategoryItem category) {
                 addComment(lines, category.comment(), indent, commentIndex);
-                var children = render(category.children(), SharedJsonIO.child(json, category.name()), indent + "  ", commentIndex);
+                var children = render(category.children(), SharedJsonIO.isChild(json, category.name()), indent + "  ", commentIndex);
                 lines.add(indent + "\"" + category.name() + "\": {\n" + String.join(",\n\n", children) + "\n" + indent + "}");
             }
 
