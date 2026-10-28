@@ -1,9 +1,9 @@
 package net.justmili.corelibs.config;
 
+import net.justmili.corelibs.v2.config.ConfigTypes;
+import net.justmili.corelibs.v2.config.FileTypes;
 import net.justmili.corelibs.v2.config.MConfigBuilder;
-import net.justmili.corelibs.v2.config.flags.ConfigTypes;
-import net.justmili.corelibs.v2.config.flags.FileTypes;
-import net.justmili.corelibs.v2.config.flags.OptionFlags;
+import net.justmili.corelibs.v2.config.OptionFlags;
 
 public class Config {
     public static MConfigBuilder client = new MConfigBuilder("corelibs", "icons", ConfigTypes.CLIENT, FileTypes.JSON5, true);

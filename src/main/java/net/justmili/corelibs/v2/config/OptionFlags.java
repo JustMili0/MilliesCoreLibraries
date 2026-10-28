@@ -1,4 +1,4 @@
-package net.justmili.corelibs.v2.config.flags;
+package net.justmili.corelibs.v2.config;
 
 import net.justmili.corelibs.CoreLibs;
 import net.minecraft.resources.ResourceLocation;

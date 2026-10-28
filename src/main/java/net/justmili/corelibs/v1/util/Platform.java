@@ -7,7 +7,6 @@ import net.minecraft.SharedConstants;
 
 import java.nio.file.Path;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
 
 public class Platform {

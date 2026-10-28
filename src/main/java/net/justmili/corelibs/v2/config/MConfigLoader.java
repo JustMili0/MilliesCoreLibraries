@@ -1,10 +1,7 @@
 package net.justmili.corelibs.v2.config;
 
-import net.fabricmc.loader.api.FabricLoader;
 import net.justmili.corelibs.CoreLibs;
 import net.justmili.corelibs.v1.util.Platform;
-import net.justmili.corelibs.v2.config.flags.ConfigTypes;
-import net.justmili.corelibs.v2.config.flags.FileTypes;
 import net.justmili.corelibs.v2.config.items.CategoryItem;
 import net.justmili.corelibs.v2.config.writers.FileWriter;
 import net.justmili.corelibs.v2.config.writers.json.Json5IO;

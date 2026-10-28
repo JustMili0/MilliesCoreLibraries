@@ -2,7 +2,6 @@ package net.justmili.corelibs.v2.config.writers.json;
 
 import com.google.gson.JsonObject;
 import net.justmili.corelibs.v1.util.common.FileIO;
-import net.justmili.corelibs.v2.config.flags.CommentType;
 import net.justmili.corelibs.v2.config.items.CategoryItem;
 import net.justmili.corelibs.v2.config.items.CommentItem;
 import net.justmili.corelibs.v2.config.items.ConfigItem;
@@ -20,30 +19,30 @@ public class Json5IO implements FileWriter {
     public void write(Path path, CategoryItem root) {
         FileIO.write(path, writer -> {
             writer.write("{\n");
-            writeItems(writer, root.children(), SharedJsonIO.encode(root), "  ");
+            writeItems(writer, root.children(), SharedJsonIO.encode(root), INDENT);
             writer.write("}\n");
         });
     }
 
-    private void writeItems(BufferedWriter writer, List<ConfigItem> items, JsonObject json, String indent) throws IOException {
+    private void writeItems(BufferedWriter writer, List<ConfigItem> items, JsonObject obj, String indent) throws IOException {
         int lastReal = SharedJsonIO.lastRealIndex(items);
         for (int i = 0; i < items.size(); i++) {
             var item = items.get(i);
             boolean last = i == lastReal;
 
-            if (item instanceof CommentItem commentItem) {
-                writeComment(writer, commentItem.comment(), CommentType.SLASH, indent);
+            if (item instanceof CommentItem comment) {
+                writeComment(writer, comment.comment(), TOKEN_SLASH, indent);
 
             } else if (item instanceof ConfigOption<?> option) {
-                writeComment(writer, option.comment(), CommentType.SLASH, indent);
-                writer.write(indent + hint(option, CommentType.SLASH) + "\n");
-                writer.write(indent + SharedJsonIO.quote(option.key()) + ": " + SharedJsonIO.getValue(json, option.key()) + (last? "\n" : ",\n"));
+                writeComment(writer, option.comment(), TOKEN_SLASH, indent);
+                writer.write(indent + hint(option, TOKEN_SLASH) + "\n");
+                writer.write(indent + SharedJsonIO.quote(option.key()) + ": " + SharedJsonIO.getValue(obj, option.key()) + (last? "\n" : ",\n"));
                 if (!last) writer.write("\n");
 
             } else if (item instanceof CategoryItem cat) {
-                writeComment(writer, cat.comment(), CommentType.SLASH, indent);
+                writeComment(writer, cat.comment(), TOKEN_SLASH, indent);
                 writer.write(indent + SharedJsonIO.quote(cat.name()) + ": {\n");
-                writeItems(writer, cat.children(), SharedJsonIO.getChild(json, cat.name()), indent + "  ");
+                writeItems(writer, cat.children(), SharedJsonIO.getChild(obj, cat.name()), indent + INDENT);
                 writer.write(indent + "}" + (last? "\n" : ",\n"));
 
                 if (!last) writer.write("\n");

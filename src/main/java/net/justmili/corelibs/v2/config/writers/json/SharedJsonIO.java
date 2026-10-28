@@ -7,10 +7,10 @@ import com.google.gson.JsonPrimitive;
 import com.mojang.serialization.JsonOps;
 import net.justmili.corelibs.CoreLibs;
 import net.justmili.corelibs.v2.config.MConfigLoader;
-import net.justmili.corelibs.v2.config.writers.ConfigCodec;
 import net.justmili.corelibs.v2.config.items.CategoryItem;
 import net.justmili.corelibs.v2.config.items.CommentItem;
 import net.justmili.corelibs.v2.config.items.ConfigItem;
+import net.justmili.corelibs.v2.config.writers.ConfigCodec;
 
 import java.io.IOException;
 import java.nio.file.Files;

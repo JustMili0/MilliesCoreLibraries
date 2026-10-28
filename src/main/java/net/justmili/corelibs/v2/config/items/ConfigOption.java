@@ -1,9 +1,14 @@
 package net.justmili.corelibs.v2.config.items;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.JsonOps;
 import net.justmili.corelibs.CoreLibs;
-import net.justmili.corelibs.v2.config.flags.OptionFlags;
+import net.justmili.corelibs.v2.config.OptionFlags;
 
 import java.util.Collections;
 import java.util.EnumSet;
@@ -74,5 +79,21 @@ public class ConfigOption<T> implements ConfigItem {
         this.value = decoded.get();
         setter.accept(value);
         return true;
+    }
+
+    public String toText() {
+        return encode(JsonOps.INSTANCE).map(element -> element instanceof JsonPrimitive primitive? primitive.getAsString() : element.toString()).orElse("");
+    }
+
+    public boolean loadText(String raw) {
+        return load(JsonOps.INSTANCE, defaultValue instanceof String? new JsonPrimitive(raw) : parseText(raw));
+    }
+
+    private JsonElement parseText(String raw) {
+        try {
+            return JsonParser.parseString(raw.trim());
+        } catch (JsonParseException e) {
+            return new JsonPrimitive(raw);
+        }
     }
 }

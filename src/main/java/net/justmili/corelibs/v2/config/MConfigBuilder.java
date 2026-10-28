@@ -1,9 +1,6 @@
 package net.justmili.corelibs.v2.config;
 
 import com.mojang.serialization.Codec;
-import net.justmili.corelibs.v2.config.flags.ConfigTypes;
-import net.justmili.corelibs.v2.config.flags.FileTypes;
-import net.justmili.corelibs.v2.config.flags.OptionFlags;
 import net.justmili.corelibs.v2.config.items.CategoryItem;
 import net.justmili.corelibs.v2.config.items.CommentItem;
 import net.justmili.corelibs.v2.config.items.ConfigOption;
