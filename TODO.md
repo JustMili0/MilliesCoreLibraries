@@ -6,7 +6,7 @@
 - [APPELS] Finish all the events
 - [MILLIE] Rewrite config from `v1.config` to `v2.config` (deprecate `v1.config` after)
   - Completely new (hopefully better) config builder
-  - No more `ConfigEntry<?>`, `ListConfigEntry` etc., just plain `int`, `boolean`, `String` and so on
+  - No more split `ConfigEntry<?>`, `ListConfigEntry` etc., now one `ConfigOption<?>` for all
   - Rewrite using Codecs
   - Support for more entry types (Base [String, Numbers, boolean], Enum, Color, Lists [List, Set])
   - Support for "attaching" images to config values (usable via `v2.configscreen`)
