@@ -14,9 +14,9 @@ public class Config {
 
         client.create()
             .addCategory("Icon Type", cat -> cat
-                .addOption("alwaysUsePrideIcons", false, value -> alwaysPride = value, OptionFlags.REQUIRES_VIDEOMODE_RELOAD)
+                .addOption("alwaysUsePrideIcons", false, value -> alwaysPride = value, OptionFlags.REQUIRES_DUMMY_FLAG)
                 .comment("Config Screen icons will always appear as their Pride Month variant")
-                .addOption("alwaysUseDefaultIcons", false, value -> alwaysDefault = value, OptionFlags.REQUIRES_VIDEOMODE_RELOAD)
+                .addOption("alwaysUseDefaultIcons", false, value -> alwaysDefault = value, OptionFlags.REQUIRES_DUMMY_FLAG)
                 .comment("Config Screen icons will always appear as their Default variant")
             ).build();
     }

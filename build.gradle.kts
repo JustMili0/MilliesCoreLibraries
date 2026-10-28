@@ -2,7 +2,7 @@ plugins {
     // This plugin applies the correct loom variant based on the Minecraft version
     id("dev.kikugie.loom-back-compat")
     alias(libs.plugins.publish)
-    kotlin("kapt") version "2.4.21"
+    kotlin("jvm") version "2.4.21"
 }
 
 // DO NOT set group = ...!

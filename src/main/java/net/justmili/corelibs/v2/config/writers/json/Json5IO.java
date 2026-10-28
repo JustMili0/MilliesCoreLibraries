@@ -31,7 +31,7 @@ public class Json5IO implements FileWriter {
             boolean last = i == lastReal;
 
             if (item instanceof CommentItem comment) {
-                writeComment(writer, comment.comment(), TOKEN_SLASH, indent);
+                writeComment(writer, comment.comment, TOKEN_SLASH, indent);
 
             } else if (item instanceof ConfigOption<?> option) {
                 writeComment(writer, option.comment(), TOKEN_SLASH, indent);

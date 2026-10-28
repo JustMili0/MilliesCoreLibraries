@@ -38,7 +38,7 @@ public class PropertiesIO implements FileWriter {
                 writeItems(writer, cat.children(), warnedAboutCategories);
 
             } else if (item instanceof CommentItem comment) {
-                writeComment(writer, comment.comment(), TOKEN_POUND, "");
+                writeComment(writer, comment.comment, TOKEN_POUND, "");
 
             } else if (item instanceof ConfigOption<?> option) {
                 writeComment(writer, option.comment(), TOKEN_POUND, "");

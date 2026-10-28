@@ -25,7 +25,7 @@ public class JsonIO implements FileWriter {
             var lines = new ArrayList<String>();
 
             if (item instanceof CommentItem comment) {
-                addComment(lines, comment.comment(), indent, commentIndex);
+                addComment(lines, comment.comment, indent, commentIndex);
 
             } else if (item instanceof ConfigOption<?> option) {
                 addComment(lines, option.comment(), indent, commentIndex);
