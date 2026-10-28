@@ -4,13 +4,7 @@
 
 # FIRST-PRIORITY TODO (0.0.2a)
 - [APPELS] Finish all the events
-- [MILLIE] Finish reworking data generation utils
-- [BLUSPRING] Port `build-logic` for Stonecutter because it's still based on Arch Loom
-- [EVERYONE] Port everything to all versions
-  - Additionally exclude some files from being included in some jars at all
-
-# TODO (0.0.2a)
-- Rewrite config from `v1.config` to `v2.config` (deprecate `v1.config` after)
+- [MILLIE] Rewrite config from `v1.config` to `v2.config` (deprecate `v1.config` after)
   - Completely new (hopefully better) config builder
   - No more `ConfigEntry<?>`, `ListConfigEntry` etc., just plain `int`, `boolean`, `String` and so on
   - Rewrite using Codecs
@@ -18,7 +12,12 @@
   - Support for "attaching" images to config values (usable via `v2.configscreen`)
   - Support for converting old config file(s) and their entries into new ones
   - Fix, rework and improve priority config synchronization
-- Include `Fabric Language Kotlin` in build (will be mostly used for utils)
+- [MILLIE] Finish reworking data generation utils
+- [BLUSPRING] Port `build-logic` for Stonecutter because it's still based on Arch Loom
+- [EVERYONE] Port everything to all versions
+  - Additionally exclude some files from being included in some jars at all
+
+# TODO (0.0.2a)
 - Rework most util classes, attempt optimizations, add a bit more functionality to all
 - Add Javadocs, proper comments, write documentation
   - For documentation create `docs.lumynitystudios.net`

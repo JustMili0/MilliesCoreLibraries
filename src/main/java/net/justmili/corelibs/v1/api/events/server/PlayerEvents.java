@@ -74,7 +74,7 @@ public class PlayerEvents {
     public static final Event<BreakBlock> BREAK_BLOCK = EventFactory.createArrayBacked(BreakBlock.class, callbacks -> (level, player, oldState, newState, pos, wasDestroyed) -> {
         for (var event : callbacks) {
             var result = event.onBlockBroken(level, player, oldState, newState, pos, wasDestroyed);
-            if (!result) return false;
+            if (result) return false;
         }
         return true;
     });

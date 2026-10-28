@@ -2,6 +2,7 @@ plugins {
     // This plugin applies the correct loom variant based on the Minecraft version
     id("dev.kikugie.loom-back-compat")
     alias(libs.plugins.publish)
+    kotlin("kapt") version "2.4.21"
 }
 
 // DO NOT set group = ...!
@@ -17,7 +18,8 @@ val requiredJava: JavaVersion = when {
 }
 
 // Used for publishing on Modrinth and Curseforge
-val compatibleVersions: List<String> = sc.properties.rawOrNull("mod", "mc_releases")?.asList().orEmpty().map { it.toString() }
+val compatibleVersions: List<String> =
+    sc.properties.rawOrNull("mod", "mc_releases")?.asList().orEmpty().map { it.toString() }
 
 // Versions before 26.1 are obfuscated (remapped), 26.1+ are not
 val obfuscated = sc.current.parsed < "26.1"
@@ -65,6 +67,7 @@ dependencies {
     } else {
         include(implementation(mixinSquared)!!)
     }
+    testImplementation(kotlin("test"))
 }
 
 fabricApi {
