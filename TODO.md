@@ -2,6 +2,9 @@
 - Keep TODO and README on the latest main branch you're working on
 - A lot of classes such as utils etc. can be copied from JustMili's other projects
 
+# FIRST-FIRST-PRIORITY TODO (0.0.2a)
+- [MILLIE] Create default formatting to apply everywhere for Java and Kotlin (and maybe buildscripts too)
+
 # FIRST-PRIORITY TODO (0.0.2a)
 - [APPELS] Finish all the events
 - [MILLIE] Rewrite config from `v1.config` to `v2.config` (deprecate `v1.config` after)
