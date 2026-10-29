@@ -1,7 +1,7 @@
 package net.justmili.mcl.v2.lib.config.writers;
 
+import net.justmili.mcl.v2.lib.config.ConfigOption;
 import net.justmili.mcl.v2.lib.config.items.CategoryItem;
-import net.justmili.mcl.v2.lib.config.items.ConfigOption;
 
 import java.io.BufferedWriter;
 import java.io.IOException;

@@ -1,9 +1,9 @@
-package net.justmili.mcl.v2.lib.config.items;
+package net.justmili.mcl.v2.lib.config;
 
 import com.google.gson.*;
 import com.mojang.serialization.*;
 import net.justmili.mcl.CoreLibs;
-import net.justmili.mcl.v2.lib.config.OptionFlags;
+import net.justmili.mcl.v2.lib.config.items.ConfigItem;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;

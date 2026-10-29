@@ -1,7 +1,8 @@
 package net.justmili.mcl.v2.lib.config
 
 import com.mojang.serialization.Codec
-import net.justmili.mcl.v2.lib.config.items.*
+import net.justmili.mcl.v2.lib.config.items.CategoryItem
+import net.justmili.mcl.v2.lib.config.items.CommentItem
 import java.nio.file.Path
 import java.util.function.Consumer
 import java.util.function.Predicate
