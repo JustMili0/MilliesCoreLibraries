@@ -4,8 +4,6 @@ import net.justmili.mcl.CoreLibs;
 import net.justmili.mcl.v1.lib.util.Platform;
 import net.justmili.mcl.v1.lib.util.common.FileIO;
 import net.justmili.mcl.v2.lib.config.MConfigLoader;
-import net.justmili.corelibs.v2.config.items.*;
-import net.justmili.mcl.v2.config.items.*;
 import net.justmili.mcl.v2.lib.config.items.*;
 import net.justmili.mcl.v2.lib.config.writers.FileWriter;
 

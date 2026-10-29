@@ -1,6 +1,5 @@
 package net.justmili.mcl.config;
 
-import net.justmili.corelibs.v2.config.*;
 import net.justmili.mcl.v2.lib.config.*;
 
 public class Config {
