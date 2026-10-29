@@ -7,6 +7,7 @@ import net.justmili.corelibs.v2.config.writers.FileWriter;
 import net.justmili.corelibs.v2.config.writers.json.Json5IO;
 import net.justmili.corelibs.v2.config.writers.json.JsonIO;
 import net.justmili.corelibs.v2.config.writers.properties.PropertiesIO;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.file.*;
@@ -22,7 +23,7 @@ public class MConfigLoader {
     private final FileWriter writer;
     private final Path path;
 
-    public MConfigLoader(String modId, String customFileName, ConfigTypes configType, FileTypes fileType, boolean createSubDirectory) {
+    public MConfigLoader(String modId, @Nullable String customFileName, ConfigTypes configType, FileTypes fileType, boolean createSubDirectory) {
         var configDir = Platform.getConfigDir();
 
         this.modId = modId;
@@ -47,7 +48,7 @@ public class MConfigLoader {
         this.suffix = usesAltSuffix? configType.altSuffix() : configType.suffix();
         this.path = usesAltSuffix? alternativePath : primaryPath;
 
-        if (!CLAIMED_PATHS.add(path)) CoreLibs.LOGGER.warn("Config file '{}' is already used by another config of the same mod, they will overwrite each other.", path);
+        if (!CLAIMED_PATHS.add(path)) CoreLibs.LOGGER.warn("Config file '{}' of '{}' is already used by another config, they will overwrite each other.", path, modId);
     }
 
     public CategoryItem root() {
@@ -72,9 +73,9 @@ public class MConfigLoader {
         var backupPath = path.resolveSibling(path.getFileName() + ".mclb"); // MCLB - MConfigLoader Backup
         try {
             Files.move(path, backupPath, StandardCopyOption.REPLACE_EXISTING);
-            CoreLibs.LOGGER.warn("Config '{}' could not be read, it was moved to '{}' and defaults will be used.", path, backupPath);
+            CoreLibs.LOGGER.warn("Could not read config of '{}' ({}, {}). File has been backed up to {}, but default values will be used.", modId, path, suffix, backupPath);
         } catch (IOException e) {
-            CoreLibs.LOGGER.error("Failed to back up unreadable config: {}", e.getMessage());
+            CoreLibs.LOGGER.error("Failed to back up unreadable config of '{}' ({}): {}", modId, suffix, e.getMessage());
         }
     }
 

@@ -19,7 +19,7 @@ public class ServerPlayerGameModeMixin {
 
     // Hook up own event for block breaking because Fabric API's event doesn't fully provide what we want
     @WrapMethod(method = "destroyBlock")
-    private boolean vnt$blockBrokenEvent(BlockPos pos, Operation<Boolean> original) {
+    private boolean corelibs$blockBrokenEvent(BlockPos pos, Operation<Boolean> original) {
         // Save the BlockState before the block is destroyed, since afterwards it's gone
         var state = level.getBlockState(pos);
         boolean result = original.call(pos);

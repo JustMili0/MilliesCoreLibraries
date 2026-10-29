@@ -33,7 +33,7 @@ public interface FileWriter {
     }
 
     default String addPeriod(String comment) {
-        if (comment == null || comment.isEmpty()) return null;
+        if (comment == null || comment.isBlank()) return null;
 
         var stripped = comment.stripTrailing();
         for (var pun : List.of(".", "!", "?", ":", ";", "*", "-", "~")) {
@@ -43,8 +43,9 @@ public interface FileWriter {
     }
 
     default void writeDescComment(BufferedWriter writer, String comment, String token, String indent) throws IOException {
-        if (comment == null) return;
-        for (var line : addPeriod(comment).split("\n")) {
+        var text = addPeriod(comment);
+        if (text == null) return;
+        for (var line : text.split("\n")) {
             writer.write(indent + token + line + "\n");
         }
     }

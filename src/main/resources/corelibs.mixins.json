@@ -10,9 +10,11 @@
     "client.ItemRendererMixin"
   ],
   "mixins": [
+    "EntityMixin",
     "FurnaceResultSlotMixin",
     "ItemEntityMixin",
     "ItemMixin",
+    "LivingEntityMixin",
     "ResultSlotMixin",
     "ServerPlayerGameModeMixin",
     "ServerPlayerMixin",

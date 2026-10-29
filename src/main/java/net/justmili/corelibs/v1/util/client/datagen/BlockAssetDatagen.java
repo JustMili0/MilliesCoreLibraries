@@ -482,7 +482,7 @@ public class BlockAssetDatagen {
         craftingTableLike(block, bottom, TextureMapping::craftingTable);
     }
 
-    public void fetchingTable(Block block, Block bottom) {
+    public void fletchingTable(Block block, Block bottom) {
         craftingTableLike(block, bottom, TextureMapping::fletchingTable);
     }
 

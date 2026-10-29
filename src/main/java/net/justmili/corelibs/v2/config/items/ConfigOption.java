@@ -4,6 +4,7 @@ import com.google.gson.*;
 import com.mojang.serialization.*;
 import net.justmili.corelibs.CoreLibs;
 import net.justmili.corelibs.v2.config.OptionFlags;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -20,7 +21,7 @@ public class ConfigOption<T> implements ConfigItem {
     private final Consumer<T> setter;
     private T value;
 
-    public ConfigOption(String key, T defaultValue, Codec<T> codec, Predicate<T> validator, String restriction, Consumer<T> setter, OptionFlags... flags) {
+    public ConfigOption(String key, T defaultValue, Codec<T> codec, Predicate<T> validator, @Nullable String restriction, Consumer<T> setter, OptionFlags... flags) {
         this.key = key;
         this.defaultValue = defaultValue;
         this.codec = codec;
@@ -48,10 +49,12 @@ public class ConfigOption<T> implements ConfigItem {
         this.comment = comment;
     }
 
+    @Nullable
     public String comment() {
         return comment;
     }
 
+    @Nullable
     public String restriction() {
         return restriction;
     }

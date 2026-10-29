@@ -96,7 +96,6 @@ public class PlayerEvents {
             var result = event.onFillBucket(player, bucket, hitResult);
             if (result != InteractionResult.PASS) return result; // CORELIBS: Should it default to PASS??
         }
-
         return InteractionResult.PASS;
     }); // TODO: hook up
 

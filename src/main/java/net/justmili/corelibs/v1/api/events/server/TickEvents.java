@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
 public class TickEvents {
@@ -44,6 +45,18 @@ public class TickEvents {
     public static final Event<PlayerPost> PLAYER_POST = EventFactory.createArrayBacked(PlayerPost.class, callbacks -> player -> {
         for (var event : callbacks) {
             event.onEndTick(player);
+        }
+    });
+
+    public static final Event<EntityPre> LIVING_ENTITY_PRE = EventFactory.createArrayBacked(EntityPre.class, callbacks -> entity -> {
+        for (var event : callbacks) {
+            event.onStartTick(entity);
+        }
+    });
+
+    public static final Event<EntityPost> LIVING_ENTITY_POST = EventFactory.createArrayBacked(EntityPost.class, callbacks -> entity -> {
+        for (var event : callbacks) {
+            event.onEndTick(entity);
         }
     });
 
@@ -87,6 +100,16 @@ public class TickEvents {
     @FunctionalInterface
     public interface PlayerPost {
         void onEndTick(Player player);
+    }
+
+    @FunctionalInterface
+    public interface LivingEntityPre {
+        void onStartTick(LivingEntity entity);
+    }
+
+    @FunctionalInterface
+    public interface LivingEntityPost {
+        void onEndTick(LivingEntity entity);
     }
 
     @FunctionalInterface

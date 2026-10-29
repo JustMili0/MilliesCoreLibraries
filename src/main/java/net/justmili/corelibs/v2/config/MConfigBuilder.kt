@@ -26,7 +26,7 @@ class MConfigBuilder @JvmOverloads constructor(modId: String, customFileName: St
             return CategoryBuilder(loader, category, child)
         }
 
-        fun <T> addOption(key: String, value: T, setter: Consumer<T>, vararg flags: OptionFlags): OptionBuilder {
+        fun <T : Any> addOption(key: String, value: T, setter: Consumer<T>, vararg flags: OptionFlags): OptionBuilder {
             return register(key, value, codecFor(value), {true}, if (value is Boolean) "Allowed values: true, false" else null, setter, *flags)
         }
 
@@ -53,7 +53,7 @@ class MConfigBuilder @JvmOverloads constructor(modId: String, customFileName: St
         }
 
         companion object {
-            private fun <T> codecFor(value: T): Codec<T> {
+            private fun <T : Any> codecFor(value: T): Codec<T> {
                 val codec: Codec<*>
                 when (value) {
                     is String -> codec = Codec.STRING
@@ -62,7 +62,7 @@ class MConfigBuilder @JvmOverloads constructor(modId: String, customFileName: St
                     is Float -> codec = Codec.FLOAT
                     is Double -> codec = Codec.DOUBLE
                     is Boolean -> codec = Codec.BOOL
-                    else -> throw IllegalArgumentException("Unsupported config option type: " + value!!.javaClass.getName())
+                    else -> throw IllegalArgumentException("Unsupported config option type: " + value.javaClass.getName())
                 }
 
                 @Suppress("UNCHECKED_CAST")
