@@ -22,15 +22,17 @@ public class JsonIO implements FileWriter {
             var lines = new ArrayList<String>();
 
             if (item instanceof CommentItem comment) {
-                addComment(lines, comment.comment, indent, commentIndex);
+                addComment(lines, addPeriod(comment.text), indent, commentIndex);
 
             } else if (item instanceof ConfigOption<?> option) {
-                addComment(lines, option.comment(), indent, commentIndex);
-                addComment(lines, hint(option, TOKEN_NONE), indent, commentIndex);
+                addComment(lines, addPeriod(option.comment()), indent, commentIndex);
+                for (var line : getDetails(option)) {
+                    addComment(lines, line, indent, commentIndex);
+                }
                 lines.add(indent + SharedJsonIO.quote(option.key()) + ": " + SharedJsonIO.getValue(obj, option.key()));
 
             } else if (item instanceof CategoryItem cat) {
-                addComment(lines, cat.comment(), indent, commentIndex);
+                addComment(lines, addPeriod(cat.comment()), indent, commentIndex);
                 var children = render(cat.children(), SharedJsonIO.getChild(obj, cat.name()), indent + INDENT, commentIndex);
                 lines.add(indent + SharedJsonIO.quote(cat.name()) + ": {\n" + String.join(",\n\n", children) + "\n" + indent + "}");
             }

@@ -28,18 +28,17 @@ public class PropertiesIO implements FileWriter {
         for (var item : items) {
             if (item instanceof CategoryItem cat) {
                 if (!warnedAboutCategories && Platform.IS_DEV_ENV) {
-                    CoreLibs.LOGGER.warn("Categories not supported in .properties format - flattening.");
+                    CoreLibs.LOGGER.warn("Categories are not supported in properties config format - they will not exist in the file.");
                     warnedAboutCategories = true;
                 }
-                writeComment(writer, cat.comment(), TOKEN_POUND, "");
+                writeDescComment(writer, cat.comment(), TOKEN_POUND, NO_INDENT);
                 writeItems(writer, cat.children(), warnedAboutCategories);
 
             } else if (item instanceof CommentItem comment) {
-                writeComment(writer, comment.comment, TOKEN_POUND, "");
+                writeDescComment(writer, comment.text, TOKEN_POUND, NO_INDENT);
 
             } else if (item instanceof ConfigOption<?> option) {
-                writeComment(writer, option.comment(), TOKEN_POUND, "");
-                writer.write(hint(option, TOKEN_POUND) + "\n");
+                writeOptionComment(writer, option, TOKEN_POUND, NO_INDENT);
                 writer.write(option.key() + "=" + escape(option.toText()) + "\n\n");
             }
         }

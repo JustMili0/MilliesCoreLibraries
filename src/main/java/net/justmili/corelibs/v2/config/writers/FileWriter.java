@@ -1,6 +1,5 @@
 package net.justmili.corelibs.v2.config.writers;
 
-import net.justmili.corelibs.v2.config.OptionFlags;
 import net.justmili.corelibs.v2.config.items.CategoryItem;
 import net.justmili.corelibs.v2.config.items.ConfigOption;
 
@@ -8,37 +7,60 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
+import java.util.List;
 
 public interface FileWriter {
-    String TOKEN_NONE = "";
     String TOKEN_SLASH = "// ";
     String TOKEN_POUND = "# ";
     String TOKEN_KEY = "_c";
+    String NO_INDENT = "";
     String INDENT = "  ";
 
     void write(Path path, CategoryItem root);
 
     boolean load(Path path, CategoryItem root);
 
-    default String hint(ConfigOption<?> option, String token) {
-        var parts = new ArrayList<String>();
+    default List<String> getDetails(ConfigOption<?> option) {
+        var lines = new ArrayList<String>();
+        if (!option.flags().isEmpty()) lines.add("Requires: " + listFlags(option));
 
+        var parts = new ArrayList<String>();
         if (option.restriction() != null) parts.add(option.restriction());
         parts.add("Default: " + String.valueOf(option.defaultValue()).replace("\r", "\\r").replace("\n", "\\n"));
-        if (!option.flags().isEmpty()) parts.add("Requires: " + listFlags(option));
+        lines.add(String.join(" - ", parts));
 
-        return token + String.join(" - ", parts);
+        return lines;
     }
 
-    default void writeComment(BufferedWriter writer, String comment, String token, String indent) throws IOException {
+    default String addPeriod(String comment) {
+        if (comment == null || comment.isEmpty()) return null;
+
+        var stripped = comment.stripTrailing();
+        for (var pun : List.of(".", "!", "?", ":", ";", "*", "-", "~")) {
+            if (stripped.endsWith(pun)) return stripped;
+        }
+        return stripped + ".";
+    }
+
+    default void writeDescComment(BufferedWriter writer, String comment, String token, String indent) throws IOException {
         if (comment == null) return;
-        for (var line : comment.split("\n")) {
+        for (var line : addPeriod(comment).split("\n")) {
+            writer.write(indent + token + line + "\n");
+        }
+    }
+
+    default void writeOptionComment(BufferedWriter writer, ConfigOption<?> option, String token, String indent) throws IOException {
+        writeDescComment(writer, option.comment(), token, indent);
+        for (var line : getDetails(option)) {
             writer.write(indent + token + line + "\n");
         }
     }
 
     private String listFlags(ConfigOption<?> option) {
-        return option.flags().stream().map(OptionFlags::descName).collect(Collectors.joining(", "));
+        var flags = new ArrayList<String>();
+        for (var flag : option.flags()) {
+            flags.add(flag.descName());
+        }
+        return String.join(", ", flags);
     }
 }
