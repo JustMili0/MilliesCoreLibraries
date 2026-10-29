@@ -10,45 +10,45 @@ package net.justmili.corelibs.v1.items.client;
 //import net.minecraft.world.item.ItemStack;
 
 public final class VisualItem {
-//    private final ResourceLocation id;
-//    private final DataComponentPatch patch;
-//    private final int seed;
-//    private final int count;
-//    private ItemStack stack = null;
-//
-//    public VisualItem(ResourceLocation id) {
-//        this(id, DataComponentPatch.EMPTY, 0, 1);
-//    }
-//
-//    public VisualItem(ResourceLocation id, DataComponentPatch patch, int seed, int count) {
-//        this.id = id;
-//        this.patch = patch;
-//        this.seed = seed;
-//        this.count = count;
-//    }
-//
-//    public void render(GuiGraphicsExtractor graphics, int x, int y) {
-//        graphics.item(createItemStack(), x, y, this.seed);
-//    }
-//
-//    private ItemStack createItemStack() {
-//        if (this.stack == null) {
-//            this.stack = new ItemStack(Holder.direct(
-//                BuiltInRegistries.ITEM.getValue(this.id),
-//                DataComponentMap.builder()
-//                    .set(DataComponents.MAX_STACK_SIZE, 64)
-//                    .set(DataComponents.ITEM_MODEL, this.id)
-//                    .build()
-//            ),
-//                this.count,
-//                this.patch
-//            );
-//        }
-//
-//        return this.stack;
-//    }
-//
-//    public ResourceLocation id() {
-//        return this.id;
-//    }
+    //    private final ResourceLocation id;
+    //    private final DataComponentPatch patch;
+    //    private final int seed;
+    //    private final int count;
+    //    private ItemStack stack = null;
+    //
+    //    public VisualItem(ResourceLocation id) {
+    //        this(id, DataComponentPatch.EMPTY, 0, 1);
+    //    }
+    //
+    //    public VisualItem(ResourceLocation id, DataComponentPatch patch, int seed, int count) {
+    //        this.id = id;
+    //        this.patch = patch;
+    //        this.seed = seed;
+    //        this.count = count;
+    //    }
+    //
+    //    public void render(GuiGraphicsExtractor graphics, int x, int y) {
+    //        graphics.item(createItemStack(), x, y, this.seed);
+    //    }
+    //
+    //    private ItemStack createItemStack() {
+    //        if (this.stack == null) {
+    //            this.stack = new ItemStack(Holder.direct(
+    //                BuiltInRegistries.ITEM.getValue(this.id),
+    //                DataComponentMap.builder()
+    //                    .set(DataComponents.MAX_STACK_SIZE, 64)
+    //                    .set(DataComponents.ITEM_MODEL, this.id)
+    //                    .build()
+    //            ),
+    //                this.count,
+    //                this.patch
+    //            );
+    //        }
+    //
+    //        return this.stack;
+    //    }
+    //
+    //    public ResourceLocation id() {
+    //        return this.id;
+    //    }
 }

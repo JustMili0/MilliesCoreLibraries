@@ -6,9 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.Container;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.*;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -26,19 +24,27 @@ public class PlayerEvents {
     }
 
     public static final Event<Respawn> RESPAWN = EventFactory.createArrayBacked(Respawn.class, callbacks -> (oldPlayer, newPlayer, alive) -> {
-        for (var event : callbacks) event.onRespawn(oldPlayer, newPlayer, alive);
+        for (var event : callbacks) {
+            event.onRespawn(oldPlayer, newPlayer, alive);
+        }
     });
 
     public static final Event<Clone> CLONE = EventFactory.createArrayBacked(Clone.class, callbacks -> (oldPlayer, newPlayer, alive) -> {
-        for (var event : callbacks) event.onClone(oldPlayer, newPlayer, alive);
+        for (var event : callbacks) {
+            event.onClone(oldPlayer, newPlayer, alive);
+        }
     });
 
     public static final Event<CraftItem> CRAFT_ITEM = EventFactory.createArrayBacked(CraftItem.class, callbacks -> (player, itemCrafted, container) -> {
-        for (var event : callbacks) event.onCraftItem(player, itemCrafted, container);
+        for (var event : callbacks) {
+            event.onCraftItem(player, itemCrafted, container);
+        }
     });
 
     public static final Event<SmeltItem> SMELT_ITEM = EventFactory.createArrayBacked(SmeltItem.class, callbacks -> (player, itemSmelted) -> {
-        for (var event : callbacks) event.onSmeltItem(player, itemSmelted);
+        for (var event : callbacks) {
+            event.onSmeltItem(player, itemSmelted);
+        }
     });
 
     public static final Event<DropItem> DROP_ITEM = EventFactory.createArrayBacked(DropItem.class, callbacks -> (player, itemDropped) -> {
@@ -64,11 +70,15 @@ public class PlayerEvents {
     });
 
     public static final Event<PickupItemPost> PICKUP_ITEM_POST = EventFactory.createArrayBacked(PickupItemPost.class, callbacks -> (player, itemEntity, stack) -> {
-        for (var event : callbacks) event.onEndPickupItem(player, itemEntity, stack);
+        for (var event : callbacks) {
+            event.onEndPickupItem(player, itemEntity, stack);
+        }
     }); // TODO: hook up
 
     public static final Event<ChangeDimension> CHANGED_DIMENSION = EventFactory.createArrayBacked(ChangeDimension.class, callbacks -> (player, fromLevel, toLevel) -> {
-        for (var event : callbacks) event.onChangedDimension(player, fromLevel, toLevel);
+        for (var event : callbacks) {
+            event.onChangedDimension(player, fromLevel, toLevel);
+        }
     }); // TODO: hook up
 
     public static final Event<BreakBlock> BREAK_BLOCK = EventFactory.createArrayBacked(BreakBlock.class, callbacks -> (level, player, oldState, newState, pos, wasDestroyed) -> {
@@ -99,11 +109,15 @@ public class PlayerEvents {
     });
 
     public static final Event<OpenMenu> OPEN_MENU = EventFactory.createArrayBacked(OpenMenu.class, callbacks -> (player, menu) -> {
-        for (var event : callbacks) event.onOpenMenu(player, menu);
+        for (var event : callbacks) {
+            event.onOpenMenu(player, menu);
+        }
     }); // TODO: hook up
 
     public static final Event<CloseMenu> CLOSE_MENU = EventFactory.createArrayBacked(CloseMenu.class, callbacks -> (player, menu) -> {
-        for (var event : callbacks) event.onCloseMenu(player, menu);
+        for (var event : callbacks) {
+            event.onCloseMenu(player, menu);
+        }
     }); // TODO: hook up
 
     @FunctionalInterface

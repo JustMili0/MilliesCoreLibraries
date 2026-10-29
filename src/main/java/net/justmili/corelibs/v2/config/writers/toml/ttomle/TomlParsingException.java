@@ -1,6 +1,6 @@
 package net.justmili.corelibs.v2.config.writers.toml.ttomle;
 
-public class TomlParsingException extends Exception{
+public class TomlParsingException extends Exception {
 
     public TomlParsingException(String message) {
         super(message);

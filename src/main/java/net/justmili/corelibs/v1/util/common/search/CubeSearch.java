@@ -4,19 +4,14 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 /**
- * Searches every block within a cube around the origin.
- * Matching blocks are returned closest to the origin first.
+ * Searches every block within a cube around the origin. Matching blocks are returned closest to the origin first.
  * <p>
- * Blocks don't have to be connected, and origin IS included in the result if it matches.
- * Every block in the cube gets checked, so keep the radius small as block count grows cubically.
+ * Blocks don't have to be connected, and origin IS included in the result if it matches. Every block in the cube gets checked, so keep the radius small as block count grows cubically.
  */
 public class CubeSearch implements SearchAlgorithm {
 

@@ -10,10 +10,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.RelativeMovement;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
@@ -157,8 +154,11 @@ public class EntityUtil {
         if (advancement == null) return;
 
         var progress = getOrStartProgress(player, id);
-        if (!progress.isDone()) for (String criteria : progress.getRemainingCriteria())
-            player.getAdvancements().award(advancement, criteria);
+        if (!progress.isDone()) {
+            for (String criteria : progress.getRemainingCriteria()) {
+                player.getAdvancements().award(advancement, criteria);
+            }
+        }
     }
 
     public static void revokeAdvancement(ServerPlayer player, ResourceLocation id) {
@@ -166,8 +166,11 @@ public class EntityUtil {
         if (advancement == null) return;
 
         var progress = getOrStartProgress(player, id);
-        if (progress.isDone()) for (String criteria : progress.getCompletedCriteria())
-            player.getAdvancements().revoke(advancement, criteria);
+        if (progress.isDone()) {
+            for (String criteria : progress.getCompletedCriteria()) {
+                player.getAdvancements().revoke(advancement, criteria);
+            }
+        }
     }
 
     private static Advancement getAdvancement(MinecraftServer server, ResourceLocation id) {
@@ -221,7 +224,8 @@ public class EntityUtil {
         return entity.level().getBlockCollisions(entity, bbOffset).iterator().hasNext();
     }
 
-    public record MobData(Class<?> entityClass, double range, double runSpeed) { }
+    public record MobData(Class<?> entityClass, double range, double runSpeed) {
+    }
 
     public static <T extends Mob> List<T> getNearby(ServerPlayer player, Class<T> mob, double radius) {
         return player.level().getEntitiesOfClass(mob, player.getBoundingBox().inflate(radius));

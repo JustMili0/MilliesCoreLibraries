@@ -40,8 +40,8 @@ public class TomlDottedElementName {
     public static TomlDottedElementName fromString(String string) {
         TomlDottedElementName name = new TomlDottedElementName();
         TomlStringType type = TomlStringUtils.isNoQuoteStringValid(string)
-                ? TomlStringType.NO_QUOTE
-                : TomlStringType.DOUBLE;
+            ? TomlStringType.NO_QUOTE
+            : TomlStringType.DOUBLE;
         name.addName(string, type);
         return name;
     }

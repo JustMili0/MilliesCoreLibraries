@@ -16,7 +16,7 @@ public abstract class ItemRendererMixin {
 
     @ModifyVariable(method = "render(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;ZLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;IILnet/minecraft/client/resources/model/BakedModel;)V", at = @At("HEAD"), argsOnly = true, ordinal = 0)
     private BakedModel corelibs$applyRenderOverride(BakedModel original, ItemStack itemStack, ItemDisplayContext displayContext, boolean leftHand, PoseStack poseStack, MultiBufferSource buffer, int light, int overlay) {
-        var renderer = (ItemRenderer)(Object)this;
+        var renderer = (ItemRenderer) (Object) this;
         var heldItem = itemStack.getItem();
 
         var override = ItemRendererUtil.getOverrideItem(heldItem);

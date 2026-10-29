@@ -5,10 +5,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.ServerAdvancementManager;
-import net.minecraft.server.ServerFunctionManager;
-import net.minecraft.server.ServerScoreboard;
+import net.minecraft.server.*;
 import net.minecraft.server.bossevents.CustomBossEvents;
 import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.server.dedicated.DedicatedServerProperties;
@@ -18,15 +15,11 @@ import net.minecraft.server.network.ServerConnectionListener;
 import net.minecraft.server.players.PlayerList;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.item.crafting.RecipeManager;
-import net.minecraft.world.level.GameRules;
-import net.minecraft.world.level.GameType;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import net.minecraft.world.level.storage.WorldData;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class ServerUtil {
 

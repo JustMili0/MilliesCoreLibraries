@@ -4,22 +4,13 @@ import com.google.gson.JsonElement;
 import net.justmili.corelibs.v1.util.client.Assets;
 import net.minecraft.data.models.BlockModelGenerators;
 import net.minecraft.data.models.blockstates.*;
-import net.minecraft.data.models.model.ModelTemplates;
-import net.minecraft.data.models.model.TextureMapping;
-import net.minecraft.data.models.model.TextureSlot;
-import net.minecraft.data.models.model.TexturedModel;
+import net.minecraft.data.models.model.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.PitcherCropBlock;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
-import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraft.world.level.block.state.properties.Tilt;
+import net.minecraft.world.level.block.state.properties.*;
 
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
+import java.util.function.*;
 
 public class BlockAssetDatagen {
     public record BlockRot(VariantProperty<VariantProperties.Rotation> axis, VariantProperties.Rotation rot) {

@@ -8,9 +8,9 @@ import net.minecraft.server.level.ServerPlayer;
 
 public class CommandUtil {
     // Replace "new" permission system with the good ol' numbers
-//    public static boolean hasPerms(CommandSourceStack source, int level) {
-//        return source.permissions().hasPermission(new Permission.HasCommandLevel(PermissionLevel.byId(level)));
-//    }
+    //    public static boolean hasPerms(CommandSourceStack source, int level) {
+    //        return source.permissions().hasPermission(new Permission.HasCommandLevel(PermissionLevel.byId(level)));
+    //    }
 
     // Command success/fail response
     public static void sendOk(CommandSourceStack source, Component message, boolean allowLogging) {

@@ -906,7 +906,9 @@ public class Maths {
     public static long factorial(int value) {
         if (value < 0 || value > 20) throw new IllegalArgumentException("value must be 0..20");
         long result = 1;
-        for (int factor = 2; factor <= value; factor++) result *= factor;
+        for (int factor = 2; factor <= value; factor++) {
+            result *= factor;
+        }
         return result;
     }
 
@@ -957,37 +959,49 @@ public class Maths {
 
     public static int largest(int... numbers) {
         int largest = MIN_INT;
-        for (int number : numbers) if (number > largest) largest = number;
+        for (int number : numbers) {
+            if (number > largest) largest = number;
+        }
         return largest;
     }
 
     public static double largest(double... numbers) {
         double largest = NEG_INFINITY;
-        for (double number : numbers) if (number > largest) largest = number;
+        for (double number : numbers) {
+            if (number > largest) largest = number;
+        }
         return largest;
     }
 
     public static int smallest(int... numbers) {
         int smallest = MAX_INT;
-        for (int number : numbers) if (number < smallest) smallest = number;
+        for (int number : numbers) {
+            if (number < smallest) smallest = number;
+        }
         return smallest;
     }
 
     public static double smallest(double... numbers) {
         double smallest = POS_INFINITY;
-        for (double number : numbers) if (number < smallest) smallest = number;
+        for (double number : numbers) {
+            if (number < smallest) smallest = number;
+        }
         return smallest;
     }
 
     public static double sum(double... numbers) {
         double total = 0;
-        for (double number : numbers) total += number;
+        for (double number : numbers) {
+            total += number;
+        }
         return total;
     }
 
     public static double product(double... numbers) {
         double total = 1;
-        for (double number : numbers) total *= number;
+        for (double number : numbers) {
+            total *= number;
+        }
         return total;
     }
 
@@ -1007,7 +1021,9 @@ public class Maths {
         if (numbers.length == 0) return 0;
         double average = avg(numbers);
         double total = 0;
-        for (double number : numbers) total += sqr(number - average);
+        for (double number : numbers) {
+            total += sqr(number - average);
+        }
         return total / numbers.length;
     }
 

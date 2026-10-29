@@ -2,10 +2,7 @@ package net.justmili.corelibs.v2.config.writers.json;
 
 import com.google.gson.JsonObject;
 import net.justmili.corelibs.v1.util.common.FileIO;
-import net.justmili.corelibs.v2.config.items.CategoryItem;
-import net.justmili.corelibs.v2.config.items.CommentItem;
-import net.justmili.corelibs.v2.config.items.ConfigItem;
-import net.justmili.corelibs.v2.config.items.ConfigOption;
+import net.justmili.corelibs.v2.config.items.*;
 import net.justmili.corelibs.v2.config.writers.FileWriter;
 
 import java.io.BufferedWriter;

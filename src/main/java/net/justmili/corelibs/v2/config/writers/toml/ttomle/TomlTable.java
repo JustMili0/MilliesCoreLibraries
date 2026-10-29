@@ -8,6 +8,7 @@ public class TomlTable extends TomlTableBase {
     public TomlTable(String name) {
         super(new TomlDottedElementName().addName(name, TomlStringType.DOUBLE));
     }
+
     public TomlTable(TomlDottedElementName name) {
         super(name);
     }

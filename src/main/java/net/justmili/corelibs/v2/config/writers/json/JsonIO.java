@@ -2,10 +2,7 @@ package net.justmili.corelibs.v2.config.writers.json;
 
 import com.google.gson.JsonObject;
 import net.justmili.corelibs.v1.util.common.FileIO;
-import net.justmili.corelibs.v2.config.items.CategoryItem;
-import net.justmili.corelibs.v2.config.items.CommentItem;
-import net.justmili.corelibs.v2.config.items.ConfigItem;
-import net.justmili.corelibs.v2.config.items.ConfigOption;
+import net.justmili.corelibs.v2.config.items.*;
 import net.justmili.corelibs.v2.config.writers.FileWriter;
 
 import java.nio.file.Path;
@@ -45,7 +42,9 @@ public class JsonIO implements FileWriter {
 
     private void addComment(List<String> lines, String comment, String indent, int[] commentIndex) {
         if (comment == null) return;
-        for (var line : comment.split("\n")) lines.add(indent + SharedJsonIO.quote(TOKEN_KEY + commentIndex[0]++) + ": " + SharedJsonIO.quote(line));
+        for (var line : comment.split("\n")) {
+            lines.add(indent + SharedJsonIO.quote(TOKEN_KEY + commentIndex[0]++) + ": " + SharedJsonIO.quote(line));
+        }
     }
 
     @Override

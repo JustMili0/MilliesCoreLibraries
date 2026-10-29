@@ -27,7 +27,7 @@ public class BlockOutlineRenderEvent {
         return shouldRender;
     });
 
-    //? if >=1.21.11 {
+    //? if >= 1.21.11 {
     /*public static final Event<ExtractionPost> EXTRACTION_POST = EventFactory.createArrayBacked(ExtractionPost.class, callbacks -> (context, hitResult) -> {
         for (var event : callbacks) event.onEndExtraction(context, hitResult);
     });
@@ -53,6 +53,6 @@ public class BlockOutlineRenderEvent {
 
     @FunctionalInterface
     public interface RenderPre {
-        boolean onStartRender(/*? if >=26.1 {*//*LevelRenderContext*//*?} else {*/WorldRenderContext/*?}*/ context, /*? if >=1.21.11 {*//*BlockOutlineRenderState outline*//*?} else {*/@Nullable HitResult hitResult/*?}*/);
+        boolean onStartRender(/*? if >= 26.1 {*//*LevelRenderContext*//*?} else {*/WorldRenderContext/*?}*/ context, /*? if >= 1.21.11 {*//*BlockOutlineRenderState outline*//*?} else {*/@Nullable HitResult hitResult/*?}*/);
     }
 }

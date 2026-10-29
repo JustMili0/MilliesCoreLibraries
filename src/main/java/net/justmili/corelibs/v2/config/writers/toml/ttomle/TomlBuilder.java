@@ -2,10 +2,7 @@ package net.justmili.corelibs.v2.config.writers.toml.ttomle;
 
 import net.justmili.corelibs.v2.config.writers.toml.ttomle.fields.TomlField;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class TomlBuilder {
 
@@ -44,7 +41,7 @@ public class TomlBuilder {
                 String indent = "";
 
                 // Header Comments
-                for (String comment: element.headerComments) {
+                for (String comment : element.headerComments) {
                     sb.append(indent).append("# ").append(comment).append("\n");
                 }
 
@@ -72,7 +69,7 @@ public class TomlBuilder {
                 }
 
                 // Header Comments
-                for (String comment: element.headerComments) {
+                for (String comment : element.headerComments) {
                     sb.append(indent).append("# ").append(comment).append("\n");
                 }
 
@@ -85,7 +82,7 @@ public class TomlBuilder {
             }
             sb.append('\n');
         }
-        
+
         return sb.toString();
     }
 

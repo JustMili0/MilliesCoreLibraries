@@ -3,9 +3,7 @@ package net.justmili.corelibs.v1.api.events.server;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.*;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -13,9 +11,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
- * Centralized group of Fabric's "use callback" events,
- * with an extra {@link #ITEM_PRE} event for item use behavior
- * that Fabric, Quilt, Forge and NeoForge don't cover.
+ * Centralized group of Fabric's "use callback" events, with an extra {@link #ITEM_PRE} event for item use behavior that Fabric, Quilt, Forge and NeoForge don't cover.
  *
  * <p>Everything except {@link #ITEM_PRE} is directly connected to Fabric API events
  */
@@ -37,15 +33,21 @@ public class UseEvents {
     });
 
     public static final Event<ItemPost> ITEM_POST = EventFactory.createArrayBacked(ItemPost.class, callbacks -> (level, player, hand, stack) -> {
-        for (var event : callbacks) event.onUseItemPost(level, player, hand, stack);
+        for (var event : callbacks) {
+            event.onUseItemPost(level, player, hand, stack);
+        }
     });
 
     public static final Event<BlockPost> BLOCK_POST = EventFactory.createArrayBacked(BlockPost.class, callbacks -> (level, player, hand, pos, state, result) -> {
-        for (var event : callbacks) event.onUseBlockPost(level, player, hand, pos, state, result);
+        for (var event : callbacks) {
+            event.onUseBlockPost(level, player, hand, pos, state, result);
+        }
     });
 
     public static final Event<EntityPost> ENTITY_POST = EventFactory.createArrayBacked(EntityPost.class, callbacks -> (level, player, hand, entity, result) -> {
-        for (var event : callbacks) event.onUseEntityPost(level, player, hand, entity, result);
+        for (var event : callbacks) {
+            event.onUseEntityPost(level, player, hand, entity, result);
+        }
     });
 
     @FunctionalInterface
@@ -56,8 +58,8 @@ public class UseEvents {
          * @param level  the level the player is in
          * @param player the player using the item
          * @param hand   the hand holding the item
-         * @return {@link InteractionResultHolder#pass(Object)} to let the item behave normally,
-         * or any other result to override it
+         *
+         * @return {@link InteractionResultHolder#pass(Object)} to let the item behave normally, or any other result to override it
          */
         InteractionResultHolder<ItemStack> onUseItemPre(Level level, Player player, InteractionHand hand);
     }

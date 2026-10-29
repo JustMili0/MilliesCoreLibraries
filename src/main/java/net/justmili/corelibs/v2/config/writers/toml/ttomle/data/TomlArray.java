@@ -28,7 +28,7 @@ public class TomlArray extends TomlVariable {
         builder.append("[");
         builder.append(variableList.get(0).toString());
 
-        for (int i = 1;i < variableList.size();i++) {
+        for (int i = 1; i < variableList.size(); i++) {
             builder.append(", ");
             TomlVariable variable = variableList.get(i);
             builder.append(variable.toString());

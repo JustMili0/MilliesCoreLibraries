@@ -4,14 +4,14 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class ItemRendererUtil {
     public record Entry(Item item, ModelResourceLocation otherItemModel, List<ItemDisplay> displayAt) {
     }
+
     public enum ItemDisplay {FIRST_PERSON, THIRD_PERSON, HEAD, GUI, FIXED, ON_SHELF, ON_GROUND}
+
     private static final Set<Entry> OVERRIDES = new HashSet<>();
 
     public static void renderAs(Item item, ModelResourceLocation otherItemModel, ItemDisplay... displayAt) {

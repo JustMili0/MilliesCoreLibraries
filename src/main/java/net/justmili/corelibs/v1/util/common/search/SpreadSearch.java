@@ -6,20 +6,14 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 /**
- * Spreads out from the origins one block at a time, through the 6 faces (no diagonals).
- * A BiPredicate decides if it can go from one block to the next, so the answer can depend on both blocks
- * (e.g. leaves only spreading further away from the logs).
+ * Spreads out from the origins one block at a time, through the 6 faces (no diagonals). A BiPredicate decides if it can go from one block to the next, so the answer can depend on both blocks (e.g. leaves only spreading further away from the logs).
  * <p>
- * No radius, only the predicate and maxSize stop it. Origins are not included in the result.
- * Only supports {@link #biSearch}.
+ * No radius, only the predicate and maxSize stop it. Origins are not included in the result. Only supports {@link #biSearch}.
  */
 public class SpreadSearch implements SearchAlgorithm {
 

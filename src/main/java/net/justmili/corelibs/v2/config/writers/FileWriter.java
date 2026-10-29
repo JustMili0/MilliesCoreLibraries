@@ -33,7 +33,9 @@ public interface FileWriter {
 
     default void writeComment(BufferedWriter writer, String comment, String token, String indent) throws IOException {
         if (comment == null) return;
-        for (var line : comment.split("\n")) writer.write(indent + token + line + "\n");
+        for (var line : comment.split("\n")) {
+            writer.write(indent + token + line + "\n");
+        }
     }
 
     private String listFlags(ConfigOption<?> option) {

@@ -9,33 +9,29 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.*;
 
 import java.util.function.Predicate;
 
-//? if < 26.2 {
+    //? if < 26.2 {
 import com.mojang.blaze3d.vertex.VertexConsumer;
- //?} else {
+    //?} else {
 /*import net.minecraft.client.renderer.rendertype.RenderType;
-*///?}
-//? if >= 1.21.11 {
+ *///?}
+    //? if >= 1.21.11 {
 /*import net.minecraft.util.ARGB;
-    *///?} else {
+ *///?} else {
 import net.minecraft.client.renderer.LevelRenderer;
- //?}
-//? if >= 1.21.11 && < 26.2 {
+    //?}
+    //? if >= 1.21.11 && < 26.2 {
 /*import net.minecraft.client.renderer.ShapeRenderer;
  *///?}
 
 /**
- * Outlines a whole group of connected blocks instead of just the one the player is looking at.
- * Does not outline every single block individually in group, only the group as a whole.
- * Call {@link #render} from the block outline event and return what it gives back.
+ * Outlines a whole group of connected blocks instead of just the one the player is looking at. Does not outline every single block individually in group, only the group as a whole. Call {@link #render} from the block outline event and return what it
+ * gives back.
  * <p>
- * The group is cached and refreshed every 10 ticks. The cache only looks at the targeted block, not stateMatch,
- * so two outliners on the same block would end up sharing a shape.
+ * The group is cached and refreshed every 10 ticks. The cache only looks at the targeted block, not stateMatch, so two outliners on the same block would end up sharing a shape.
  */
 @Environment(EnvType.CLIENT)
 public class BlockGroupOutlineRenderer {
@@ -44,11 +40,9 @@ public class BlockGroupOutlineRenderer {
     private static VoxelShape shapeCache;
 
     /**
-     * Outlines every block connected to the targeted one that passes stateMatch.
-     * Callers decide if it should show at all, this only draws.
+     * Outlines every block connected to the targeted one that passes stateMatch. Callers decide if it should show at all, this only draws.
      * <p>
-     * maxRadius and maxSize are passed to the search, color and opacity go from 0 to 1.
-     * If the targeted block is on its own there's nothing to group, so vanilla's outline is left alone.
+     * maxRadius and maxSize are passed to the search, color and opacity go from 0 to 1. If the targeted block is on its own there's nothing to group, so vanilla's outline is left alone.
      *
      * @return true to let vanilla draw its own outline, false to cancel it.
      */
@@ -56,7 +50,7 @@ public class BlockGroupOutlineRenderer {
                                  float a, float r, float g, float b, boolean renderVanillaOutline) {
         var level = group.level();
         var lines = group.lines();
-        if (level == null/*? if < 1.21.11 {*/|| group.poseStack() == null || group.lines() == null/*?}*/) return true;
+        if (level == null/*? if < 1.21.11 {*/ || group.poseStack() == null || group.lines() == null/*?}*/) return true;
 
         var pos = group.blockPos();
         var camera = group.cameraPos();
@@ -83,7 +77,7 @@ public class BlockGroupOutlineRenderer {
 
         //? if < 1.21.11 {
         LevelRenderer.renderShape(pose, lines, shape, cameraX, cameraY, cameraZ, r, g, b, a);
-         //?} else if < 26.2 {
+        //?} else if < 26.2 {
         /*ShapeRenderer.renderShape(pose, lines, shape, cameraX, cameraY, cameraZ, color, lineWidth);
          *///?} else {
         /*pose.pushPose();

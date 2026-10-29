@@ -15,11 +15,11 @@ public class TomlStringField extends TomlField {
     }
 
     public void setValue(String value) {
-        ((TomlString)this.value).value = value;
+        ((TomlString) this.value).value = value;
     }
 
     public void setStringType(TomlStringType type) {
-        ((TomlString)this.value).type = type;
+        ((TomlString) this.value).type = type;
     }
 
     @Override

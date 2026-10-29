@@ -17,6 +17,7 @@ public class TomlString extends TomlVariable {
         this.value = value;
         this.type = type;
     }
+
     // maybe validate LITERAL strings?    public String toString() {
     @Override
     public String toString() {

@@ -1,9 +1,7 @@
 package net.justmili.corelibs.v1.util.common;
 
 import com.mojang.serialization.Codec;
-import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry;
-import net.fabricmc.fabric.api.attachment.v1.AttachmentTarget;
-import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
+import net.fabricmc.fabric.api.attachment.v1.*;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.function.UnaryOperator;
@@ -43,8 +41,7 @@ public class FdaUtil {
         return target.getAttachedOrElse(variable, defaultValue);
     }
 
-    /// Will silently throw and return nothing if target does not have the variable
-    /// It is preferred to use get(target, variable, defaultValue)
+    /// Will silently throw and return nothing if target does not have the variable It is preferred to use get(target, variable, defaultValue)
     public static <A> A get(AttachmentTarget target, AttachmentType<A> variable) {
         return target.getAttachedOrThrow(variable);
     }
@@ -73,8 +70,8 @@ public class FdaUtil {
 
     // Creates values synced to the player and clear after restart
     // CORELIBS: synced added in 1.21.4, unavailable in 1.20.1
-//    public static <A> AttachmentType<A> createSynced(ResourceLocation id, A defaultValue, StreamCodec<? super RegistryFriendlyByteBuf, A> streamCodec) {
-//        return AttachmentRegistry.<A>builder().initializer(() -> defaultValue).copyOnDeath(); // ???
-//        //return AttachmentRegistry.create(id, builder -> builder.initializer(() -> defaultValue).copyOnDeath().syncWith(streamCodec, AttachmentSyncPredicate.targetOnly()));
-//    }
+    //    public static <A> AttachmentType<A> createSynced(ResourceLocation id, A defaultValue, StreamCodec<? super RegistryFriendlyByteBuf, A> streamCodec) {
+    //        return AttachmentRegistry.<A>builder().initializer(() -> defaultValue).copyOnDeath(); // ???
+    //        //return AttachmentRegistry.create(id, builder -> builder.initializer(() -> defaultValue).copyOnDeath().syncWith(streamCodec, AttachmentSyncPredicate.targetOnly()));
+    //    }
 }

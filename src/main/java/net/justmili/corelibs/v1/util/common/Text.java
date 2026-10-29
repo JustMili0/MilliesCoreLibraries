@@ -30,9 +30,9 @@ public class Text {
         return Component.translatable(String.format(key, args));
     }
 
-//    public static MutableComponent translateSafe(String key, Object... args) {
-//        return Component.translatableEscape(key, args);
-//    }
+    //    public static MutableComponent translateSafe(String key, Object... args) {
+    //        return Component.translatableEscape(key, args);
+    //    }
 
     public static MutableComponent translateWithFallback(String key, String fallback) {
         return Component.translatableWithFallback(key, fallback, TranslatableContents.NO_ARGS);

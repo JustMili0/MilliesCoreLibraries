@@ -4,9 +4,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonElement;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataProvider;
-import net.minecraft.data.PackOutput;
+import net.minecraft.data.*;
 import net.minecraft.data.models.BlockModelGenerators;
 import net.minecraft.data.models.ItemModelGenerators;
 import net.minecraft.data.models.blockstates.BlockStateGenerator;
@@ -17,15 +15,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
 import java.nio.file.Path;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import java.util.function.*;
 
 // this is just Minecraft code but with the Fabric API patches on top of it, because Forge doesn't have a similar system unfortunately.
 public abstract class ImprovedModelProvider implements DataProvider {
@@ -40,6 +32,7 @@ public abstract class ImprovedModelProvider implements DataProvider {
     }
 
     public abstract void generateBlockStateModels(BlockModelGenerators generator);
+
     public abstract void generateItemModels(ItemModelGenerators generator);
 
     public CompletableFuture<?> run(CachedOutput output) {
@@ -48,7 +41,7 @@ public abstract class ImprovedModelProvider implements DataProvider {
             Block block = generator.getBlock();
             BlockStateGenerator prev = blockStateGenerators.put(block, generator);
             if (prev != null) {
-                throw new IllegalStateException("Duplicate blockstate definition for "+block);
+                throw new IllegalStateException("Duplicate blockstate definition for " + block);
             }
         };
 
@@ -57,7 +50,7 @@ public abstract class ImprovedModelProvider implements DataProvider {
         BiConsumer<ResourceLocation, Supplier<JsonElement>> modelOutput = (resourceLocation, supplier) -> {
             Supplier<JsonElement> prev = models.put(resourceLocation, supplier);
             if (prev != null) {
-                throw new IllegalStateException("Duplicate model definition for "+resourceLocation);
+                throw new IllegalStateException("Duplicate model definition for " + resourceLocation);
             }
         };
         Objects.requireNonNull(simpleModels);
@@ -69,7 +62,7 @@ public abstract class ImprovedModelProvider implements DataProvider {
 
         List<Block> list = BuiltInRegistries.BLOCK.stream().filter((block) -> !blockStateGenerators.containsKey(block)).toList();
         if (/*!list.isEmpty()*/ false) { // We don't need this
-            throw new IllegalStateException("Missing blockstate definitions for: "+list);
+            throw new IllegalStateException("Missing blockstate definitions for: " + list);
         } else {
             BuiltInRegistries.BLOCK.forEach((block) -> {
                 ResourceLocation blockId = BuiltInRegistries.BLOCK.getKey(block);

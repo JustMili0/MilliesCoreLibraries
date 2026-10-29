@@ -1,14 +1,12 @@
 package net.justmili.corelibs.v2.config
 
 import com.mojang.serialization.Codec
-import net.justmili.corelibs.v2.config.items.CategoryItem
-import net.justmili.corelibs.v2.config.items.CommentItem
-import net.justmili.corelibs.v2.config.items.ConfigOption
+import net.justmili.corelibs.v2.config.items.*
 import java.nio.file.Path
 import java.util.function.Consumer
 import java.util.function.Predicate
 
-class MConfigBuilder @JvmOverloads constructor (modId: String, customFileName: String? = null, configType: ConfigTypes, fileType: FileTypes, createSubDirectory: Boolean = false) {
+class MConfigBuilder @JvmOverloads constructor(modId: String, customFileName: String? = null, configType: ConfigTypes, fileType: FileTypes, createSubDirectory: Boolean = false) {
     private val loader = MConfigLoader(modId, customFileName, configType, fileType, createSubDirectory)
 
     fun create(): ConfigBuilder {

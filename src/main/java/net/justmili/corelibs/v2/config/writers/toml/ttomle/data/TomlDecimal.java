@@ -24,14 +24,14 @@ public class TomlDecimal extends TomlVariable {
     @Override
     public String toString() {
         if (hasExponent) {
-            if (value > (10^7)) {
+            if (value > (10 ^ 7)) {
                 try {
                     throw new TomlBuildingException("Decimal with value: " + value + " and exponent " + exponent + " is too large have a separate exponent");
                 } catch (TomlBuildingException e) {
                     throw new RuntimeException(e);
                 }
             }
-            if (value < -(10^3)) {
+            if (value < -(10 ^ 3)) {
                 try {
                     throw new TomlBuildingException("Decimal with value: " + value + " and exponent " + exponent + " is too small have a separate exponent");
                 } catch (TomlBuildingException e) {

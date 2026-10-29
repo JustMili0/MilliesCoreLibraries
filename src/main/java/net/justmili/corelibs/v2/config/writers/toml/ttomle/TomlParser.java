@@ -4,9 +4,7 @@ import net.justmili.corelibs.v2.config.writers.toml.ttomle.data.TomlVariable;
 import net.justmili.corelibs.v2.config.writers.toml.ttomle.fields.*;
 import org.apache.commons.io.IOUtils;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +14,7 @@ public class TomlParser {
 
     public TomlParser(File tomlFile) throws TomlParsingException {
 
-        try(FileReader reader = new FileReader (tomlFile)) {
+        try (FileReader reader = new FileReader(tomlFile)) {
             String everything = IOUtils.toString(reader);
 
             parseToml(everything);
@@ -76,7 +74,7 @@ public class TomlParser {
 
                     if (index >= tomlContent.length()) throw new TomlParsingException("Array not closed. Random EOF", tomlContent, index);
 
-                        // ignore whitespace again
+                    // ignore whitespace again
                     index += getTrailingWhitespace(tomlContent, index);
 
                     if (index >= tomlContent.length()) throw new TomlParsingException("Array not closed. Random EOF", tomlContent, index);
@@ -93,7 +91,7 @@ public class TomlParser {
 
                     index += getTrailingWhitespace(tomlContent, index);
 
-                }else if (tomlContent.codePointAt(index) == '[') {
+                } else if (tomlContent.codePointAt(index) == '[') {
                     index += 1;
 
                     TomlDottedElementResult result = getDotSeparatedStringASCIElement(tomlContent, index);
@@ -103,7 +101,7 @@ public class TomlParser {
                     index += getTrailingWhitespace(tomlContent, index);
 
                     // get the end bracket
-                    if (tomlContent.codePointAt(index) == ']' && tomlContent.codePointAt(index+1) == ']') {
+                    if (tomlContent.codePointAt(index) == ']' && tomlContent.codePointAt(index + 1) == ']') {
                         index += 2;
                         // add the element
                         TomlArrayTable table = new TomlArrayTable(result.name);
@@ -137,8 +135,7 @@ public class TomlParser {
                         TomlBooleanField field = new TomlBooleanField(nameResult.name, true);
                         elements.add(field);
                         index += 4;
-                    }
-                    else if (tomlContent.startsWith("false", index)) {
+                    } else if (tomlContent.startsWith("false", index)) {
                         TomlBooleanField field = new TomlBooleanField(nameResult.name, false);
                         elements.add(field);
                         index += 5;
@@ -171,8 +168,7 @@ public class TomlParser {
                         TomlStringField field = new TomlStringField(nameResult.name, stringValueResult.character, stringValueResult.type);
                         elements.add(field);
                         index += stringValueResult.length;
-                    }
-                    else if (tomlContent.codePointAt(index) == '\'') {
+                    } else if (tomlContent.codePointAt(index) == '\'') {
                         StringResult stringValueResult = getLiteralStringElement(tomlContent, index);
                         TomlStringField field = new TomlStringField(nameResult.name, stringValueResult.character, TomlStringType.LITERAL);
                         elements.add(field);
@@ -194,7 +190,6 @@ public class TomlParser {
 
         }
     }
-
 
 
     private record ArrayValueResult(List<TomlVariable> elements, int length) {
@@ -225,7 +220,8 @@ public class TomlParser {
         return whitespace;
     }
 
-    public record TomlDottedElementResult(TomlDottedElementName name, int length) {}
+    public record TomlDottedElementResult(TomlDottedElementName name, int length) {
+    }
 
     private TomlDottedElementResult getDotSeparatedStringASCIElement(String chars, int index) throws TomlParsingException {
 
@@ -308,7 +304,7 @@ public class TomlParser {
         return getDoubleQuotedStringElement(chars, index, false);
     }
 
-    private record StringFieldValueResult(String character, int length, TomlStringType type){
+    private record StringFieldValueResult(String character, int length, TomlStringType type) {
     }
 
     private StringFieldValueResult getDoubleQuotedStringElementWithTriples(String chars, int index) throws TomlParsingException {
@@ -327,8 +323,8 @@ public class TomlParser {
         }
         if (index < chars.length() - 2 && allowTriples) {
             int firstQuote = chars.codePointAt(index);
-            int secondQuote = chars.codePointAt(index+1);
-            int thirdQuote = chars.codePointAt(index+2);
+            int secondQuote = chars.codePointAt(index + 1);
+            int thirdQuote = chars.codePointAt(index + 2);
 
             if (firstQuote == '"' && secondQuote == '"' && thirdQuote == '"') {
                 index += 3;
@@ -336,7 +332,7 @@ public class TomlParser {
             }
         }
         StringBuilder string = new StringBuilder();
-        int i = index+1;
+        int i = index + 1;
         while (i < chars.length()) {
 
             if (chars.codePointAt(i) == '\\') {
@@ -393,8 +389,8 @@ public class TomlParser {
         }
 
         int firstQuote = chars.codePointAt(index);
-        int secondQuote = chars.codePointAt(index+1);
-        int thirdQuote = chars.codePointAt(index+2);
+        int secondQuote = chars.codePointAt(index + 1);
+        int thirdQuote = chars.codePointAt(index + 2);
 
         if (firstQuote == '"' && secondQuote == '"' && thirdQuote == '"') {
             index += 3;
@@ -458,13 +454,14 @@ public class TomlParser {
 
     }
 
-    private record StringResult(String character, int length) {}
+    private record StringResult(String character, int length) {
+    }
 
     private StringResult getEscape(String chars, int index) throws TomlParsingException {
         if (index < 0) {
             throw new TomlParsingException("Index of escape character check negative", chars, index);
         }
-        switch (chars.codePointAt(index + 1)){
+        switch (chars.codePointAt(index + 1)) {
             case 'n':
                 return new StringResult("\n", 2);
             case 'b':
@@ -525,7 +522,8 @@ public class TomlParser {
         }
     }
 
-    private record NumberResult(Number number, int exponent, boolean hasExponent, int type, int length){}
+    private record NumberResult(Number number, int exponent, boolean hasExponent, int type, int length) {
+    }
 
     private NumberResult getNumber(String chars, int index) throws TomlParsingException {
         if (chars.isEmpty()) {
