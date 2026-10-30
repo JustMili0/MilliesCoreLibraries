@@ -3,7 +3,7 @@ package net.justmili.mcl.v2.lib.config.writers;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.*;
 import net.justmili.mcl.CoreLibs;
-import net.justmili.mcl.v2.lib.config.ConfigOption;
+import net.justmili.mcl.v2.lib.config.option.ConfigOption;
 import net.justmili.mcl.v2.lib.config.items.CategoryItem;
 
 public class ConfigCodec {

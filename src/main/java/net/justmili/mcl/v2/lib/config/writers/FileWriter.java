@@ -1,6 +1,6 @@
 package net.justmili.mcl.v2.lib.config.writers;
 
-import net.justmili.mcl.v2.lib.config.ConfigOption;
+import net.justmili.mcl.v2.lib.config.option.ConfigOption;
 import net.justmili.mcl.v2.lib.config.items.CategoryItem;
 
 import java.io.BufferedWriter;
