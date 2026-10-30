@@ -1,4 +1,4 @@
-package net.justmili.mcl.v2.lib.config;
+package net.justmili.mcl.v2.lib.config.option;
 
 import com.google.gson.*;
 import com.mojang.serialization.*;
@@ -43,6 +43,11 @@ public class ConfigOption<T> implements ConfigItem {
 
     public T get() {
         return value;
+    }
+
+    public void set(T value) {
+        // TODO: return early if set value isn't instance of this.value
+        this.value = value;
     }
 
     public void comment(String comment) {

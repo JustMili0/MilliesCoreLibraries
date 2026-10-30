@@ -1,6 +1,7 @@
 package net.justmili.mcl.config;
 
 import net.justmili.mcl.v2.lib.config.*;
+import net.justmili.mcl.v2.lib.config.option.OptionFlags;
 
 public class Config {
     public static MConfigBuilder client = new MConfigBuilder("corelibs", "icons", ConfigTypes.CLIENT, FileTypes.PROPERTIES, true);

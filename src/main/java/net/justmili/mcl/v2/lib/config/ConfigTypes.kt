@@ -3,8 +3,7 @@ package net.justmili.mcl.v2.lib.config
 enum class ConfigTypes {
     /**
      * Client-only configuration.
-     * 
-     * 
+     *
      * Exists only on the client and is never synchronized with
      * or modified by the server.
      */
@@ -12,8 +11,7 @@ enum class ConfigTypes {
 
     /**
      * Server-only configuration.
-     * 
-     * 
+     *
      * Exists only on the server and is never synchronized with
      * or modified by clients.
      */
@@ -21,8 +19,7 @@ enum class ConfigTypes {
 
     /**
      * Common configuration available on both the client and server.
-     * 
-     * 
+     *
      * Client and server each use their own local values,
      * so they may differ without being synchronized.
      */
@@ -30,21 +27,15 @@ enum class ConfigTypes {
 
     /**
      * Common configuration where the client's values take priority.
-     * 
-     * 
-     * 
+     *
      * Both client and server have a local configuration file, but when
      * connected, the client's values override the server's values in
      * cases where this is used.
-     * 
-     * 
-     * 
+     *
      * Recommended only for uses where a client tells the server what it wants
      * or where a lack of client-side installation defaults to server's values
      * being used for the client.
-     * 
-     * 
-     * 
+     *
      * File name matches COMMON unless a COMMON config already exists.
      * Config values synchronize temporarily when used.
      */
@@ -52,18 +43,13 @@ enum class ConfigTypes {
 
     /**
      * Common configuration where the server's values take priority.
-     * 
-     * 
+     *
      * Both client and server have a local configuration file, but when
      * connected, the server's values override the client's values in memory.
-     * 
-     * 
-     * 
+     *
      * Recommended only for uses where some settings require to be enabled
      * on both client and server.
-     * 
-     * 
-     * 
+     *
      * File name matches COMMON unless a COMMON config already exists.
      * Config values synchronize at join.
      */
