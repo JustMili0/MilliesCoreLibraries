@@ -7,8 +7,8 @@ import net.justmili.mcl.v2.lib.config.writers.FileWriter
 import net.justmili.mcl.v2.lib.config.writers.json.Json5IO
 import net.justmili.mcl.v2.lib.config.writers.json.JsonIO
 import net.justmili.mcl.v2.lib.config.writers.properties.PropertiesIO
-import java.io.IOException
-import java.nio.file.*
+import java.io.File
+import java.nio.file.Path
 
 class MConfigLoader(private val modId: String, customFileName: String?, configType: ConfigTypes, fileType: FileTypes, createSubDirectory: Boolean) {
     private val root = CategoryItem("root", null)
@@ -16,29 +16,23 @@ class MConfigLoader(private val modId: String, customFileName: String?, configTy
     private val writer = getWriter(fileType)
     private val suffix: String
     private val path: Path
+    private val file: File
 
     init {
         val configDir = Platform.CONFIG_DIR
-
-        if (configType == ConfigTypes.COMMON_CLIENT_PRIORITY) {
-            // Client -> Server
-        } else if (configType == ConfigTypes.COMMON_SERVER_PRIORITY) {
-            // Server -> Client
-        }
-
         val directory = if (createSubDirectory) configDir.resolve(modId) else configDir
         val extension = fileType.extension()
-        val fileNameWithSuffix = customFileName != null || !createSubDirectory
-
-        val primaryPath = getPath(directory, configType.suffix(), extension, fileNameWithSuffix)
-        val alternativePath = getPath(directory, configType.altSuffix(), extension, fileNameWithSuffix)
+        val usesSuffix = customFileName != null || !createSubDirectory
 
         // Uses alternative suffix for Common Priority config files if a regular common config exists
+        val primaryPath = getPath(directory, configType.suffix(), extension, usesSuffix)
+        val alternativePath = getPath(directory, configType.altSuffix(), extension, usesSuffix)
         val usesAltSuffix = CLAIMED_PATHS.contains(primaryPath) && primaryPath != alternativePath
         this.suffix = if (usesAltSuffix) configType.altSuffix() else configType.suffix()
         this.path = if (usesAltSuffix) alternativePath else primaryPath
+        this.file = this.path.toFile()
 
-        if (!CLAIMED_PATHS.add(path)) CoreLibs.LOGGER.warn("Config file '{}' of '{}' is already used by another config, they will overwrite each other.", path, modId)
+        if (!CLAIMED_PATHS.add(path)) CoreLibs.LOGGER.warn("Config file name '{}' of '{}' is already in use, files will overwrite each other.", file.name, modId)
     }
 
     fun root(): CategoryItem {
@@ -47,26 +41,18 @@ class MConfigLoader(private val modId: String, customFileName: String?, configTy
 
     @Synchronized
     fun save() {
+        if (!file.exists()) CoreLibs.LOGGER.error("Config file '{}' of '{}' is missing, creating new.", file.name, modId)
         writer.write(path, root)
     }
 
     @Synchronized
     fun buildOrLoad() {
-        if (!path.toFile().exists()) {
+        if (!file.exists()) {
+            writer.write(path, root)
+        } else if (writer.load(path, root)) {
             save()
-            return
-        }
-        if (!writer.load(path, root)) backupIfBroken()
-        save()
-    }
-
-    private fun backupIfBroken() {
-        val backupPath = path.resolveSibling(path.fileName.toString() + ".mclb") // MCLB - MConfigLoader Backup
-        try {
-            Files.move(path, backupPath, StandardCopyOption.REPLACE_EXISTING)
-            CoreLibs.LOGGER.warn("Could not read config of '{}' ({}, {}). File has been backed up to {}.", modId, path, suffix, backupPath)
-        } catch (e: IOException) {
-            CoreLibs.LOGGER.error("Failed to back up unreadable config of '{}' ({}): {}", modId, suffix, e.message)
+        } else {
+            CoreLibs.LOGGER.error("Could not read config of '{}' ({}).", modId, file.name)
         }
     }
 
@@ -79,8 +65,8 @@ class MConfigLoader(private val modId: String, customFileName: String?, configTy
         }
     }
 
-    private fun getPath(directory: Path, suffix: String, extension: String, fileNameWithSuffix: Boolean): Path {
-        val file = if (fileNameWithSuffix) "$fileName-$suffix" else suffix
+    private fun getPath(directory: Path, suffix: String, extension: String, usesSuffix: Boolean): Path {
+        val file = if (usesSuffix) "$fileName-$suffix" else suffix
         return directory.resolve(file + extension)
     }
 
