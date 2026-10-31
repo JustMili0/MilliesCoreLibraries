@@ -162,7 +162,7 @@ publishMods {
         minecraftVersions.addAll(compatibleVersions)
         environment = CLIENT_OR_SERVER
         // STABLE, BETA, ALPHA
-        type = STABLE
+        type = ALPHA
 
         requires("fabric-api")
     }

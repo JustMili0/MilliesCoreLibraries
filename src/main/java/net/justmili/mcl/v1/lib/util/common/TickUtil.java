@@ -18,7 +18,7 @@ public class TickUtil {
         }
     }
 
-    public static void registerProcessQueue() {
+    public static void initProcessQueue() {
         TickEvents.SERVER_POST.register(server -> queue.removeIf(item -> {
             if (--item.processTicks <= 0) {
                 item.task.run();
