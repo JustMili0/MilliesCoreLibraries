@@ -1,13 +1,9 @@
 package net.justmili.mcl.v2.lib.config
 
-import com.mojang.serialization.Codec
 import net.justmili.mcl.v2.lib.config.items.CategoryItem
 import net.justmili.mcl.v2.lib.config.items.CommentItem
-import net.justmili.mcl.v2.lib.config.option.ConfigOption
-import net.justmili.mcl.v2.lib.config.option.OptionFlags
-import java.nio.file.Path
+import net.justmili.mcl.v2.lib.config.options.*
 import java.util.function.Consumer
-import java.util.function.Predicate
 
 class MConfigBuilder @JvmOverloads constructor(modId: String, customFileName: String? = null, configType: ConfigTypes, fileType: FileTypes, createSubDirectory: Boolean = false) {
     private val loader = MConfigLoader(modId, customFileName, configType, fileType, createSubDirectory)
@@ -29,16 +25,28 @@ class MConfigBuilder @JvmOverloads constructor(modId: String, customFileName: St
             return CategoryBuilder(loader, category, child)
         }
 
-        fun <T : Any> addOption(key: String, value: T, setter: Consumer<T>, vararg flags: OptionFlags): OptionBuilder {
-            return register(key, value, codecFor(value), {true}, if (value is Boolean) "Allowed values: true, false" else null, setter, *flags)
+        fun addBooleanOption(key: String): BooleanOptionBuilder {
+            return BooleanOptionBuilder(loader, category, key)
         }
 
-        fun addOption(key: String, value: String, charLimit: Int, setter: Consumer<String>, vararg flags: OptionFlags): OptionBuilder {
-            return register<String>(key, value, Codec.STRING, {candidate: String -> candidate.length <= charLimit}, "Maximum length: $charLimit", setter, *flags)
+        fun addStringOption(key: String): StringOptionBuilder {
+            return StringOptionBuilder(loader, category, key)
         }
 
-        fun <T : Comparable<T>> addOption(key: String, value: T, min: T, max: T, setter: Consumer<T>, vararg flags: OptionFlags): OptionBuilder {
-            return register(key, value, codecFor(value), {candidate: T -> candidate in min..max}, "Allowed range: $min-$max", setter, *flags)
+        fun addIntOption(key: String): IntOptionBuilder {
+            return IntOptionBuilder(loader, category, key)
+        }
+
+        fun addLongOption(key: String): LongOptionBuilder {
+            return LongOptionBuilder(loader, category, key)
+        }
+
+        fun addFloatOption(key: String): FloatOptionBuilder {
+            return FloatOptionBuilder(loader, category, key)
+        }
+
+        fun addDoubleOption(key: String): DoubleOptionBuilder {
+            return DoubleOptionBuilder(loader, category, key)
         }
 
         // TODO: Add Enum support
@@ -48,47 +56,12 @@ class MConfigBuilder @JvmOverloads constructor(modId: String, customFileName: St
         fun build() {
             loader.buildOrLoad()
         }
-
-        private fun <T> register(key: String, value: T, codec: Codec<T>, validator: Predicate<T>, restriction: String?, setter: Consumer<T>, vararg flags: OptionFlags): OptionBuilder {
-            val option = ConfigOption<T>(key, value, codec, validator, restriction, setter, *flags)
-            category.add(option)
-            return OptionBuilder(loader, category, option)
-        }
-
-        companion object {
-            private fun <T : Any> codecFor(value: T): Codec<T> {
-                val codec: Codec<*>
-                when (value) {
-                    is String -> codec = Codec.STRING
-                    is Int -> codec = Codec.INT
-                    is Long -> codec = Codec.LONG
-                    is Float -> codec = Codec.FLOAT
-                    is Double -> codec = Codec.DOUBLE
-                    is Boolean -> codec = Codec.BOOL
-                    else -> throw IllegalArgumentException("Unsupported config option type: " + value.javaClass.getName())
-                }
-
-                @Suppress("UNCHECKED_CAST")
-                return codec as Codec<T>
-            }
-        }
     }
 
     class CategoryBuilder(loader: MConfigLoader, category: CategoryItem, private val child: CategoryItem) : ConfigBuilder(loader, category) {
         fun comment(comment: String): CategoryBuilder {
             child.comment(comment)
             return this
-        }
-    }
-
-    class OptionBuilder(loader: MConfigLoader, category: CategoryItem, private val option: ConfigOption<*>) : ConfigBuilder(loader, category) {
-        fun comment(comment: String): OptionBuilder {
-            option.comment(comment)
-            return this
-        }
-
-        fun attachImage(path: Path) {
-            // TODO: Add optional attaching image paths for use in v2.configscreen
         }
     }
 }

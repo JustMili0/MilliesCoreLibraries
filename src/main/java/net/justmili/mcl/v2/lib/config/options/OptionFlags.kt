@@ -1,4 +1,4 @@
-package net.justmili.mcl.v2.lib.config.option
+package net.justmili.mcl.v2.lib.config.options
 
 import net.justmili.mcl.CoreLibs
 import net.minecraft.resources.ResourceLocation

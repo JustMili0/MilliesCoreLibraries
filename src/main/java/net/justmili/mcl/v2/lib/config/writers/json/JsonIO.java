@@ -2,8 +2,8 @@ package net.justmili.mcl.v2.lib.config.writers.json;
 
 import com.google.gson.JsonObject;
 import net.justmili.mcl.v1.lib.util.common.FileIO;
-import net.justmili.mcl.v2.lib.config.option.ConfigOption;
 import net.justmili.mcl.v2.lib.config.items.*;
+import net.justmili.mcl.v2.lib.config.options.ConfigOption;
 import net.justmili.mcl.v2.lib.config.writers.FileWriter;
 
 import java.nio.file.Path;

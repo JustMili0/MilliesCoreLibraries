@@ -1,7 +1,7 @@
 package net.justmili.mcl.v2.lib.config.writers;
 
-import net.justmili.mcl.v2.lib.config.option.ConfigOption;
 import net.justmili.mcl.v2.lib.config.items.CategoryItem;
+import net.justmili.mcl.v2.lib.config.options.ConfigOption;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -26,7 +26,7 @@ public interface FileWriter {
 
         var parts = new ArrayList<String>();
         if (option.restriction() != null) parts.add(option.restriction());
-        parts.add("Default: " + String.valueOf(option.defaultValue()).replace("\r", "\\r").replace("\n", "\\n"));
+        parts.add("Default: " + String.valueOf(option.getDefault()).replace("\r", "\\r").replace("\n", "\\n"));
         lines.add(String.join(" - ", parts));
 
         return lines;

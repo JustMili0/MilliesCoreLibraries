@@ -3,8 +3,8 @@ package net.justmili.mcl.v2.lib.config.writers;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.*;
 import net.justmili.mcl.CoreLibs;
-import net.justmili.mcl.v2.lib.config.option.ConfigOption;
 import net.justmili.mcl.v2.lib.config.items.CategoryItem;
+import net.justmili.mcl.v2.lib.config.options.ConfigOption;
 
 public class ConfigCodec {
 
@@ -37,7 +37,7 @@ public class ConfigCodec {
         for (var item : category.children()) {
             if (item instanceof ConfigOption<?> option) {
                 var value = map.get(option.key());
-                if (value != null && !option.load(ops, value)) CoreLibs.LOGGER.warn("Invalid value for config option '{}', using default.", option.key());
+                if (value != null && !option.load(ops, value)) CoreLibs.LOGGER.warn("Invalid value for config option '{}'.", option.key());
             } else if (item instanceof CategoryItem child) {
                 var value = map.get(child.name());
                 if (value != null) ops.getMap(value).result().ifPresent(childMap -> decodeCat(child, ops, childMap));

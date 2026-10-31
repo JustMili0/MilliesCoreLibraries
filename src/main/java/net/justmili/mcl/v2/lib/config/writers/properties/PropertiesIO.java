@@ -3,22 +3,22 @@ package net.justmili.mcl.v2.lib.config.writers.properties;
 import net.justmili.mcl.CoreLibs;
 import net.justmili.mcl.v1.lib.util.Platform;
 import net.justmili.mcl.v1.lib.util.common.FileIO;
-import net.justmili.mcl.v2.lib.config.option.ConfigOption;
 import net.justmili.mcl.v2.lib.config.MConfigLoader;
 import net.justmili.mcl.v2.lib.config.items.*;
+import net.justmili.mcl.v2.lib.config.options.ConfigOption;
 import net.justmili.mcl.v2.lib.config.writers.FileWriter;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 public class PropertiesIO implements FileWriter {
 
     @Override
     public void write(Path path, CategoryItem root) {
+        checkForDupedKeys(path, root.children(), new HashSet<>());
         FileIO.write(path, writer -> {
             writer.write(TOKEN_POUND + path.getFileName() + "\n\n");
             writeItems(writer, root.children(), false);
@@ -47,6 +47,7 @@ public class PropertiesIO implements FileWriter {
 
     @Override
     public boolean load(Path path, CategoryItem root) {
+        checkForDupedKeys(path, root.children(), new HashSet<>());
         var properties = new Properties();
         try (var reader = Files.newBufferedReader(path)) {
             properties.load(reader);
@@ -66,6 +67,16 @@ public class PropertiesIO implements FileWriter {
             } else if (item instanceof ConfigOption<?> option) {
                 var raw = properties.getProperty(option.key());
                 if (raw != null && !option.loadText(raw)) CoreLibs.LOGGER.warn("Invalid value '{}' for config option '{}', using default.", raw, option.key());
+            }
+        }
+    }
+
+    private void checkForDupedKeys(Path path, List<ConfigItem> items, Set<String> keys) {
+        for (var item : items) {
+            if (item instanceof CategoryItem cat) {
+                checkForDupedKeys(path, cat.children(), keys);
+            } else if (item instanceof ConfigOption<?> option && !keys.add(option.key())) {
+                throw new IllegalArgumentException("Config option '" + option.key() + "' exists more than once in '" + path.getFileName() + "', categories are not supported in properties config format.");
             }
         }
     }

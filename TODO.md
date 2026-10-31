@@ -4,11 +4,8 @@
 
 # FIRST-PRIORITY TODO (0.0.2a)
 - [APPELS] Finish all the events
-- [MILLIE] Rewrite config from `v1.config` to `v2.config` (deprecate `v1.config` after)
-  - Completely new (hopefully better) config builder
-  - No more split `ConfigEntry<?>`, `ListConfigEntry` etc., now one `ConfigOption<?>` for all
-  - Rewrite using Codecs
-  - Support for more entry types (Base [String, Numbers, boolean], Enum, Color, Lists [List, Set])
+- [MILLIE] Rewrite config from `v1.config` to `v2.config`
+  - Support for more entry types (TODO: Enum, Color, Lists [List, Set])
   - Support for "attaching" images to config values (usable via `v2.configscreen`)
   - Support for converting old config file(s) and their entries into new ones
   - Fix, rework and improve priority config synchronization
