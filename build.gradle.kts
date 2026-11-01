@@ -21,7 +21,7 @@ val requiredJava: JavaVersion = when {
 }
 
 // Used for publishing on Modrinth and Curseforge
-val compatibleVersions: List<String> = sc.properties.rawOrNull("mod", "mc_releases")?.asList().orEmpty().map { it.toString() }
+val compatibleVersions: List<String> = sc.properties.rawOrNull("mod", "mc_releases")?.asList().orEmpty().map {it.toString()}
 
 // Versions before 26.1 are obfuscated (remapped), 26.1+ are not
 val obfuscated = sc.current.parsed < "26.1"
@@ -32,8 +32,8 @@ repositories {
      * improving the setup speed.
      */
     fun strictMaven(url: String, alias: String, vararg groups: String) = exclusiveContent {
-        forRepository { maven(url) { name = alias } }
-        filter { groups.forEach(::includeGroup) }
+        forRepository {maven(url) {name = alias}}
+        filter {groups.forEach(::includeGroup)}
     }
     strictMaven("https://www.cursemaven.com", "CurseForge", "curse.maven")
     strictMaven("https://api.modrinth.com/maven", "Modrinth", "maven.modrinth")
@@ -127,15 +127,15 @@ tasks {
             register("minecraft_version_constraint", sc.properties["mod.mc_compat"])
         }
 
-        filesMatching("fabric.mod.json") { expand(props) }
+        filesMatching("fabric.mod.json") {expand(props)}
 
         val mixinJava = "JAVA_${requiredJava.majorVersion}"
-        filesMatching("*.mixins.json") { expand("java" to mixinJava) }
+        filesMatching("*.mixins.json") {expand("java" to mixinJava)}
     }
 
     // Includes the license file in the built mod
     withType<Jar> {
-        from(rootProject.file("LICENSE")) { rename { it } }
+        from(rootProject.file("LICENSE")) {rename {it}}
     }
 
     register<Copy>("buildAndCollect") {
@@ -144,7 +144,7 @@ tasks {
 
         inputs.property("version", modVersion)
         // loomx.modJar returns the jar task for the applied loom variant
-        from(loomx.modJar.flatMap { it.archiveFile })
+        from(loomx.modJar.flatMap {it.archiveFile})
         into(rootProject.layout.buildDirectory.file("libs/$modVersion"))
     }
 }

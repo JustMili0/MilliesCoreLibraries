@@ -6,8 +6,8 @@ import net.minecraft.network.chat.Component;
 public class ConfigScreen extends Screen {
     private final Screen parent;
 
-    public ConfigScreen(Screen parent, Component component) {
-        super(component);
+    public ConfigScreen(Screen parent) {
+        super(Component.translatable("corelibs.screen.config.title"));
         this.parent = parent;
     }
 

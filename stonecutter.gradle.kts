@@ -1,4 +1,5 @@
-import net.justmili.dslprops.*
+import net.justmili.dslprops.modId
+import net.justmili.dslprops.modVersion
 
 plugins {
     id("dev.kikugie.stonecutter")
