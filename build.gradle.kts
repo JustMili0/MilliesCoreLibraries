@@ -153,8 +153,7 @@ publishMods {
     file = loomx.modJar.flatMap {it.archiveFile}
     modLoaders.add("fabric")
 
-    // Reads `.Changelogs/<mod.version>-Fabric.md` from the origin/rep-info branch
-    changelog = readChangelog()
+    changelog = readChangelogFromBranch("origin/rep-info", ".Changelogs/$modVersion-Fabric.md")
 
     modrinth {
         accessToken = providers.gradleProperty("modrinth_token")

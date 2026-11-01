@@ -49,7 +49,3 @@ fun Project.readChangelogFromBranch(branch: String, path: String): String {
         "No changelog found"
     }
 }
-
-/** Shortcut for the Fabric-only layout: `.Changelogs/<mod.version>-Fabric.md` on the given branch. */
-fun Project.readChangelog(branch: String = "origin/rep-info"): String =
-    readChangelogFromBranch(branch, ".Changelogs/$modVersion-Fabric.md")
