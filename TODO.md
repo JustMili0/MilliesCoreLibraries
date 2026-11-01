@@ -25,7 +25,7 @@
 - Add a Screen lib for easy screen creation 
   - Easy enabling/disabling and adding screen elements
   - Similar builder layout to Config Lib
-- Add a proper config screen for Core Libs for our config
+- [REQUIRES CONFIG AND SCREEN LIB FINISHED] Add a proper config screen for Core Libs for our config
 - Complete utils by adding as much functionality as possible by turning repetitive code from across multiple projects into utils
 
 # TODO (1.0.0)

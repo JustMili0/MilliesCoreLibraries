@@ -67,7 +67,7 @@ abstract class OptionBuilder<T : Any, B : OptionBuilder<T, B>>(private val loade
     }
 }
 
-class BooleanOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: String) : OptionBuilder<Boolean, BooleanOptionBuilder>(loader, category, key, Codec.BOOL) {
+class BooleanOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: String): OptionBuilder<Boolean, BooleanOptionBuilder>(loader, category, key, Codec.BOOL) {
 
     override fun self(): BooleanOptionBuilder {
         return this
@@ -82,7 +82,7 @@ class BooleanOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: S
     }
 }
 
-class StringOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: String) : OptionBuilder<String, StringOptionBuilder>(loader, category, key, Codec.STRING) {
+class StringOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: String): OptionBuilder<String, StringOptionBuilder>(loader, category, key, Codec.STRING) {
     private var charLimit = Int.MAX_VALUE
 
     override fun self(): StringOptionBuilder {
@@ -109,7 +109,7 @@ class StringOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: St
     }
 }
 
-abstract class NumberOptionBuilder<T, B : NumberOptionBuilder<T, B>>(loader: MConfigLoader, category: CategoryItem, key: String, codec: Codec<T>) : OptionBuilder<T, B>(loader, category, key, codec) where T : Comparable<T>, T : Any {
+abstract class NumberOptionBuilder<T, B : NumberOptionBuilder<T, B>>(loader: MConfigLoader, category: CategoryItem, key: String, codec: Codec<T>): OptionBuilder<T, B>(loader, category, key, codec) where T: Comparable<T>, T: Any {
     private var range: ClosedRange<T>? = null
 
     override fun getValidator(): Predicate<T> {
@@ -129,7 +129,7 @@ abstract class NumberOptionBuilder<T, B : NumberOptionBuilder<T, B>>(loader: MCo
     }
 }
 
-class IntOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: String) : NumberOptionBuilder<Int, IntOptionBuilder>(loader, category, key, Codec.INT) {
+class IntOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: String): NumberOptionBuilder<Int, IntOptionBuilder>(loader, category, key, Codec.INT) {
 
     override fun self(): IntOptionBuilder {
         return this
@@ -144,7 +144,7 @@ class IntOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: Strin
     }
 }
 
-class LongOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: String) : NumberOptionBuilder<Long, LongOptionBuilder>(loader, category, key, Codec.LONG) {
+class LongOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: String): NumberOptionBuilder<Long, LongOptionBuilder>(loader, category, key, Codec.LONG) {
 
     override fun self(): LongOptionBuilder {
         return this
@@ -159,7 +159,7 @@ class LongOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: Stri
     }
 }
 
-class FloatOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: String) : NumberOptionBuilder<Float, FloatOptionBuilder>(loader, category, key, Codec.FLOAT) {
+class FloatOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: String): NumberOptionBuilder<Float, FloatOptionBuilder>(loader, category, key, Codec.FLOAT) {
 
     override fun self(): FloatOptionBuilder {
         return this
@@ -174,7 +174,7 @@ class FloatOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: Str
     }
 }
 
-class DoubleOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: String) : NumberOptionBuilder<Double, DoubleOptionBuilder>(loader, category, key, Codec.DOUBLE) {
+class DoubleOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: String): NumberOptionBuilder<Double, DoubleOptionBuilder>(loader, category, key, Codec.DOUBLE) {
 
     override fun self(): DoubleOptionBuilder {
         return this
@@ -188,3 +188,7 @@ class DoubleOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: St
         return setRangeLimit(min, max)
     }
 }
+
+// TODO: Add Enum support
+// TODO: Add List<?>/Set support
+// TODO: Add (ARGB) color picker support

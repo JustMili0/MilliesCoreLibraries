@@ -1,4 +1,4 @@
-package net.justmili.mcl.client;
+package net.justmili.mcl.client.config;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;

@@ -27,7 +27,7 @@
       "net.justmili.mcl.client.FabricClient"
     ],
     "modmenu": [
-      "net.justmili.mcl.client.ModMenuEntrypoint"
+      "net.justmili.mcl.client.config.ModMenuEntrypoint"
     ]
   },
   "mixins": [

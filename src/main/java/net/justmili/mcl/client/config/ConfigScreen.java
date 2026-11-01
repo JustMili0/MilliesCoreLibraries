@@ -1,4 +1,4 @@
-package net.justmili.mcl.client;
+package net.justmili.mcl.client.config;
 
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
