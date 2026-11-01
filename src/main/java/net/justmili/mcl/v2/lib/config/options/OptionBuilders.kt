@@ -3,13 +3,13 @@ package net.justmili.mcl.v2.lib.config.options
 import com.mojang.serialization.Codec
 import net.justmili.mcl.v2.lib.config.MConfigLoader
 import net.justmili.mcl.v2.lib.config.items.CategoryItem
-import java.nio.file.Path
+import net.minecraft.resources.ResourceLocation
 import java.util.function.Predicate
 
 abstract class OptionBuilder<T : Any, B : OptionBuilder<T, B>>(private val loader: MConfigLoader, private val category: CategoryItem, private val key: String, private val codec: Codec<T>) {
     private var defaultValue: T? = null
     private var flags: Array<out OptionFlags> = emptyArray()
-    private var attachedImage: Path? = null
+    private var attachedImage: ResourceLocation? = null
     private var comment: String? = null
 
     protected abstract fun self(): B
@@ -36,12 +36,12 @@ abstract class OptionBuilder<T : Any, B : OptionBuilder<T, B>>(private val loade
         return flags
     }
 
-    fun addImage(path: Path): B {
+    fun addImage(path: ResourceLocation): B {
         this.attachedImage = path
         return self()
     }
 
-    fun getImage(): Path? {
+    fun getImage(): ResourceLocation? {
         return attachedImage
     }
 

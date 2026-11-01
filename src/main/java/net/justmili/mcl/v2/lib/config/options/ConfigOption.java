@@ -4,9 +4,9 @@ import com.google.gson.*;
 import com.mojang.serialization.*;
 import net.justmili.mcl.CoreLibs;
 import net.justmili.mcl.v2.lib.config.items.ConfigItem;
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
-import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Predicate;
 
@@ -16,7 +16,7 @@ public class ConfigOption<T> implements ConfigItem {
     private volatile T value;
     private volatile T synced;
     private final Set<OptionFlags> flags = EnumSet.noneOf(OptionFlags.class);
-    private Path attachedImage;
+    private ResourceLocation attachedImage;
     private String comment;
     private final Codec<T> codec;
     private final Predicate<T> validator;
@@ -75,12 +75,12 @@ public class ConfigOption<T> implements ConfigItem {
         return Collections.unmodifiableSet(flags);
     }
 
-    public void setImage(Path path) {
+    public void setImage(ResourceLocation path) {
         this.attachedImage = path;
     }
 
     @Nullable
-    public Path getImage() {
+    public ResourceLocation getImage() {
         return attachedImage;
     }
 
