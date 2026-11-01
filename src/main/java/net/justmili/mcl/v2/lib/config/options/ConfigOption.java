@@ -6,27 +6,29 @@ import net.justmili.mcl.CoreLibs;
 import net.justmili.mcl.v2.lib.config.items.ConfigItem;
 import org.jetbrains.annotations.Nullable;
 
+import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Predicate;
 
 public class ConfigOption<T> implements ConfigItem {
     private final String key;
     private final T defaultValue;
-    private final Codec<T> codec;
-    private final Predicate<T> validator;
-    private final String restriction;
-    private final Runnable saver;
-    private final Set<OptionFlags> flags = EnumSet.noneOf(OptionFlags.class);
-    private String comment;
     private volatile T value;
     private volatile T synced;
+    private final Set<OptionFlags> flags = EnumSet.noneOf(OptionFlags.class);
+    private Path attachedImage;
+    private String comment;
+    private final Codec<T> codec;
+    private final Predicate<T> validator;
+    private final String bounds;
+    private final Runnable saver;
 
-    public ConfigOption(String key, T defaultValue, Codec<T> codec, Predicate<T> validator, @Nullable String restriction, Runnable saver, OptionFlags... flags) {
+    public ConfigOption(String key, T defaultValue, Codec<T> codec, Predicate<T> validator, @Nullable String bounds, Runnable saver, OptionFlags... flags) {
         this.key = key;
         this.defaultValue = defaultValue;
         this.codec = codec;
         this.validator = validator;
-        this.restriction = restriction;
+        this.bounds = bounds;
         this.saver = saver;
         this.value = defaultValue;
         Collections.addAll(this.flags, flags);
@@ -69,6 +71,19 @@ public class ConfigOption<T> implements ConfigItem {
         return synced != null;
     }
 
+    public Set<OptionFlags> getFlags() {
+        return Collections.unmodifiableSet(flags);
+    }
+
+    public void setImage(Path path) {
+        this.attachedImage = path;
+    }
+
+    @Nullable
+    public Path getImage() {
+        return attachedImage;
+    }
+
     public void comment(String comment) {
         this.comment = comment;
     }
@@ -79,12 +94,8 @@ public class ConfigOption<T> implements ConfigItem {
     }
 
     @Nullable
-    public String restriction() {
-        return restriction;
-    }
-
-    public Set<OptionFlags> flags() {
-        return Collections.unmodifiableSet(flags);
+    public String getBounds() {
+        return bounds;
     }
 
     public <R> Optional<R> encode(DynamicOps<R> ops) {

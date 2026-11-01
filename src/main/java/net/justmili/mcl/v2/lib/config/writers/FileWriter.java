@@ -22,10 +22,10 @@ public interface FileWriter {
 
     default List<String> getDetails(ConfigOption<?> option) {
         var lines = new ArrayList<String>();
-        if (!option.flags().isEmpty()) lines.add("Requires: " + listFlags(option));
+        if (!option.getFlags().isEmpty()) lines.add("Requires: " + listFlags(option));
 
         var parts = new ArrayList<String>();
-        if (option.restriction() != null) parts.add(option.restriction());
+        if (option.getBounds() != null) parts.add(option.getBounds());
         parts.add("Default: " + String.valueOf(option.getDefault()).replace("\r", "\\r").replace("\n", "\\n"));
         lines.add(String.join(" - ", parts));
 
@@ -59,7 +59,7 @@ public interface FileWriter {
 
     private String listFlags(ConfigOption<?> option) {
         var flags = new ArrayList<String>();
-        for (var flag : option.flags()) {
+        for (var flag : option.getFlags()) {
             flags.add(flag.descName());
         }
         return String.join(", ", flags);

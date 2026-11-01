@@ -8,9 +8,9 @@ import java.util.function.Predicate
 
 abstract class OptionBuilder<T : Any, B : OptionBuilder<T, B>>(private val loader: MConfigLoader, private val category: CategoryItem, private val key: String, private val codec: Codec<T>) {
     private var defaultValue: T? = null
+    private var flags: Array<out OptionFlags> = emptyArray()
     private var attachedImage: Path? = null
     private var comment: String? = null
-    private var flags: Array<out OptionFlags> = emptyArray()
 
     protected abstract fun self(): B
 
@@ -18,7 +18,7 @@ abstract class OptionBuilder<T : Any, B : OptionBuilder<T, B>>(private val loade
         return Predicate {true}
     }
 
-    protected open fun restriction(): String? {
+    protected open fun bounds(): String? {
         return null
     }
 
@@ -27,18 +27,26 @@ abstract class OptionBuilder<T : Any, B : OptionBuilder<T, B>>(private val loade
         return self()
     }
 
-    fun setComment(comment: String): B {
-        this.comment = comment
-        return self()
-    }
-
     fun setFlags(vararg flags: OptionFlags): B {
         this.flags = flags
         return self()
     }
 
-    fun attachImage(path: Path): B {
+    fun getFlags(): Array<out OptionFlags> {
+        return flags
+    }
+
+    fun addImage(path: Path): B {
         this.attachedImage = path
+        return self()
+    }
+
+    fun getImage(): Path? {
+        return attachedImage
+    }
+
+    fun setComment(comment: String): B {
+        this.comment = comment
         return self()
     }
 
@@ -47,7 +55,10 @@ abstract class OptionBuilder<T : Any, B : OptionBuilder<T, B>>(private val loade
         val validator = validator()
         require(validator.test(value)) {"Default value '$value' of config option '$key' does not meet its own limits."}
 
-        val option = ConfigOption(key, value, codec, validator, restriction(), loader::save, *flags)
+        val option = ConfigOption(key, value, codec, validator, bounds(), loader::save, *flags)
+        val image = attachedImage
+        if (image != null) option.image = image
+
         val text = comment
         if (text != null) option.comment(text)
 
@@ -62,7 +73,7 @@ class BooleanOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: S
         return this
     }
 
-    override fun restriction(): String {
+    override fun bounds(): String {
         return "Allowed values: true, false"
     }
 
@@ -83,7 +94,7 @@ class StringOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: St
         return Predicate {candidate: String -> candidate.length <= limit}
     }
 
-    override fun restriction(): String? {
+    override fun bounds(): String? {
         return if (charLimit == Int.MAX_VALUE) null else "Maximum length: $charLimit"
     }
 
@@ -106,7 +117,7 @@ abstract class NumberOptionBuilder<T, B : NumberOptionBuilder<T, B>>(loader: MCo
         return Predicate {candidate: T -> limit == null || candidate in limit}
     }
 
-    override fun restriction(): String? {
+    override fun bounds(): String? {
         val limit = range
         return if (limit == null) null else "Allowed range: ${limit.start} to ${limit.endInclusive}"
     }
