@@ -39,6 +39,10 @@ enum class ConfigTypes {
      * File name matches COMMON unless a COMMON config already exists.
      * Config values synchronize temporarily when used.
      */
+    // TODO: probably rewrite the javadoc for this accordingly to the idea
+    // IDEA: When .get() is used on an option from a client priority config,
+    // server tries to ask client for their values.
+    // If client doesn't have the mod to give the values it defaults to server's
     COMMON_CLIENT_PRIORITY("common", "common-client"),
 
     /**

@@ -4,7 +4,8 @@
 
 # FIRST-PRIORITY TODO (0.0.2a)
 - [APPELS] Finish all the events
-- [MILLIE] Rewrite config from `v1.config` to `v2.config`
+- [MILLIE] Rewrite config from `v1.config` to `v2.config` 
+  - Rewrite into full Kotlin
   - Support for more entry types (TODO: Enum, Color, Lists [List, Set])
   - Support for converting old config file(s) and their entries into new ones
   - Fix, rework and improve priority config synchronization
