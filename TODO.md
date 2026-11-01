@@ -22,8 +22,10 @@
 # TODO (0.0.2b)
 - Finish Config
   - Add full TOML support
-- [REQUIRES CONFIG] Redo Config Screen to be more like HTML+CSS in `v2` - highly customizable
-  - It will be absolute pain to make, but it'll be so worth it
+- Add a Screen lib for easy screen creation 
+  - Easy enabling/disabling and adding screen elements
+  - Similar builder layout to Config Lib
+- Add a proper config screen for Core Libs for our config
 - Complete utils by adding as much functionality as possible by turning repetitive code from across multiple projects into utils
 
 # TODO (1.0.0)
