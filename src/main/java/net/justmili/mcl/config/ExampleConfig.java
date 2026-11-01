@@ -1,68 +1,51 @@
-//package net.justmili.corelibs.config;
-//
-//import net.justmili.corelibs.v1.config.ConfigType;
-//import net.justmili.corelibs.v1.config.FileType;
-//import net.justmili.corelibs.v1.config.MConfigBuilder;
-//import net.justmili.corelibs.v1.config.entry.ConfigEntry;
-//import net.justmili.corelibs.v1.config.entry.ListConfigEntry;
-//
-//import java.util.List;
-//
-//public class ExampleConfig {
-//    // Leave your builders exposed if you want to hook your mod to Mod Menu or (Neo)Forge Config...
-//    public static MConfigBuilder server = new MConfigBuilder("examplemod", ConfigType.SERVER, FileType.JSON5, true);
-//    public static MConfigBuilder client = new MConfigBuilder("examplemod", ConfigType.CLIENT, FileType.JSON5, true);
-//
-//    public static ConfigEntry<Integer> someInt;
-//    public static ConfigEntry<Float> someFloat;
-//    public static ConfigEntry<Double> someDouble;
-//    public static ConfigEntry<Long> someLong;
-//    public static ConfigEntry<Boolean> someBool;
-//    public static ConfigEntry<String> someString;
-//    public static ListConfigEntry<Double> someDoubleList;
-//    public static ListConfigEntry<String> someStringList;
-//
-//    public static void register() {
-//        // ...Or keep it in the register method if you'd like
-//        // (but you won't be able to integrate your mod with Mod Menu/(Neo)Forge Config)
-//        // MConfigBuilder server = new MConfigBuilder("examplemod", "suffix-or-suffix", FileType.JSON5, true);
-//
-//        someInt = server.comment("Integer entry comment")
-//            .define("someInt", 10, 0, 100);
-//
-//        server.openCat("Decimal Numbers");
-//        someFloat = server.comment("Float entry comment")
-//            .define("someFloat", 1.0f, 0.1f, 5.0f);
-//
-//        someDouble = server.comment("Double entry comment")
-//            .define("someDouble", 2.5, 0.0, 20.0);
-//
-//        someLong = server.comment("Long entry comment")
-//            .define("someLong", 123456789L, Long.MIN_VALUE, Long.MAX_VALUE);
-//        server.closeCat();
-//
-//        someBool = server.comment("Boolean entry comment")
-//            .define("someBool", true);
-//
-//        server.comment("A category comment").openCat("Strings");
-//        someString = server.comment("String entry comment")
-//            .define("someString", "Awawawa");
-//
-//        server.openCat("Strings Category");
-//        someStringList = server.comment("List entry comment - A string list")
-//            .defineList("someStringList", List.of("minecraft:grass_block", "minecraft:dirt", "minecraft:stone"));
-//        server.closeCat();
-//
-//        server.closeCat();
-//
-//        someDoubleList = server.comment("List entry comment - A double list")
-//            .defineList("someDoubleList", List.of(4.2, 6.9, 6.7));
-//
-//        server.build(); // Will create, load and update the config file depending on the situation
-//
-//        // You can also create configs like so, but they will not be accessible throughout the code of your mod
-//        ConfigEntry<Integer> somethingForTheClientToBuild = client.define("clientInt", 69, 0, 70);
-//
-//        client.build();
-//    }
-//}
+// TODO: after finishing v2 config lib make example config account for EVERYTHING
+package net.justmili.mcl.config;
+
+import net.justmili.mcl.v2.lib.config.*;
+
+public class ExampleConfig {
+    public static MConfigBuilder clientJson = createBuilder(ConfigTypes.CLIENT, FileTypes.JSON);
+    public static MConfigBuilder serverJson = createBuilder(ConfigTypes.SERVER, FileTypes.JSON);
+    public static MConfigBuilder commonJson = createBuilder(ConfigTypes.COMMON, FileTypes.JSON);
+    public static MConfigBuilder commonClientJson = createBuilder(ConfigTypes.COMMON_CLIENT_PRIORITY, FileTypes.JSON);
+    public static MConfigBuilder commonServerJson = createBuilder(ConfigTypes.COMMON_SERVER_PRIORITY, FileTypes.JSON);
+
+    public static MConfigBuilder clientJson5 = createBuilder(ConfigTypes.CLIENT, FileTypes.JSON5);
+    public static MConfigBuilder serverJson5 = createBuilder(ConfigTypes.SERVER, FileTypes.JSON5);
+    public static MConfigBuilder commonJson5 = createBuilder(ConfigTypes.COMMON, FileTypes.JSON5);
+    public static MConfigBuilder commonClientJson5 = createBuilder(ConfigTypes.COMMON_CLIENT_PRIORITY, FileTypes.JSON5);
+    public static MConfigBuilder commonServerJson5 = createBuilder(ConfigTypes.COMMON_SERVER_PRIORITY, FileTypes.JSON5);
+
+    public static MConfigBuilder clientProps = createBuilder(ConfigTypes.CLIENT, FileTypes.PROPERTIES);
+    public static MConfigBuilder serverProps = createBuilder(ConfigTypes.SERVER, FileTypes.PROPERTIES);
+    public static MConfigBuilder commonProps = createBuilder(ConfigTypes.COMMON, FileTypes.PROPERTIES);
+    public static MConfigBuilder commonClientProps = createBuilder(ConfigTypes.COMMON_CLIENT_PRIORITY, FileTypes.PROPERTIES);
+    public static MConfigBuilder commonServerProps = createBuilder(ConfigTypes.COMMON_SERVER_PRIORITY, FileTypes.PROPERTIES);
+
+    // TODO: Options here
+
+    // Function made only for purpose of this example
+    private static MConfigBuilder createBuilder(ConfigTypes env, FileTypes ext) {
+        return new MConfigBuilder("examplemod", null, env, ext, true);
+    }
+
+    public static void initClient() {
+
+    }
+
+    public static void initServer() {
+
+    }
+
+    public static void initCommon() {
+
+    }
+
+    public static void initCommonClient() {
+
+    }
+
+    public static void initCommonServer() {
+
+    }
+}

@@ -5,7 +5,7 @@ import net.justmili.mcl.v2.lib.config.items.CommentItem
 import net.justmili.mcl.v2.lib.config.options.*
 import java.util.function.Consumer
 
-class MConfigBuilder @JvmOverloads constructor(modId: String, customFileName: String? = null, configType: ConfigTypes, fileType: FileTypes, createSubDirectory: Boolean = false) {
+class MConfigBuilder @JvmOverloads constructor(modId: String, customFileName: String?, configType: ConfigTypes, fileType: FileTypes, createSubDirectory: Boolean = false) {
     private val loader = MConfigLoader(modId, customFileName, configType, fileType, createSubDirectory)
 
     fun create(): ConfigBuilder {

@@ -60,7 +60,7 @@ abstract class OptionBuilder<T : Any, B : OptionBuilder<T, B>>(private val loade
         if (image != null) option.image = image
 
         val text = comment
-        if (text != null) option.setComment(text)
+        if (text != null) option.comment = text
 
         category.add(option)
         return option

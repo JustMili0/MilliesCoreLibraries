@@ -1,13 +1,16 @@
+import net.justmili.dslprops.*
+
 plugins {
     // This plugin applies the correct loom variant based on the Minecraft version
     id("dev.kikugie.loom-back-compat")
+    id("dslprops-props")
     alias(libs.plugins.publish)
     kotlin("jvm") version "2.4.21"
 }
 
 // DO NOT set group = ...!
-version = "${property("mod.version")}+mc${sc.current.version}-Fabric"
-base.archivesName = property("mod.archives_base_name") as String
+version = "$modVersion+mc$mcVersion-Fabric"
+base.archivesName = baseName
 
 val requiredJava: JavaVersion = when {
     sc.current.parsed >= "26.1" -> JavaVersion.VERSION_25
@@ -18,8 +21,7 @@ val requiredJava: JavaVersion = when {
 }
 
 // Used for publishing on Modrinth and Curseforge
-val compatibleVersions: List<String> =
-    sc.properties.rawOrNull("mod", "mc_releases")?.asList().orEmpty().map { it.toString() }
+val compatibleVersions: List<String> = sc.properties.rawOrNull("mod", "mc_releases")?.asList().orEmpty().map { it.toString() }
 
 // Versions before 26.1 are obfuscated (remapped), 26.1+ are not
 val obfuscated = sc.current.parsed < "26.1"
@@ -45,7 +47,7 @@ repositories {
 }
 
 dependencies {
-    minecraft("com.mojang:minecraft:${sc.current.version}")
+    minecraft("com.mojang:minecraft:$mcVersion")
     // Applies Mojang Mappings on obfuscated versions
     loomx.applyMojangMappings()
 
@@ -113,12 +115,12 @@ tasks {
         }
 
         val props = buildMap {
-            register("mod_id", sc.properties["mod.id"])
-            register("mod_name", sc.properties["mod.name"])
-            register("mod_version", sc.properties["mod.version"])
-            register("mod_description", sc.properties["mod.description"])
-            register("mod_authors", sc.properties["mod.authors"])
-            register("mod_license", sc.properties["mod.license"])
+            register("mod_id", modId)
+            register("mod_name", modName)
+            register("mod_version", modVersion)
+            register("mod_description", modDesc)
+            register("mod_authors", modAuthor)
+            register("mod_license", modLicense)
             register("fabric_loader_version", sc.properties["deps.fabric_loader"])
             register("fabric_api_version", sc.properties["deps.fabric_api"])
             register("kotlin_version", sc.properties["deps.kotlin"])
@@ -140,20 +142,19 @@ tasks {
         group = "build"
         description = "Builds mod jars and copies results to `build/libs/{mod version}/`"
 
-        inputs.property("version", project.property("mod.version"))
+        inputs.property("version", modVersion)
         // loomx.modJar returns the jar task for the applied loom variant
         from(loomx.modJar.flatMap { it.archiveFile })
-        into(rootProject.layout.buildDirectory.file("libs/${project.property("mod.version")}"))
+        into(rootProject.layout.buildDirectory.file("libs/$modVersion"))
     }
 }
 
 publishMods {
-    file = loomx.modJar.flatMap { it.archiveFile }
+    file = loomx.modJar.flatMap {it.archiveFile}
     modLoaders.add("fabric")
 
-    // TODO: bring back one build-logic is ported
-    //changelog = readChangelogFromBranch("origin/rep-info", ".Changelogs/${project.property("mod.version")}-Changelog.md")
-    changelog = "No changelog"
+    // Reads `.Changelogs/<mod.version>-Fabric.md` from the origin/rep-info branch
+    changelog = readChangelog()
 
     modrinth {
         accessToken = providers.gradleProperty("modrinth_token")
@@ -162,21 +163,21 @@ publishMods {
         minecraftVersions.addAll(compatibleVersions)
         environment = CLIENT_OR_SERVER
         // STABLE, BETA, ALPHA
-        type = ALPHA
+        type = BETA
 
         requires("fabric-api")
     }
 
-//    curseforge {
-//        accessToken = providers.gradleProperty("curseforge_token")
-//        projectId = "abcdefg"
-//
-//        minecraftVersions.addAll(compatibleVersions)
-//        clientRequired = true
-//        serverRequired = true
-//        // STABLE, BETA, ALPHA
-//        type = STABLE
-//
-//        requires("fabric-api")
-//    }
+    //    curseforge {
+    //        accessToken = providers.gradleProperty("curseforge_token")
+    //        projectId = "abcdefg"
+    //
+    //        minecraftVersions.addAll(compatibleVersions)
+    //        clientRequired = true
+    //        serverRequired = true
+    //        // STABLE, BETA, ALPHA
+    //        type = STABLE
+    //
+    //        requires("fabric-api")
+    //    }
 }

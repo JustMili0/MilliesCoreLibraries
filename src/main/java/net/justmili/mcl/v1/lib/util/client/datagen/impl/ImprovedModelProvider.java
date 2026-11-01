@@ -19,7 +19,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.*;
 
-// this is just Minecraft code but with the Fabric API patches on top of it, because Forge doesn't have a similar system unfortunately.
+// this is just Minecraft code but with the Fabric API patches on top of it, because Forge doesn't have a similar system, unfortunately.
 public abstract class ImprovedModelProvider implements DataProvider {
     private final PackOutput.PathProvider blockStatePathProvider;
     private final PackOutput.PathProvider modelPathProvider;

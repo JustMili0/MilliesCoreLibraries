@@ -1,42 +1,41 @@
-package multiloader
+package net.justmili.dslprops
 
 import org.gradle.api.Project
-import org.gradle.api.artifacts.VersionCatalogsExtension
-import org.gradle.kotlin.dsl.getByType
+
+private fun Project.prop(key: String): String =
+    property(key) as? String ?: error("Missing or non-string Gradle property '$key'")
 
 val Project.root: Project
     get() = rootProject
 
 val Project.modId: String
-    get() = root.property("mod_id") as String
+    get() = prop("mod.id")
 
 val Project.modName: String
-    get() = root.property("mod_name") as String
+    get() = prop("mod.name")
 
 val Project.modVersion: String
-    get() = root.property("mod_version") as String
+    get() = prop("mod.version")
 
 val Project.modDesc: String
-    get() = root.property("mod_description") as String
+    get() = prop("mod.description")
 
 val Project.modLicense: String
-    get() = root.property("mod_license") as String
+    get() = prop("mod.license")
 
 val Project.modAuthor: String
-    get() = root.property("mod_authors") as String
+    get() = prop("mod.authors")
 
 val Project.baseName: String
-    get() = root.property("archives_base_name") as String
+    get() = prop("mod.archives_base_name")
 
 val Project.mcVersion: String
-    get() = root.extensions.getByType<VersionCatalogsExtension>()
-        .find("libs").get()
-        .findVersion("minecraft").get()
-        .requiredVersion
+    get() = name
 
 fun Project.readChangelogFromBranch(branch: String, path: String): String {
     return try {
         val output = providers.exec {
+            workingDir = rootProject.projectDir // `git show <branch>:<path>` resolves the path from the repo root
             commandLine("git", "show", "$branch:$path")
             isIgnoreExitValue = true
         }
@@ -50,3 +49,7 @@ fun Project.readChangelogFromBranch(branch: String, path: String): String {
         "No changelog found"
     }
 }
+
+/** Shortcut for the Fabric-only layout: `.Changelogs/<mod.version>-Fabric.md` on the given branch. */
+fun Project.readChangelog(branch: String = "origin/rep-info"): String =
+    readChangelogFromBranch(branch, ".Changelogs/$modVersion-Fabric.md")
