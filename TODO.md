@@ -18,6 +18,7 @@
 - Add Javadocs, proper comments, write documentation
   - For documentation create `docs.lumynitystudios.net`
   - [MILLIE] Maybe hire someone to write it all🧍‍♀️
+- ADD AN ICON
 
 # TODO (0.0.2b)
 - Finish Config

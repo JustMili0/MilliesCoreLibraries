@@ -17,7 +17,6 @@
     "sources": "https://github.com/JustMili0/MilliesCoreLibraries"
   },
   "license": "${mod_license}",
-  "icon": "icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
