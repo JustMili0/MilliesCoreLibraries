@@ -21,21 +21,21 @@ class MConfigLoader(private val modId: String, customFileName: String?, configTy
     init {
         val configDir = Platform.CONFIG_DIR
         val directory = if (createSubDirectory) configDir.resolve(modId) else configDir
-        val extension = fileType.extension()
+        val extension = fileType.getExtension()
         val usesSuffix = customFileName != null || !createSubDirectory
 
         // Uses alternative suffix for Common Priority config files if a regular common config exists
-        val primaryPath = getPath(directory, configType.suffix(), extension, usesSuffix)
-        val alternativePath = getPath(directory, configType.altSuffix(), extension, usesSuffix)
+        val primaryPath = getPath(directory, configType.getSuffix(), extension, usesSuffix)
+        val alternativePath = getPath(directory, configType.getAltSuffix(), extension, usesSuffix)
         val usesAltSuffix = CLAIMED_PATHS.contains(primaryPath) && primaryPath != alternativePath
-        this.suffix = if (usesAltSuffix) configType.altSuffix() else configType.suffix()
+        this.suffix = if (usesAltSuffix) configType.getAltSuffix() else configType.getSuffix()
         this.path = if (usesAltSuffix) alternativePath else primaryPath
         this.file = this.path.toFile()
 
         if (!CLAIMED_PATHS.add(path)) CoreLibs.LOGGER.warn("Config file name '{}' of '{}' is already in use, files will overwrite each other.", file.name, modId)
     }
 
-    fun root(): CategoryItem {
+    fun getRoot(): CategoryItem {
         return root
     }
 

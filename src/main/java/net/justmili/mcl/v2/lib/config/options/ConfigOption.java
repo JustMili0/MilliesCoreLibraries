@@ -34,7 +34,7 @@ public class ConfigOption<T> implements ConfigItem {
         Collections.addAll(this.flags, flags);
     }
 
-    public String key() {
+    public String getKey() {
         return key;
     }
 
@@ -48,7 +48,7 @@ public class ConfigOption<T> implements ConfigItem {
     }
 
     public boolean set(T value) {
-        if (!validate(value)) return false;
+        if (!isValid(value)) return false;
         if (value.equals(this.value)) return true;
 
         this.value = value;
@@ -57,7 +57,7 @@ public class ConfigOption<T> implements ConfigItem {
     }
 
     public boolean setSynced(T value) {
-        if (!validate(value)) return false;
+        if (!isValid(value)) return false;
 
         this.synced = value;
         return true;
@@ -84,12 +84,12 @@ public class ConfigOption<T> implements ConfigItem {
         return attachedImage;
     }
 
-    public void comment(String comment) {
+    public void setComment(String comment) {
         this.comment = comment;
     }
 
     @Nullable
-    public String comment() {
+    public String getComment() {
         return comment;
     }
 
@@ -118,7 +118,7 @@ public class ConfigOption<T> implements ConfigItem {
         return load(JsonOps.INSTANCE, defaultValue instanceof String? new JsonPrimitive(raw) : parseText(raw));
     }
 
-    private boolean validate(@Nullable T value) {
+    private boolean isValid(@Nullable T value) {
         return defaultValue.getClass().isInstance(value) && validator.test(value);
     }
 

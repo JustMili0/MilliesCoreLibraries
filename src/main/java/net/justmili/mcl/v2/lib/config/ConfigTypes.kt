@@ -68,11 +68,11 @@ enum class ConfigTypes {
         this.altSuffix = altName
     }
 
-    fun suffix(): String {
+    fun getSuffix(): String {
         return suffix
     }
 
-    fun altSuffix(): String {
+    fun getAltSuffix(): String {
         return altSuffix
     }
 }

@@ -15,11 +15,11 @@ enum class OptionFlags {
 
     private val id: ResourceLocation = CoreLibs.asId("config_option_flag." + this.name.lowercase())
 
-    fun id(): ResourceLocation {
+    fun getId(): ResourceLocation {
         return id
     }
 
-    fun descName(): String {
+    fun getDescName(): String {
         return name.lowercase().replace("requires_", "").replace("_", " ")
     }
 }

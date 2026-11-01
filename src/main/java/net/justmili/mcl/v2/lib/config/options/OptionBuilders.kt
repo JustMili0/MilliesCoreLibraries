@@ -14,15 +14,15 @@ abstract class OptionBuilder<T : Any, B : OptionBuilder<T, B>>(private val loade
 
     protected abstract fun self(): B
 
-    protected open fun validator(): Predicate<T> {
+    protected open fun getValidator(): Predicate<T> {
         return Predicate {true}
     }
 
-    protected open fun bounds(): String? {
+    protected open fun getBounds(): String? {
         return null
     }
 
-    protected fun default(value: T): B {
+    protected fun setDefaultValue(value: T): B {
         this.defaultValue = value
         return self()
     }
@@ -52,15 +52,15 @@ abstract class OptionBuilder<T : Any, B : OptionBuilder<T, B>>(private val loade
 
     fun buildOption(): ConfigOption<T> {
         val value = checkNotNull(defaultValue) {"Config option '$key' has no default value."}
-        val validator = validator()
+        val validator = getValidator()
         require(validator.test(value)) {"Default value '$value' of config option '$key' does not meet its own limits."}
 
-        val option = ConfigOption(key, value, codec, validator, bounds(), loader::save, *flags)
+        val option = ConfigOption(key, value, codec, validator, getBounds(), loader::save, *flags)
         val image = attachedImage
         if (image != null) option.image = image
 
         val text = comment
-        if (text != null) option.comment(text)
+        if (text != null) option.setComment(text)
 
         category.add(option)
         return option
@@ -73,12 +73,12 @@ class BooleanOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: S
         return this
     }
 
-    override fun bounds(): String {
+    override fun getBounds(): String {
         return "Allowed values: true, false"
     }
 
     fun setDefault(value: Boolean): BooleanOptionBuilder {
-        return default(value)
+        return setDefaultValue(value)
     }
 }
 
@@ -89,17 +89,17 @@ class StringOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: St
         return this
     }
 
-    override fun validator(): Predicate<String> {
+    override fun getValidator(): Predicate<String> {
         val limit = charLimit
         return Predicate {candidate: String -> candidate.length <= limit}
     }
 
-    override fun bounds(): String? {
+    override fun getBounds(): String? {
         return if (charLimit == Int.MAX_VALUE) null else "Maximum length: $charLimit"
     }
 
     fun setDefault(value: String): StringOptionBuilder {
-        return default(value)
+        return setDefaultValue(value)
     }
 
     fun setCharLimit(limit: Int): StringOptionBuilder {
@@ -112,17 +112,17 @@ class StringOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: St
 abstract class NumberOptionBuilder<T, B : NumberOptionBuilder<T, B>>(loader: MConfigLoader, category: CategoryItem, key: String, codec: Codec<T>) : OptionBuilder<T, B>(loader, category, key, codec) where T : Comparable<T>, T : Any {
     private var range: ClosedRange<T>? = null
 
-    override fun validator(): Predicate<T> {
+    override fun getValidator(): Predicate<T> {
         val limit = range
         return Predicate {candidate: T -> limit == null || candidate in limit}
     }
 
-    override fun bounds(): String? {
+    override fun getBounds(): String? {
         val limit = range
         return if (limit == null) null else "Allowed range: ${limit.start} to ${limit.endInclusive}"
     }
 
-    protected fun range(min: T, max: T): B {
+    protected fun setRangeLimit(min: T, max: T): B {
         require(min <= max) {"Minimum can't be higher than maximum."}
         this.range = min..max
         return self()
@@ -136,11 +136,11 @@ class IntOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: Strin
     }
 
     fun setDefault(value: Int): IntOptionBuilder {
-        return default(value)
+        return setDefaultValue(value)
     }
 
     fun setRange(min: Int, max: Int): IntOptionBuilder {
-        return range(min, max)
+        return setRangeLimit(min, max)
     }
 }
 
@@ -151,11 +151,11 @@ class LongOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: Stri
     }
 
     fun setDefault(value: Long): LongOptionBuilder {
-        return default(value)
+        return setDefaultValue(value)
     }
 
     fun setRange(min: Long, max: Long): LongOptionBuilder {
-        return range(min, max)
+        return setRangeLimit(min, max)
     }
 }
 
@@ -166,11 +166,11 @@ class FloatOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: Str
     }
 
     fun setDefault(value: Float): FloatOptionBuilder {
-        return default(value)
+        return setDefaultValue(value)
     }
 
     fun setRange(min: Float, max: Float): FloatOptionBuilder {
-        return range(min, max)
+        return setRangeLimit(min, max)
     }
 }
 
@@ -181,10 +181,10 @@ class DoubleOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: St
     }
 
     fun setDefault(value: Double): DoubleOptionBuilder {
-        return default(value)
+        return setDefaultValue(value)
     }
 
     fun setRange(min: Double, max: Double): DoubleOptionBuilder {
-        return range(min, max)
+        return setRangeLimit(min, max)
     }
 }

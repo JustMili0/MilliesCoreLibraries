@@ -9,7 +9,7 @@ class MConfigBuilder @JvmOverloads constructor(modId: String, customFileName: St
     private val loader = MConfigLoader(modId, customFileName, configType, fileType, createSubDirectory)
 
     fun create(): ConfigBuilder {
-        return ConfigBuilder(loader, loader.root())
+        return ConfigBuilder(loader, loader.getRoot())
     }
 
     open class ConfigBuilder(private val loader: MConfigLoader, private val category: CategoryItem) {
@@ -59,8 +59,8 @@ class MConfigBuilder @JvmOverloads constructor(modId: String, customFileName: St
     }
 
     class CategoryBuilder(loader: MConfigLoader, category: CategoryItem, private val child: CategoryItem) : ConfigBuilder(loader, category) {
-        fun comment(comment: String): CategoryBuilder {
-            child.comment(comment)
+        fun setComment(comment: String): CategoryBuilder {
+            child.setComment(comment)
             return this
         }
     }

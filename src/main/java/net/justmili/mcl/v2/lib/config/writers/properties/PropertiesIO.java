@@ -18,10 +18,10 @@ public class PropertiesIO implements FileWriter {
 
     @Override
     public void write(Path path, CategoryItem root) {
-        checkForDupedKeys(path, root.children(), new HashSet<>());
+        checkForDupedKeys(path, root.getChildren(), new HashSet<>());
         FileIO.write(path, writer -> {
             writer.write(TOKEN_POUND + path.getFileName() + "\n\n");
-            writeItems(writer, root.children(), false);
+            writeItems(writer, root.getChildren(), false);
         });
     }
 
@@ -32,22 +32,22 @@ public class PropertiesIO implements FileWriter {
                     CoreLibs.LOGGER.warn("Categories are not supported in properties config format - they will not exist in the file.");
                     warnedAboutCategories = true;
                 }
-                writeDescComment(writer, cat.comment(), TOKEN_POUND, NO_INDENT);
-                writeItems(writer, cat.children(), warnedAboutCategories);
+                writeDescComment(writer, cat.getComment(), TOKEN_POUND, NO_INDENT);
+                writeItems(writer, cat.getChildren(), warnedAboutCategories);
 
             } else if (item instanceof CommentItem comment) {
-                writeDescComment(writer, comment.text, TOKEN_POUND, NO_INDENT);
+                writeDescComment(writer, comment.getText(), TOKEN_POUND, NO_INDENT);
 
             } else if (item instanceof ConfigOption<?> option) {
                 writeOptionComment(writer, option, TOKEN_POUND, NO_INDENT);
-                writer.write(option.key() + "=" + escape(option.toText()) + "\n\n");
+                writer.write(option.getKey() + "=" + escape(option.toText()) + "\n\n");
             }
         }
     }
 
     @Override
     public boolean load(Path path, CategoryItem root) {
-        checkForDupedKeys(path, root.children(), new HashSet<>());
+        checkForDupedKeys(path, root.getChildren(), new HashSet<>());
         var properties = new Properties();
         try (var reader = Files.newBufferedReader(path)) {
             properties.load(reader);
@@ -56,17 +56,17 @@ public class PropertiesIO implements FileWriter {
             return false;
         }
 
-        loadItems(properties, root.children());
+        loadItems(properties, root.getChildren());
         return true;
     }
 
     private void loadItems(Properties properties, List<ConfigItem> items) {
         for (var item : items) {
             if (item instanceof CategoryItem cat) {
-                loadItems(properties, cat.children());
+                loadItems(properties, cat.getChildren());
             } else if (item instanceof ConfigOption<?> option) {
-                var raw = properties.getProperty(option.key());
-                if (raw != null && !option.loadText(raw)) CoreLibs.LOGGER.warn("Invalid value '{}' for config option '{}', using default.", raw, option.key());
+                var raw = properties.getProperty(option.getKey());
+                if (raw != null && !option.loadText(raw)) CoreLibs.LOGGER.warn("Invalid value '{}' for config option '{}', using default.", raw, option.getKey());
             }
         }
     }
@@ -74,9 +74,9 @@ public class PropertiesIO implements FileWriter {
     private void checkForDupedKeys(Path path, List<ConfigItem> items, Set<String> keys) {
         for (var item : items) {
             if (item instanceof CategoryItem cat) {
-                checkForDupedKeys(path, cat.children(), keys);
-            } else if (item instanceof ConfigOption<?> option && !keys.add(option.key())) {
-                throw new IllegalArgumentException("Config option '" + option.key() + "' exists more than once in '" + path.getFileName() + "', categories are not supported in properties config format.");
+                checkForDupedKeys(path, cat.getChildren(), keys);
+            } else if (item instanceof ConfigOption<?> option && !keys.add(option.getKey())) {
+                throw new IllegalArgumentException("Config option '" + option.getKey() + "' exists more than once in '" + path.getFileName() + "', categories are not supported in properties config format.");
             }
         }
     }

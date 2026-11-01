@@ -22,7 +22,7 @@ public interface FileWriter {
 
     default List<String> getDetails(ConfigOption<?> option) {
         var lines = new ArrayList<String>();
-        if (!option.getFlags().isEmpty()) lines.add("Requires: " + listFlags(option));
+        if (!option.getFlags().isEmpty()) lines.add("Requires: " + getFlagNames(option));
 
         var parts = new ArrayList<String>();
         if (option.getBounds() != null) parts.add(option.getBounds());
@@ -51,16 +51,16 @@ public interface FileWriter {
     }
 
     default void writeOptionComment(BufferedWriter writer, ConfigOption<?> option, String token, String indent) throws IOException {
-        writeDescComment(writer, option.comment(), token, indent);
+        writeDescComment(writer, option.getComment(), token, indent);
         for (var line : getDetails(option)) {
             writer.write(indent + token + line + "\n");
         }
     }
 
-    private String listFlags(ConfigOption<?> option) {
+    private String getFlagNames(ConfigOption<?> option) {
         var flags = new ArrayList<String>();
         for (var flag : option.getFlags()) {
-            flags.add(flag.descName());
+            flags.add(flag.getDescName());
         }
         return String.join(", ", flags);
     }

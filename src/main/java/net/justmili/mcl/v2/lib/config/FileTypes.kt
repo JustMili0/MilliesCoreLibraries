@@ -6,7 +6,7 @@ enum class FileTypes(private val extension: String) {
     PROPERTIES(".properties"),
     TOML(".toml");
 
-    fun extension(): String {
+    fun getExtension(): String {
         return extension
     }
 }

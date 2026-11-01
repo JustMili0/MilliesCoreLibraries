@@ -23,23 +23,23 @@ public class ConfigCodec {
 
     private static <T> DataResult<T> encodeCat(CategoryItem category, DynamicOps<T> ops, T prefix) {
         var builder = ops.mapBuilder();
-        for (var item : category.children()) {
+        for (var item : category.getChildren()) {
             if (item instanceof ConfigOption<?> option) {
-                option.encode(ops).ifPresent(value -> builder.add(option.key(), value));
+                option.encode(ops).ifPresent(value -> builder.add(option.getKey(), value));
             } else if (item instanceof CategoryItem child) {
-                encodeCat(child, ops, ops.empty()).result().ifPresent(value -> builder.add(child.name(), value));
+                encodeCat(child, ops, ops.empty()).result().ifPresent(value -> builder.add(child.getName(), value));
             }
         }
         return builder.build(prefix);
     }
 
     private static <T> void decodeCat(CategoryItem category, DynamicOps<T> ops, MapLike<T> map) {
-        for (var item : category.children()) {
+        for (var item : category.getChildren()) {
             if (item instanceof ConfigOption<?> option) {
-                var value = map.get(option.key());
-                if (value != null && !option.load(ops, value)) CoreLibs.LOGGER.warn("Invalid value for config option '{}'.", option.key());
+                var value = map.get(option.getKey());
+                if (value != null && !option.load(ops, value)) CoreLibs.LOGGER.warn("Invalid value for config option '{}'.", option.getKey());
             } else if (item instanceof CategoryItem child) {
-                var value = map.get(child.name());
+                var value = map.get(child.getName());
                 if (value != null) ops.getMap(value).result().ifPresent(childMap -> decodeCat(child, ops, childMap));
             }
         }
