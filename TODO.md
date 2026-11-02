@@ -1,5 +1,5 @@
 ### Notes
-- Keep TODO and README on the latest main branch you're working on
+- Keep TODO updated
 - A lot of classes such as utils etc. can be copied from JustMili's other projects
 
 # FIRST-PRIORITY TODO (0.0.1b)

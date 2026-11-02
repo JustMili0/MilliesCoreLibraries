@@ -4,13 +4,12 @@ import com.google.gson.*;
 import com.mojang.serialization.JsonOps;
 import net.justmili.mcl.CoreLibs;
 import net.justmili.mcl.v2.lib.config.MConfigLoader;
-import net.justmili.mcl.v2.lib.config.items.*;
+import net.justmili.mcl.v2.lib.config.items.CategoryItem;
 import net.justmili.mcl.v2.lib.config.writers.ConfigCodec;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
 
 public class SharedJsonIO {
 
