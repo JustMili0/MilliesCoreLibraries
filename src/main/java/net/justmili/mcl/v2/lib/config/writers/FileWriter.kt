@@ -18,7 +18,9 @@ interface FileWriter {
 
         val parts = ArrayList<String>()
         option.bounds?.let(parts::add)
-        parts.add("Default: " + option.default.toString().replace("\r", "\\r").replace("\n", "\\n"))
+
+        val default = option.default.toString().replace("\r", "\\r").replace("\n", "\\n")
+        parts.add(if (default.isEmpty()) "Empty by default" else "Default: $default")
         lines.add(parts.joinToString(" - "))
 
         return lines
@@ -26,7 +28,6 @@ interface FileWriter {
 
     fun addPeriod(comment: String?): String? {
         if (comment.isNullOrBlank()) return null
-
         val stripped = comment.trimEnd()
         return if (stripped.last() in ".!?:;*-~") stripped else "$stripped."
     }

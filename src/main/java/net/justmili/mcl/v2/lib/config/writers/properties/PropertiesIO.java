@@ -76,7 +76,7 @@ public class PropertiesIO implements FileWriter {
             if (item instanceof CategoryItem cat) {
                 checkForDupedKeys(path, cat.getChildren(), keys);
             } else if (item instanceof ConfigOption<?> option && !keys.add(option.getKey())) {
-                throw new IllegalArgumentException("Config option '" + option.getKey() + "' exists more than once in '" + path.getFileName() + "', categories are not supported in properties config format.");
+                throw new IllegalArgumentException("Duplicate config option '" + option.getKey() + "' detected in '" + path.getFileName() + "' after removing categories (not supported in the properties format), duplicate keys are not allowed.");
             }
         }
     }

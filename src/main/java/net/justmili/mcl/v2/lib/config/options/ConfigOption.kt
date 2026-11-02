@@ -1,25 +1,16 @@
 package net.justmili.mcl.v2.lib.config.options
 
-import com.google.gson.JsonElement
-import com.google.gson.JsonParseException
-import com.google.gson.JsonParser
-import com.google.gson.JsonPrimitive
-import com.mojang.serialization.Codec
-import com.mojang.serialization.DynamicOps
-import com.mojang.serialization.JsonOps
+import com.google.gson.*
+import com.mojang.serialization.*
 import net.justmili.mcl.CoreLibs
 import net.justmili.mcl.v2.lib.config.items.ConfigItem
 import net.minecraft.resources.ResourceLocation
-import java.util.Collections
-import java.util.EnumSet
-import java.util.Optional
+import java.util.*
 import java.util.function.Predicate
 
 class ConfigOption<T : Any>(val key: String, val default: T, private val codec: Codec<T>, private val validator: Predicate<T>, val bounds: String?, private val saver: Runnable, vararg flags: OptionFlags) : ConfigItem {
-    @Volatile
-    private var value: T = default
-    @Volatile
-    private var synced: T? = null
+    @Volatile private var value: T = default
+    @Volatile private var synced: T? = null
     val flags: Set<OptionFlags> = Collections.unmodifiableSet(flags.toCollection(EnumSet.noneOf(OptionFlags::class.java)))
     var attachedImage: ResourceLocation? = null
     var comment: String? = null
@@ -64,7 +55,8 @@ class ConfigOption<T : Any>(val key: String, val default: T, private val codec: 
     }
 
     fun toText(): String {
-        return encode(JsonOps.INSTANCE).map {element -> if (element is JsonPrimitive) element.asString else element.toString()}.orElse("")
+        val element = encode(JsonOps.INSTANCE).orElse(null) ?: return ""
+        return if (element is JsonPrimitive) element.asString else element.toString()
     }
 
     fun loadText(raw: String): Boolean {
@@ -72,7 +64,7 @@ class ConfigOption<T : Any>(val key: String, val default: T, private val codec: 
     }
 
     private fun isValid(value: T): Boolean {
-        return default.javaClass.isInstance(value) && validator.test(value)
+        return validator.test(value)
     }
 
     private fun parseText(raw: String): JsonElement {

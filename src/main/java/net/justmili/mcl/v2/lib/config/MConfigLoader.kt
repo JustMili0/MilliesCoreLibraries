@@ -39,14 +39,12 @@ class MConfigLoader(private val modId: String, customFileName: String?, configTy
         return root
     }
 
-    @Synchronized
-    fun save() {
+    @Synchronized fun save() {
         if (!file.exists()) CoreLibs.LOGGER.error("Config file '{}' of '{}' is missing, creating new.", file.name, modId)
         writer.write(path, root)
     }
 
-    @Synchronized
-    fun buildOrLoad() {
+    @Synchronized fun buildOrLoad() {
         if (!file.exists()) {
             writer.write(path, root)
         } else if (writer.load(path, root)) {
@@ -73,8 +71,7 @@ class MConfigLoader(private val modId: String, customFileName: String?, configTy
     companion object {
         private val CLAIMED_PATHS: MutableSet<Path> = HashSet()
 
-        @JvmStatic
-        fun loadError(e: String?) {
+        @JvmStatic fun loadError(e: String?) {
             CoreLibs.LOGGER.error("Failed to load config: {}", e)
         }
     }
