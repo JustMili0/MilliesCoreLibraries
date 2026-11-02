@@ -12,6 +12,12 @@ class MConfigBuilder @JvmOverloads constructor(modId: String, customFileName: St
         return ConfigBuilder(loader, loader.getRoot())
     }
 
+    fun create(content: Consumer<ConfigBuilder>): ConfigBuilder {
+        val root = create()
+        content.accept(root)
+        return root
+    }
+
     open class ConfigBuilder(private val loader: MConfigLoader, private val category: CategoryItem) {
         fun addComment(comment: String): ConfigBuilder {
             category.add(CommentItem(comment))

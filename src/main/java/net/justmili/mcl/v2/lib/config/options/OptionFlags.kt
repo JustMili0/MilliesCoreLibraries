@@ -4,7 +4,10 @@ import net.justmili.mcl.CoreLibs
 import net.minecraft.resources.ResourceLocation
 
 enum class OptionFlags {
-    REQUIRES_DUMMY_FLAG, // dummy test flag that does nothing
+    // dummy test flags that do nothing (to be removed when config lib is finished)
+    REQUIRES_DUMMY_FLAG_1,
+    REQUIRES_DUMMY_FLAG_2,
+
     REQUIRES_GAME_RESTART,
     REQUIRES_LEVEL_RELOAD,
     REQUIRES_ASSETS_RELOAD,

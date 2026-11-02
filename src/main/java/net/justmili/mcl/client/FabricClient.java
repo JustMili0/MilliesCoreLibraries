@@ -2,7 +2,9 @@ package net.justmili.mcl.client;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.justmili.mcl.config.Config;
+import net.justmili.mcl.config.TestConfig;
 import net.justmili.mcl.v1.api.events.bridge.ClientEventsBridge;
+import net.justmili.mcl.v1.lib.util.Platform;
 import net.justmili.mcl.v2.lib.config.sync.SyncPriorityConfigs;
 
 public class FabricClient implements ClientModInitializer {
@@ -13,5 +15,6 @@ public class FabricClient implements ClientModInitializer {
         SyncPriorityConfigs.initC2S();
 
         Config.initClient();
+        if (Platform.IS_DEV_ENV) TestConfig.initCommon();
     }
 }

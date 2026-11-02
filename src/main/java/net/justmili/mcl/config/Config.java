@@ -15,12 +15,12 @@ public class Config {
             .addCategory("Icon Type", cat -> {
                 alwaysPride = cat.addBooleanOption("alwaysUsePrideIcons")
                     .setDefault(false)
-                    .setComment("Config Screen icons will always appear as their Pride Month variant   ")
+                    .addComment("Config Screen icons will always appear as their Pride Month variant   ")
                     .buildOption();
                 alwaysDefault = cat.addBooleanOption("alwaysUseDefaultIcons")
                     .setDefault(false)
-                    .setFlags(OptionFlags.REQUIRES_DUMMY_FLAG)
-                    .setComment("Config Screen icons will always appear as their Default variant.")
+                    .addFlags(OptionFlags.REQUIRES_DUMMY_FLAG_1)
+                    .addComment("Config Screen icons will always appear as their Default variant.")
                     .buildOption();
             }).build();
     }

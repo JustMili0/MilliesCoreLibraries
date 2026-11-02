@@ -27,7 +27,7 @@ abstract class OptionBuilder<T : Any, B : OptionBuilder<T, B>>(private val loade
         return self()
     }
 
-    fun setFlags(vararg flags: OptionFlags): B {
+    fun addFlags(vararg flags: OptionFlags): B {
         this.flags = flags
         return self()
     }
@@ -45,7 +45,7 @@ abstract class OptionBuilder<T : Any, B : OptionBuilder<T, B>>(private val loade
         return attachedImage
     }
 
-    fun setComment(comment: String): B {
+    fun addComment(comment: String): B {
         this.comment = comment
         return self()
     }
@@ -57,7 +57,7 @@ abstract class OptionBuilder<T : Any, B : OptionBuilder<T, B>>(private val loade
 
         val option = ConfigOption(key, value, codec, validator, getBounds(), loader::save, *flags)
         val image = attachedImage
-        if (image != null) option.image = image
+        if (image != null) option.attachedImage = image
 
         val text = comment
         if (text != null) option.comment = text
