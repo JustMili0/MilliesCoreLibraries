@@ -39,11 +39,4 @@ public class SharedJsonIO {
     public static String quote(String text) {
         return new JsonPrimitive(text).toString();
     }
-
-    public static int getLastRealIndex(List<ConfigItem> items) {
-        for (int i = items.size() - 1; i >= 0; i--) {
-            if (!(items.get(i) instanceof CommentItem)) return i;
-        }
-        return -1;
-    }
 }
