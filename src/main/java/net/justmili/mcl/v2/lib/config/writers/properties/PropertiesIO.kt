@@ -6,19 +6,19 @@ import net.justmili.mcl.v1.lib.util.common.FileIO
 import net.justmili.mcl.v2.lib.config.MConfigLoader
 import net.justmili.mcl.v2.lib.config.items.*
 import net.justmili.mcl.v2.lib.config.options.ConfigOption
-import net.justmili.mcl.v2.lib.config.writers.FileWriter
+import net.justmili.mcl.v2.lib.config.writers.ConfigIO
 import java.io.BufferedWriter
 import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.*
 
-class PropertiesIO : FileWriter {
+class PropertiesIO : ConfigIO {
 
     override fun write(path: Path, root: CategoryItem) {
         checkForDupedKeys(path, root.getChildren(), HashSet())
         FileIO.write(path) {writer ->
-            writer.write(FileWriter.TOKEN_POUND + path.fileName + "\n\n")
+            writer.write(ConfigIO.TOKEN_POUND + path.fileName + "\n\n")
             writeItems(writer, root.getChildren(), false)
         }
     }
@@ -32,13 +32,13 @@ class PropertiesIO : FileWriter {
                         CoreLibs.LOGGER.warn("Categories are not supported in properties config format - they will not exist in the file.")
                         warned = true
                     }
-                    writeDescComment(writer, item.getComment(), FileWriter.TOKEN_POUND, FileWriter.NO_INDENT)
+                    writeDescComment(writer, item.getComment(), ConfigIO.TOKEN_POUND, ConfigIO.NO_INDENT)
                     writeItems(writer, item.getChildren(), warned)
                 }
 
-                is CommentItem -> writeDescComment(writer, item.text, FileWriter.TOKEN_POUND, FileWriter.NO_INDENT)
+                is CommentItem -> writeDescComment(writer, item.text, ConfigIO.TOKEN_POUND, ConfigIO.NO_INDENT)
                 is ConfigOption<*> -> {
-                    writeOptionComment(writer, item, FileWriter.TOKEN_POUND, FileWriter.NO_INDENT)
+                    writeOptionComment(writer, item, ConfigIO.TOKEN_POUND, ConfigIO.NO_INDENT)
                     writer.write(item.key + "=" + escape(item.toText()) + "\n\n")
                 }
             }

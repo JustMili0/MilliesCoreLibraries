@@ -4,13 +4,13 @@ import com.google.gson.JsonObject;
 import net.justmili.mcl.v1.lib.util.common.FileIO;
 import net.justmili.mcl.v2.lib.config.items.*;
 import net.justmili.mcl.v2.lib.config.options.ConfigOption;
-import net.justmili.mcl.v2.lib.config.writers.FileWriter;
+import net.justmili.mcl.v2.lib.config.writers.ConfigIO;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JsonIO implements FileWriter {
+public class JsonIO implements ConfigIO {
 
     @Override
     public void write(Path path, CategoryItem root) {

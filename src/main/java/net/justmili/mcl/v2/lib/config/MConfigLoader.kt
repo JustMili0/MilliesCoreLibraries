@@ -3,7 +3,7 @@ package net.justmili.mcl.v2.lib.config
 import net.justmili.mcl.CoreLibs
 import net.justmili.mcl.v1.lib.util.Platform
 import net.justmili.mcl.v2.lib.config.items.CategoryItem
-import net.justmili.mcl.v2.lib.config.writers.FileWriter
+import net.justmili.mcl.v2.lib.config.writers.ConfigIO
 import net.justmili.mcl.v2.lib.config.writers.json.Json5IO
 import net.justmili.mcl.v2.lib.config.writers.json.JsonIO
 import net.justmili.mcl.v2.lib.config.writers.properties.PropertiesIO
@@ -54,7 +54,7 @@ class MConfigLoader(private val modId: String, customFileName: String?, configTy
         }
     }
 
-    private fun getWriter(fileType: FileTypes): FileWriter {
+    private fun getWriter(fileType: FileTypes): ConfigIO {
         return when (fileType) {
             FileTypes.JSON -> JsonIO()
             FileTypes.JSON5 -> Json5IO()

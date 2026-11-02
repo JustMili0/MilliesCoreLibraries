@@ -6,7 +6,7 @@ import java.io.BufferedWriter
 import java.io.IOException
 import java.nio.file.Path
 
-interface FileWriter {
+interface ConfigIO {
 
     fun write(path: Path, root: CategoryItem)
 
