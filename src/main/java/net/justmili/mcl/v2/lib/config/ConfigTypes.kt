@@ -30,19 +30,10 @@ enum class ConfigTypes {
      *
      * Both client and server have a local configuration file, but when
      * connected, the client's values override the server's values in
-     * cases where this is used.
-     *
-     * Recommended only for uses where a client tells the server what it wants
-     * or where a lack of client-side installation defaults to server's values
-     * being used for the client.
-     *
-     * File name matches COMMON unless a COMMON config already exists.
-     * Config values synchronize temporarily when used.
+     * cases where values from this config type are used.
      */
-    // TODO: probably rewrite the javadoc for this accordingly to the idea
-    // IDEA: When .get() is used on an option from a client priority config,
-    // server tries to ask client for their values.
-    // If client doesn't have the mod to give the values it defaults to server's
+    // TODO: Redo to be more like what Vein n' Timber does for its few shared values - https://github.com/JustMili0/Vein-n-Timber
+    // And finish the Javadoc for this one
     COMMON_CLIENT_PRIORITY("common", "common-client"),
 
     /**
