@@ -2,7 +2,7 @@
 publish = "2.2.0"
 
 # https://github.com/Bawnorton/MixinSquared/releases
-mixinsquared = "0.3.3"
+mixinsquared = "0.3.7"
 
 [plugins]
 publish = { id = "me.modmuss50.mod-publish-plugin", version.ref = "publish" }

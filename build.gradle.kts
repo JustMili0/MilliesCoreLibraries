@@ -42,7 +42,8 @@ repositories {
 
     mavenCentral()
     maven("https://repo.spongepowered.org/repository/maven-public/")
-    maven("https://maven.enjarai.dev/mirrors") // MixinSquared mirror
+    maven("https://maven.bawnorton.com/releases")
+    maven("https://maven.enjarai.dev/mirrors")
     maven("https://maven.lumynitystudios.net/") // Lumynity Studios' mods
 }
 
