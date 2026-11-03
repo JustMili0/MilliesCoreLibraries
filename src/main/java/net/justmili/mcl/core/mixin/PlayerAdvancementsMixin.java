@@ -19,28 +19,19 @@ public abstract class PlayerAdvancementsMixin {
     @Shadow
     private ServerPlayer player;
 
-    @Shadow
-    public abstract AdvancementProgress getOrStartProgress(Advancement advancement);
-
-    @Unique
-    private boolean corelibs$isProgressive;
-
     @Inject(method = "reload", at = @At("TAIL"))
     private void corelibs$reload(ServerAdvancementManager manager, CallbackInfo ci) {
         AdvancementEvents.RELOAD.invoker().onReload(player, manager);
     }
 
-    @Inject(method = "award", at = @At("HEAD"))
-    private void corelibs$trackProgress(Advancement advancement, String criterion, CallbackInfoReturnable<Boolean> cir) {
-        corelibs$isProgressive = getOrStartProgress(advancement).hasProgress();
+    @Inject(method = "startProgress", at = @At("TAIL"))
+    private void corelibs$startProgress(Advancement advancement, AdvancementProgress progress, CallbackInfo ci) {
+        AdvancementEvents.START_PROGRESS.invoker().onStartProgress(player, advancement);
     }
 
     @Inject(method = "award", at = @At("TAIL"))
     private void corelibs$award(Advancement advancement, String criterion, CallbackInfoReturnable<Boolean> cir) {
         if (!cir.getReturnValueZ()) return;
-        boolean firstProgress = !corelibs$isProgressive;
-
-        if (firstProgress) AdvancementEvents.START_PROGRESS.invoker().onStartProgress(player, advancement);
         AdvancementEvents.AWARD.invoker().onAward(player, advancement);
     }
 
