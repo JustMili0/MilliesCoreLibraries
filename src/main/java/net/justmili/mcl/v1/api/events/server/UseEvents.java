@@ -16,8 +16,6 @@ import net.minecraft.world.level.block.state.BlockState;
  * <p>Everything except {@link #ITEM_PRE} is directly connected to Fabric API events
  */
 public class UseEvents {
-    private UseEvents() {
-    }
 
     /**
      * An event that is called before an item is used.

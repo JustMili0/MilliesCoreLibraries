@@ -20,8 +20,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class PlayerEvents {
-    private PlayerEvents() {
-    }
 
     public static final Event<Respawn> RESPAWN = EventFactory.createArrayBacked(Respawn.class, callbacks -> (oldPlayer, newPlayer, alive) -> {
         for (var event : callbacks) {

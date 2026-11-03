@@ -1,38 +1,52 @@
 package net.justmili.mcl.core.mixin;
 
-import net.justmili.mcl.v1.api.events.server.PlayerAdvancementEvents;
+import net.justmili.mcl.v1.api.events.server.AdvancementEvents;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.PlayerAdvancements;
+import net.minecraft.server.ServerAdvancementManager;
 import net.minecraft.server.level.ServerPlayer;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+// CORELIBS TODO: Mojang did something with advancements in newer versions, needs checking after we're done with 1.20.1 dev
 @Mixin(PlayerAdvancements.class)
-public class PlayerAdvancementsMixin {
+public abstract class PlayerAdvancementsMixin {
 
     @Shadow
     private ServerPlayer player;
 
-    @Inject(at = @At("HEAD"), method = "startProgress")
-    private void startProgressMixin(Advancement advancement, AdvancementProgress advancementProgress, CallbackInfo ci) {
-        PlayerAdvancementEvents.START_PROGRESS.invoker().startProgress(player, advancement, advancementProgress);
+    @Shadow
+    public abstract AdvancementProgress getOrStartProgress(Advancement advancement);
+
+    @Unique
+    private boolean corelibs$isProgressive;
+
+    @Inject(method = "reload", at = @At("TAIL"))
+    private void corelibs$reload(ServerAdvancementManager manager, CallbackInfo ci) {
+        AdvancementEvents.RELOAD.invoker().onReload(player, manager);
     }
 
-    @Inject(at = @At("HEAD"), method = "award")
-    private void onAdvancementAward(Advancement advancement, String string, CallbackInfoReturnable<Boolean> cir) {
-        PlayerAdvancementEvents.AWARD.invoker().awardAdvancement(player, advancement);
-        player.sendSystemMessage(Component.literal("advancement " + advancement.getId()));
+    @Inject(method = "award", at = @At("HEAD"))
+    private void corelibs$trackProgress(Advancement advancement, String criterion, CallbackInfoReturnable<Boolean> cir) {
+        corelibs$isProgressive = getOrStartProgress(advancement).hasProgress();
     }
 
-    @Inject(at = @At("HEAD"), method = "revoke")
-    private void onAdvancementRevoke(Advancement advancement, String string, CallbackInfoReturnable<Boolean> cir) {
-        PlayerAdvancementEvents.REVOKE.invoker().revokeAdvancement(player, advancement);
+    @Inject(method = "award", at = @At("TAIL"))
+    private void corelibs$award(Advancement advancement, String criterion, CallbackInfoReturnable<Boolean> cir) {
+        if (!cir.getReturnValueZ()) return;
+        boolean firstProgress = !corelibs$isProgressive;
+
+        if (firstProgress) AdvancementEvents.START_PROGRESS.invoker().onStartProgress(player, advancement);
+        AdvancementEvents.AWARD.invoker().onAward(player, advancement);
     }
 
+    @Inject(method = "revoke", at = @At("TAIL"))
+    private void corelibs$revoke(Advancement advancement, String criterion, CallbackInfoReturnable<Boolean> cir) {
+        if (!cir.getReturnValueZ()) return;
+        AdvancementEvents.REVOKE.invoker().onRevoke(player, advancement);
+    }
 }

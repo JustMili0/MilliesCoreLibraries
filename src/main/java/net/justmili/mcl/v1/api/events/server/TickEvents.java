@@ -9,8 +9,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
 public class TickEvents {
-    private TickEvents() {
-    }
 
     public static final Event<ServerPre> SERVER_PRE = EventFactory.createArrayBacked(ServerPre.class, callbacks -> server -> {
         for (var event : callbacks) {
