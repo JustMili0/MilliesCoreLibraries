@@ -15,6 +15,7 @@
     "ItemEntityMixin",
     "ItemMixin",
     "LivingEntityMixin",
+    "PlayerAdvancementsMixin",
     "ResultSlotMixin",
     "ServerPlayerGameModeMixin",
     "ServerPlayerMixin",
