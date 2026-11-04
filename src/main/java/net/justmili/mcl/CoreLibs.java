@@ -14,11 +14,11 @@ public class CoreLibs implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(CoreLibs.class);
     public static final String ID = "corelibs";
     public static final String NAME = "Millie's Core Libraries";
-    public static final String BUILD = "0.0.2a";
+    public static final String BUILD = "0.1.14b";
 
     @Override
     public void onInitialize() {
-        ModUtil.specialInitMessage(LOGGER, NAME, ID, BUILD, ModUtil.VersionType.EARLY_DEV_ALPHA);
+        ModUtil.specialInitMessage(LOGGER, NAME, ID, BUILD, ModUtil.VersionType.EARLY_DEV_BETA);
 
         ServerEventsBridge.init();
         SyncPriorityConfigs.initS2C();

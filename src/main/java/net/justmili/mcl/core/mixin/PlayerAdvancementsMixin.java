@@ -6,7 +6,8 @@ import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.server.PlayerAdvancements;
 import net.minecraft.server.ServerAdvancementManager;
 import net.minecraft.server.level.ServerPlayer;
-import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -26,7 +27,7 @@ public abstract class PlayerAdvancementsMixin {
 
     @Inject(method = "startProgress", at = @At("TAIL"))
     private void corelibs$startProgress(Advancement advancement, AdvancementProgress progress, CallbackInfo ci) {
-        AdvancementEvents.START_PROGRESS.invoker().onStartProgress(player, advancement);
+        AdvancementEvents.START_PROGRESS.invoker().onStartProgress(player, advancement, progress);
     }
 
     @Inject(method = "award", at = @At("TAIL"))

@@ -16,21 +16,21 @@ public class AdvancementEvents {
         }
     });
 
-    public static final Event<Award> AWARD = EventFactory.createArrayBacked(Award.class, callbacks -> (player, advancement) -> {
+    public static final Event<StartProgress> START_PROGRESS = EventFactory.createArrayBacked(StartProgress.class, callbacks -> (player, advancement, progress) -> {
         for (var event : callbacks) {
-            event.onAward(player, advancement);
-        }
-    });
-
-    public static final Event<StartProgress> START_PROGRESS = EventFactory.createArrayBacked(StartProgress.class, callbacks -> (player, advancement) -> {
-        for (var event : callbacks) {
-            event.onStartProgress(player, advancement);
+            event.onStartProgress(player, advancement, progress);
         }
     });
 
     public static final Event<UpdateProgress> UPDATE_PROGRESS = EventFactory.createArrayBacked(UpdateProgress.class, callbacks -> (progress, criteria, requirements) -> {
         for (var event : callbacks) {
             event.onUpdateProgress(progress, criteria, requirements);
+        }
+    });
+
+    public static final Event<Award> AWARD = EventFactory.createArrayBacked(Award.class, callbacks -> (player, advancement) -> {
+        for (var event : callbacks) {
+            event.onAward(player, advancement);
         }
     });
 
@@ -46,18 +46,18 @@ public class AdvancementEvents {
     }
 
     @FunctionalInterface
-    public interface Award {
-        void onAward(ServerPlayer player, Advancement advancement);
-    }
-
-    @FunctionalInterface
     public interface StartProgress {
-        void onStartProgress(ServerPlayer player, Advancement advancement);
+        void onStartProgress(ServerPlayer player, Advancement advancement, AdvancementProgress progress);
     }
 
     @FunctionalInterface
     public interface UpdateProgress {
         void onUpdateProgress(AdvancementProgress progress, Map<String, Criterion> criteria, String[][] requirements);
+    }
+
+    @FunctionalInterface
+    public interface Award {
+        void onAward(ServerPlayer player, Advancement advancement);
     }
 
     @FunctionalInterface

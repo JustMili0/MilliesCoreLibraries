@@ -3,10 +3,7 @@ package net.justmili.mcl.v2.lib.config
 import net.justmili.mcl.CoreLibs
 import net.justmili.mcl.v1.lib.util.Platform
 import net.justmili.mcl.v2.lib.config.items.CategoryItem
-import net.justmili.mcl.v2.lib.config.writers.ConfigIO
-import net.justmili.mcl.v2.lib.config.writers.json.Json5IO
-import net.justmili.mcl.v2.lib.config.writers.json.JsonIO
-import net.justmili.mcl.v2.lib.config.writers.properties.PropertiesIO
+import net.justmili.mcl.v2.lib.config.writers.*
 import java.io.File
 import java.nio.file.Path
 
