@@ -5,7 +5,7 @@ import net.justmili.mcl.v2.lib.config.options.ConfigOption;
 import net.justmili.mcl.v2.lib.config.options.OptionFlags;
 import net.minecraft.util.Mth;
 
-@Deprecated(since = "1.0.0", forRemoval = true)
+@Deprecated(since = "corelibs:1.0.0", forRemoval = true)
 public class TestConfig {
     public static ConfigOption<Integer> rootInt;
     public static ConfigOption<Integer> rootIntRanged;
@@ -29,20 +29,21 @@ public class TestConfig {
     public static ConfigOption<Float> cat2Float;
     public static ConfigOption<Double> cat2Double;
     public static ConfigOption<String> cat2String;
+    public static ConfigOption<TestConfigEnum> rootEnum;
 
     // Function made only for purpose of this example test
-    private static MConfigBuilder createBuilder(FileTypes ext) {
+    private static MConfigBuilder builderOfType(FileTypes ext) {
         return new MConfigBuilder("examplemod", null, ConfigTypes.COMMON, ext, true);
     }
 
     public static void initCommon() {
         for (var type : FileTypes.getEntries()) {
             if (type == FileTypes.TOML) continue;
-            create(createBuilder(type));
+            buildWith(builderOfType(type));
         }
     }
 
-    public static void create(MConfigBuilder builder) {
+    private static void buildWith(MConfigBuilder builder) {
         builder.create(root -> {
             root.addComment("Config root comment");
             root.addComment("Second root comment\nwith two lines");
@@ -62,8 +63,13 @@ public class TestConfig {
                 .setRange(-99, -1)
                 .buildOption();
 
+            rootEnum = root.addEnumOption("rootEnum", TestConfigEnum.class)
+                .setDefault(TestConfigEnum.VALUE_2)
+                .addComment("Some enum value")
+                .buildOption();
+
             root.addCategory("Root Category", cat0 -> {
-                cat0StartBool = cat0.addBooleanOption("cat0StartBool")
+                cat0StartBool = cat0.addBoolOption("cat0StartBool")
                     .setDefault(true)
                     .addComment("Some boolean value")
                     .buildOption();
@@ -78,7 +84,7 @@ public class TestConfig {
                     .buildOption();
 
                 cat0.addCategory("Cat-in-cat 1", cat1 -> {
-                    cat1Bool = cat1.addBooleanOption("cat1Bool")
+                    cat1Bool = cat1.addBoolOption("cat1Bool")
                         .setDefault(false)
                         .addComment("Some boolean value")
                         .buildOption();
@@ -124,7 +130,7 @@ public class TestConfig {
                     .buildOption();
 
                 cat0.addCategory("Cat-in-cat 2", cat2 -> {
-                    cat2Bool = cat2.addBooleanOption("cat2Bool")
+                    cat2Bool = cat2.addBoolOption("cat2Bool")
                         .setDefault(true)
                         .addComment("Some boolean value with a flag")
                         .addFlags(OptionFlags.REQUIRES_GAME_RESTART)
@@ -153,7 +159,7 @@ public class TestConfig {
                         .buildOption();
                 });
 
-                cat0EndBool = cat0.addBooleanOption("cat0EndBool")
+                cat0EndBool = cat0.addBoolOption("cat0EndBool")
                     .setDefault(false)
                     .addComment("Some boolean value after every child category")
                     .buildOption();

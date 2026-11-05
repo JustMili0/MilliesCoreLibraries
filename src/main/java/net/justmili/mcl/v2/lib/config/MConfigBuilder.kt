@@ -5,7 +5,7 @@ import net.justmili.mcl.v2.lib.config.items.CommentItem
 import net.justmili.mcl.v2.lib.config.options.*
 import java.util.function.Consumer
 
-class MConfigBuilder @JvmOverloads constructor(modId: String, customFileName: String?, configType: ConfigTypes, fileType: FileTypes, createSubDirectory: Boolean = false) {
+class MConfigBuilder @JvmOverloads constructor(modId: String, customFileName: String? = null, configType: ConfigTypes, fileType: FileTypes, createSubDirectory: Boolean = false) {
     private val loader = MConfigLoader(modId, customFileName, configType, fileType, createSubDirectory)
 
     fun create(): ConfigBuilder {
@@ -31,7 +31,7 @@ class MConfigBuilder @JvmOverloads constructor(modId: String, customFileName: St
             return CategoryBuilder(loader, category, child)
         }
 
-        fun addBooleanOption(key: String): BooleanOptionBuilder {
+        fun addBoolOption(key: String): BooleanOptionBuilder {
             return BooleanOptionBuilder(loader, category, key)
         }
 
@@ -55,7 +55,10 @@ class MConfigBuilder @JvmOverloads constructor(modId: String, customFileName: St
             return DoubleOptionBuilder(loader, category, key)
         }
 
-        // TODO: Add Enum support
+        fun <E : Enum<E>> addEnumOption(key: String, type: Class<E>): EnumOptionBuilder<E> {
+            return EnumOptionBuilder(loader, category, key, type)
+        }
+
         // TODO: Add List<?>/Set support
         // TODO: Add (ARGB) color picker support
 

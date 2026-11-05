@@ -1,5 +1,6 @@
 package net.justmili.mcl.v2.lib.config.writers
 
+import net.justmili.mcl.v2.lib.config.codecs.EnumCodec
 import net.justmili.mcl.v2.lib.config.items.CategoryItem
 import net.justmili.mcl.v2.lib.config.options.ConfigOption
 import java.io.BufferedWriter
@@ -19,7 +20,8 @@ interface ConfigIO {
         val parts = ArrayList<String>()
         option.bounds?.let(parts::add)
 
-        val default = option.default.toString().replace("\r", "\\r").replace("\n", "\\n")
+        val default = ((option.default as? Enum<*>)?.let {EnumCodec.nameOf(it)} ?: option.default.toString())
+            .replace("\r", "\\r").replace("\n", "\\n")
         parts.add(if (default.isEmpty()) "Empty by default" else "Default: $default")
         lines.add(parts.joinToString(" - "))
 

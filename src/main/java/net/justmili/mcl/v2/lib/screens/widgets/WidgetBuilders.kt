@@ -1,9 +1,7 @@
 package net.justmili.mcl.v2.lib.screens.widgets
 
-abstract class WidgetBuilder {
-}
+abstract class WidgetBuilder
 
-class ButtonBuilder {
-}
+class ButtonBuilder
 
 // TODO: Add it all idk

@@ -60,7 +60,11 @@ class ConfigOption<T : Any>(val key: String, val default: T, private val codec: 
     }
 
     fun loadText(raw: String): Boolean {
-        return load(JsonOps.INSTANCE, if (default is String) JsonPrimitive(raw) else parseText(raw))
+        return load(JsonOps.INSTANCE, when (default) {
+            is String -> JsonPrimitive(raw)
+            is Enum<*> -> JsonPrimitive(raw.trim())
+            else -> parseText(raw)
+        })
     }
 
     private fun isValid(value: T): Boolean {

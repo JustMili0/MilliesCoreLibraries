@@ -1,4 +1,4 @@
-package net.justmili.mcl.v2.lib.config.writers
+package net.justmili.mcl.v2.lib.config.codecs
 
 import com.mojang.datafixers.util.Pair
 import com.mojang.serialization.*
@@ -44,7 +44,7 @@ object ConfigCodec {
         for (item in category.getChildren()) {
             if (item is ConfigOption<*>) {
                 val value = map.get(item.key)
-                if (value != null && !item.load(ops, value)) CoreLibs.LOGGER.warn("Invalid value for config option '{}'.", item.key)
+                if (value != null && !item.load(ops, value)) CoreLibs.LOGGER.warn("Invalid config option value of '{}'.", item.key)
             } else if (item is CategoryItem) {
                 val value = map.get(item.getName())
                 if (value != null) ops.getMap(value).result().ifPresent {childMap -> decodeCat(item, ops, childMap)}

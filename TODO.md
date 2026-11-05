@@ -6,7 +6,8 @@
 # FIRST-PRIORITY TODO (EARLY BETA)
 - [EVERYONE] Finish all the events
 - [MILLIE] Rewrite config from `v1.config` to `v2.config`
-  - Support for more entry types (TODO: Enum, Color, Lists [List, Set])
+  - Re-read config values after `/reload`
+  - Support for more entry types (TODO: Color, Lists [List, Set])
   - Support for converting old config file(s) and their entries into new ones
     - Add `.tryConvertFromOldFile(Path oldPath, Boolean deleteOldFile)` (path starts from config directory) to main builder
     - Add `.tryGetValueFromOldKey(String oldKey)` (from convert file tries to grab value from key and set it) to option builders

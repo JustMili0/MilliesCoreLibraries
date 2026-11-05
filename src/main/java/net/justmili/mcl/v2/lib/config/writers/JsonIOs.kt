@@ -5,6 +5,7 @@ import com.mojang.serialization.JsonOps
 import net.justmili.mcl.CoreLibs
 import net.justmili.mcl.v1.lib.util.common.FileIO
 import net.justmili.mcl.v2.lib.config.MConfigLoader
+import net.justmili.mcl.v2.lib.config.codecs.ConfigCodec
 import net.justmili.mcl.v2.lib.config.items.*
 import net.justmili.mcl.v2.lib.config.options.ConfigOption
 import java.io.BufferedWriter
