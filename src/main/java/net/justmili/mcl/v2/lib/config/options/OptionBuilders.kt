@@ -2,6 +2,7 @@ package net.justmili.mcl.v2.lib.config.options
 
 import com.mojang.serialization.Codec
 import net.justmili.mcl.v2.lib.config.MConfigLoader
+import net.justmili.mcl.v2.lib.config.codecs.EnumCodec
 import net.justmili.mcl.v2.lib.config.items.CategoryItem
 import net.minecraft.resources.ResourceLocation
 import java.util.function.Predicate
@@ -189,6 +190,20 @@ class DoubleOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: St
     }
 }
 
-// TODO: Add Enum support
+class EnumOptionBuilder<E : Enum<E>>(loader: MConfigLoader, category: CategoryItem, key: String, private val type: Class<E>) : OptionBuilder<E, EnumOptionBuilder<E>>(loader, category, key, EnumCodec.of(type)) {
+
+    override fun self(): EnumOptionBuilder<E> {
+        return this
+    }
+
+    override fun getBounds(): String {
+        return "Allowed values: " + type.enumConstants.joinToString(", ") {it.name}
+    }
+
+    fun setDefault(value: E): EnumOptionBuilder<E> {
+        return setDefaultValue(value)
+    }
+}
+
 // TODO: Add List<?>/Set support
 // TODO: Add (ARGB) color picker support

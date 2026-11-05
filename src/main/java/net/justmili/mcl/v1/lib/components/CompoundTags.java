@@ -1,9 +1,9 @@
-//? if < 1.20.5 {
+//? if <= 1.20.5 {
 package net.justmili.mcl.v1.lib.components;
 
 import net.minecraft.world.item.ItemStack;
 
-@Deprecated(since = "1.20.5")
+@Deprecated(since = "1.20.5", forRemoval = true)
 public final class CompoundTags {
     private CompoundTags() {
     }
