@@ -1,7 +1,7 @@
 package net.justmili.mcl.v2.lib.ttomle.data;
 
-import net.justmili.mcl.v2.lib.ttomle.TomlBuildingException;
-import net.justmili.mcl.v2.lib.ttomle.TomlUtils;
+import net.justmili.mcl.v2.lib.ttomle.builder.TomlBuildingException;
+import net.justmili.mcl.v2.lib.ttomle.util.TomlUtils;
 
 public class TomlDecimal extends TomlVariable {
 
@@ -38,7 +38,7 @@ public class TomlDecimal extends TomlVariable {
                     throw new RuntimeException(e);
                 }
             }
-            return TomlUtils.toTomlFloatString(value) + "E" + exponent;
+            return TomlUtils.toTomlFloatString(value) + "E" + exponent.value;
         }
         return TomlUtils.toTomlFloatString(value);
     }

@@ -1,4 +1,6 @@
-package net.justmili.mcl.v2.lib.ttomle;
+package net.justmili.mcl.v2.lib.ttomle.util;
+
+import net.justmili.mcl.v2.lib.ttomle.data.TomlStringType;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,8 +34,9 @@ public class TomlStringUtils {
         return Character.isLetterOrDigit(codePoint) || codePoint == '_' || codePoint == '-';
     }
 
-    public static String getCharacterString(int codePoint) {
-        return new String(Character.toChars(codePoint));
+    // check if this is whitespace i.e. a tab or a string;
+    public static boolean isWhitespace(int codePoint) {
+        return Character.isWhitespace(codePoint) && codePoint != '\n';
     }
 
     public static TomlStringType getPreferredStringType(String string) {

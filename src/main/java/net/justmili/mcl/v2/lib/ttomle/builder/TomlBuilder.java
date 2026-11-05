@@ -1,6 +1,8 @@
-package net.justmili.mcl.v2.lib.ttomle;
+package net.justmili.mcl.v2.lib.ttomle.builder;
 
-import net.justmili.mcl.v2.lib.ttomle.fields.TomlField;
+import net.justmili.mcl.v2.lib.ttomle.elements.*;
+import net.justmili.mcl.v2.lib.ttomle.elements.fields.TomlField;
+import net.justmili.mcl.v2.lib.ttomle.parser.TomlParsingException;
 
 import java.util.*;
 

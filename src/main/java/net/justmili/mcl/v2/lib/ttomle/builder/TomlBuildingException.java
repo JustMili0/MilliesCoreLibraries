@@ -1,4 +1,4 @@
-package net.justmili.mcl.v2.lib.ttomle;
+package net.justmili.mcl.v2.lib.ttomle.builder;
 
 public class TomlBuildingException extends Exception {
 

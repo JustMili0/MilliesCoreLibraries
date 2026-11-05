@@ -1,6 +1,6 @@
 package net.justmili.mcl.v2.lib.ttomle.data;
 
-import net.justmili.mcl.v2.lib.ttomle.TomlBuildingException;
+import net.justmili.mcl.v2.lib.ttomle.builder.TomlBuildingException;
 
 import java.util.List;
 

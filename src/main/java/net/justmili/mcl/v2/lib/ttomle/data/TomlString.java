@@ -1,7 +1,6 @@
 package net.justmili.mcl.v2.lib.ttomle.data;
 
-import net.justmili.mcl.v2.lib.ttomle.TomlStringType;
-import net.justmili.mcl.v2.lib.ttomle.TomlStringUtils;
+import net.justmili.mcl.v2.lib.ttomle.util.TomlStringUtils;
 
 public class TomlString extends TomlVariable {
 

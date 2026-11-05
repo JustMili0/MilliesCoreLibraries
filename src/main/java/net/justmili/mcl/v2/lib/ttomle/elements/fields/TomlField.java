@@ -1,7 +1,7 @@
-package net.justmili.mcl.v2.lib.ttomle.fields;
+package net.justmili.mcl.v2.lib.ttomle.elements.fields;
 
-import net.justmili.mcl.v2.lib.ttomle.TomlDottedElementName;
-import net.justmili.mcl.v2.lib.ttomle.TomlElement;
+import net.justmili.mcl.v2.lib.ttomle.elements.TomlDottedElementName;
+import net.justmili.mcl.v2.lib.ttomle.elements.TomlElement;
 import net.justmili.mcl.v2.lib.ttomle.data.TomlVariable;
 
 public class TomlField extends TomlElement {

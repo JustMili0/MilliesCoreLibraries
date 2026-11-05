@@ -1,22 +1,25 @@
-package net.justmili.mcl.v2.lib.ttomle;
+package net.justmili.mcl.v2.lib.ttomle.elements;
+
+import net.justmili.mcl.v2.lib.ttomle.data.TomlStringType;
+import net.justmili.mcl.v2.lib.ttomle.util.TomlStringUtils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class TomlTable extends TomlTableBase {
+public class TomlArrayTable extends TomlTableBase {
 
-    public TomlTable(String name) {
+    public TomlArrayTable(String name) {
         super(new TomlDottedElementName().addName(name, TomlStringType.DOUBLE));
     }
 
-    public TomlTable(TomlDottedElementName name) {
+    public TomlArrayTable(TomlDottedElementName name) {
         super(name);
     }
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("[");
+        builder.append("[[");
         for (int i = 0; i < name.depth(); i++) {
             String item = name.getName(i);
             Pattern pattern = Pattern.compile("([A-Za-z0-9_-]+)");
@@ -31,8 +34,7 @@ public class TomlTable extends TomlTableBase {
                 builder.append(".");
             }
         }
-        builder.append("]");
+        builder.append("]]");
         return builder.toString();
     }
-
 }

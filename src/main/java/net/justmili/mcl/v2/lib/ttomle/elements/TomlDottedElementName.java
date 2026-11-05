@@ -1,4 +1,7 @@
-package net.justmili.mcl.v2.lib.ttomle;
+package net.justmili.mcl.v2.lib.ttomle.elements;
+
+import net.justmili.mcl.v2.lib.ttomle.data.TomlStringType;
+import net.justmili.mcl.v2.lib.ttomle.util.TomlStringUtils;
 
 import java.util.ArrayList;
 import java.util.List;

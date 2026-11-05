@@ -8,4 +8,8 @@ public class TomlInteger extends TomlVariable {
     public TomlInteger(long value) {
         this.value = value;
     }
+
+    public String toString() {
+        return Long.toString(value);
+    }
 }
