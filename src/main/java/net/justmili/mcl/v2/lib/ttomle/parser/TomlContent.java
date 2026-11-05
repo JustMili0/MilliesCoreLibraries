@@ -49,7 +49,7 @@ public class TomlContent {
 
     // get the next whitespace and advances the index to the next non whitespace character
     // whitespace contains spaces and tabs but not line breaks
-    public int advanceThroughWhitespace() throws TomlParsingException{
+    public int advanceThroughWhitespace() throws TomlParsingException {
         if (isAtFileEnd) {// getting a character here throws an error
             return 0;
         }
@@ -86,21 +86,22 @@ public class TomlContent {
     }
 
     public int current() throws TomlParsingException {
-        if (isAtFileEnd)
+        if (isAtFileEnd) {
             throw new TomlParsingException("Cannot pull next the end of a the content");
+        }
         return chars.codePointAt(index);
     }
 
     public String getCurrentLine() {
-        int endIndex = contentSize-1;
-        for (int i = index;i<contentSize;i++) {
+        int endIndex = contentSize - 1;
+        for (int i = index; i < contentSize; i++) {
             if (chars.codePointAt(i) == '\n') {
                 endIndex = i;
                 break;
             }
         }
         int startIndex = 0;
-        for (int i = index;i >= 0;i--) {
+        for (int i = index; i >= 0; i--) {
             if (chars.codePointAt(i) == '\n') {
                 startIndex = i;
                 break;
@@ -109,22 +110,26 @@ public class TomlContent {
         return chars.substring(startIndex, endIndex);
     }
 
-    public int next() throws TomlParsingException{
+    public int next() throws TomlParsingException {
 
-        if (isAtFileEnd)
+        if (isAtFileEnd) {
             throw new TomlParsingException("Cannot pull next the end of a the content");
-        return chars.codePointAt(index+1);
+        }
+        return chars.codePointAt(index + 1);
     }
-    public int next(int next) throws TomlParsingException{
 
-        if (isAtFileEnd)
+    public int next(int next) throws TomlParsingException {
+
+        if (isAtFileEnd) {
             throw new TomlParsingException("Cannot pull next the end of a the content");
-        return chars.codePointAt(index+next);
+        }
+        return chars.codePointAt(index + next);
     }
 
     public boolean nextCharactersExist(int amount) {
-        if (index < 0)
+        if (index < 0) {
             return false;
+        }
         return index < contentSize - amount;
     }
 

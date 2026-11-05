@@ -1,7 +1,7 @@
 package net.justmili.mcl.v2.lib.ttomle.elements.fields;
 
-import net.justmili.mcl.v2.lib.ttomle.elements.TomlDottedElementName;
 import net.justmili.mcl.v2.lib.ttomle.data.TomlInteger;
+import net.justmili.mcl.v2.lib.ttomle.elements.TomlDottedElementName;
 
 public class TomlIntegerField extends TomlField {
 

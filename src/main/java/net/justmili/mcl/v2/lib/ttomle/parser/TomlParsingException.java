@@ -13,7 +13,7 @@ public class TomlParsingException extends Exception {
     public static String message(String message, TomlContent content) {
         String before;
         if (content.isAtFileEnd) {
-            before = content.chars.substring(0, content.getIndex()-1);
+            before = content.chars.substring(0, content.getIndex() - 1);
         } else {
             before = content.chars.substring(0, content.getIndex());
         }

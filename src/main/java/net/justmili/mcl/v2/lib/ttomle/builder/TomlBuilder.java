@@ -8,8 +8,8 @@ import java.util.*;
 
 public class TomlBuilder {
 
-    private List<TomlElement> elements;
-    private TomlBuilderOptions options;
+    private final List<TomlElement> elements;
+    private final TomlBuilderOptions options;
 
 
     public TomlBuilder(TomlBuilderOptions options) {
@@ -30,10 +30,10 @@ public class TomlBuilder {
         for (TomlElement element : this.elements) {
 
             if (element instanceof TomlTable) {
-                if (tableNames.contains(((TomlTable) element).name)) {
+                if (tableNames.contains(element.name)) {
                     throw new TomlParsingException("Two tables cannot have the same name!");
                 }
-                tableNames.add(((TomlTable) element).name);
+                tableNames.add(element.name);
             }
             if (element instanceof TomlTableBase) {
                 if (!sb.isEmpty()) {

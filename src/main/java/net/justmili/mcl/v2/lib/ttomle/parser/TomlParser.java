@@ -128,9 +128,9 @@ public class TomlParser {
 
                     content.advance();
                     content.advanceThroughWhitespace();
-                    
+
                     if (content.isAtFileEnd) {
-                        throw new TomlParsingException("OEF after equals sign. No valid field found.",content);
+                        throw new TomlParsingException("OEF after equals sign. No valid field found.", content);
                     }
 
                     // boolean
@@ -166,13 +166,13 @@ public class TomlParser {
                     }
 
                     // normal and literal strings
-                     if (content.current() == '"') {
+                    if (content.current() == '"') {
                         TomlString stringValue = getDoubleQuotedStringElementWithTriples();
                         TomlStringField field = new TomlStringField(name, stringValue);
                         elements.add(field);
                         continue;
                     }
-                     if (content.current() == '\'') {
+                    if (content.current() == '\'') {
                         TomlString stringValue = getLiteralStringElement();
                         TomlStringField field = new TomlStringField(name, stringValue);
                         elements.add(field);
@@ -324,7 +324,7 @@ public class TomlParser {
     private TomlString getLiteralStringElement() throws TomlParsingException {
         StringBuilder string = new StringBuilder();
         content.advance();
-        while(!content.isAtFileEndOrLineBreak()) {
+        while (!content.isAtFileEndOrLineBreak()) {
             if (content.current() == '\n') {
                 throw new TomlParsingException("String not finished before line break", content);
             }
@@ -337,7 +337,7 @@ public class TomlParser {
             string.append(Character.toString(content.current()));
             content.advance();
         }
-        throw new TomlParsingException("String was not terminated with ' \' '", content);
+        throw new TomlParsingException("String was not terminated with ' ' '", content);
     }
 
     // todo: add support for line ending backslash
@@ -371,7 +371,7 @@ public class TomlParser {
                         quoteCount++;
                     }
 
-                    String extraQuotes = "\"".repeat(quoteCount-3);
+                    String extraQuotes = "\"".repeat(quoteCount - 3);
                     builder.append(extraQuotes);
                     return new TomlString(builder.toString(), TomlStringType.TRIPLE_DOUBLE);
                 }
@@ -387,7 +387,7 @@ public class TomlParser {
 
         StringBuilder string = new StringBuilder();
 
-        while(TomlStringUtils.isCharInNoQuote(content.current()) && !content.isAtFileEndOrLineBreak()) {
+        while (TomlStringUtils.isCharInNoQuote(content.current()) && !content.isAtFileEndOrLineBreak()) {
             string.append(Character.toString(content.current()));
             content.advance();
         }
@@ -486,7 +486,7 @@ public class TomlParser {
 
         while (!content.isAtFileEndOrLineBreak()) {
 
-             if (Character.isDigit(content.current())) {
+            if (Character.isDigit(content.current())) {
                 numberAfter = false;
                 allowedPlus = false;
 
