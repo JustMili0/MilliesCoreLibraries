@@ -14,39 +14,39 @@ import org.joml.Quaternionf;
 
 public class ItemRenderEvents {
 
-    public static final Event<ModifyResolvedModel> MODIFY_RESOLVED_MODEL = EventFactory.createArrayBacked(ModifyResolvedModel.class, callbacks -> (stack, level, entity, model) -> {
+    public static final Event<ModifyResolvedModel> MODIFY_RESOLVED_MODEL = EventFactory.createArrayBacked(ModifyResolvedModel.class, callbacks -> (level, entity, stack, originalModel) -> {
         for (var event : callbacks) {
-            model = event.onModifyResolvedModel(stack, level, entity, model);
+            originalModel = event.onModifyResolvedModel(level, entity, stack, originalModel);
         }
-        return model;
+        return originalModel;
     });
 
-    public static final Event<ModifyModel> MODIFY_MODEL = EventFactory.createArrayBacked(ModifyModel.class, callbacks -> (stack, context, pose, model) -> {
+    public static final Event<ModifyModel> MODIFY_MODEL = EventFactory.createArrayBacked(ModifyModel.class, callbacks -> (stack, originalModel, pose, context) -> {
         for (var event : callbacks) {
-            model = event.onModifyModel(stack, context, pose, model);
+            originalModel = event.onModifyModel(stack, originalModel, pose, context);
         }
-        return model;
+        return originalModel;
     });
 
-    public static final Event<ModifyEntityRotation> MODIFY_ENTITY_ROTATION = EventFactory.createArrayBacked(ModifyEntityRotation.class, callbacks -> (entity, partialTick, rotation) -> {
+    public static final Event<ModifyEntityRotation> MODIFY_ENTITY_ROTATION = EventFactory.createArrayBacked(ModifyEntityRotation.class, callbacks -> (entity, originalRot, partialTick) -> {
         for (var event : callbacks) {
-            rotation = event.onModifyRotation(entity, partialTick, rotation);
+            originalRot = event.onModifyRotation(entity, originalRot, partialTick);
         }
-        return rotation;
+        return originalRot;
     });
 
     @FunctionalInterface
     public interface ModifyResolvedModel {
-        BakedModel onModifyResolvedModel(ItemStack stack, @Nullable Level level, @Nullable LivingEntity entity, BakedModel model);
+        BakedModel onModifyResolvedModel(@Nullable Level level, @Nullable LivingEntity entity, ItemStack stack, BakedModel originalModel);
     }
 
     @FunctionalInterface
     public interface ModifyModel {
-        BakedModel onModifyModel(ItemStack stack, ItemDisplayContext context, PoseStack pose, BakedModel model);
+        BakedModel onModifyModel(ItemStack stack, BakedModel originalModel, PoseStack pose, ItemDisplayContext context);
     }
 
     @FunctionalInterface
     public interface ModifyEntityRotation {
-        Quaternionf onModifyRotation(ItemEntity entity, float partialTick, Quaternionf rotation);
+        Quaternionf onModifyRotation(ItemEntity entity, Quaternionf originalRot, float partialTick);
     }
 }

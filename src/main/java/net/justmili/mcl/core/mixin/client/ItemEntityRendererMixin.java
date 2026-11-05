@@ -13,6 +13,6 @@ public class ItemEntityRendererMixin {
 
     @ModifyExpressionValue(method = "render(Lnet/minecraft/world/entity/item/ItemEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "INVOKE", target = "Lcom/mojang/math/Axis;rotation(F)Lorg/joml/Quaternionf;"))
     private Quaternionf corelibs$modifyRotation(Quaternionf original, ItemEntity entity, float entityYaw, float partialTick) {
-        return ItemRenderEvents.MODIFY_ENTITY_ROTATION.invoker().onModifyRotation(entity, partialTick, original);
+        return ItemRenderEvents.MODIFY_ENTITY_ROTATION.invoker().onModifyRotation(entity, original, partialTick);
     }
 }

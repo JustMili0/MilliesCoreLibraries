@@ -18,6 +18,6 @@ public class BlockRenderDispatcherMixin {
         "renderBatched*" // forge target (for later forge port)
     }, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/block/BlockRenderDispatcher;getBlockModel(Lnet/minecraft/world/level/block/state/BlockState;)Lnet/minecraft/client/resources/model/BakedModel;"), require = 0)
     private BakedModel corelibs$modifyBatchedModel(BakedModel original, BlockState state, BlockPos pos, BlockAndTintGetter level) {
-        return BlockRenderEvents.MODIFY_BATCHED_MODEL.invoker().onModifyBatchedModel(state, pos, level, original);
+        return BlockRenderEvents.MODIFY_BATCHED_MODEL.invoker().onModifyBatchedModel(level, state, pos, original);
     }
 }

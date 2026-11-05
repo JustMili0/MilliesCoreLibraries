@@ -20,11 +20,11 @@ public abstract class ItemRendererMixin {
 
     @ModifyVariable(method = "render(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;ZLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;IILnet/minecraft/client/resources/model/BakedModel;)V", at = @At("HEAD"), argsOnly = true, ordinal = 0)
     private BakedModel corelibs$modifyModel(BakedModel original, ItemStack stack, ItemDisplayContext context, boolean leftHand, PoseStack pose, MultiBufferSource buffer, int light, int overlay) {
-        return ItemRenderEvents.MODIFY_MODEL.invoker().onModifyModel(stack, context, pose, original);
+        return ItemRenderEvents.MODIFY_MODEL.invoker().onModifyModel(stack, original, pose, context);
     }
 
     @ModifyReturnValue(method = "getModel", at = @At("RETURN"))
     private BakedModel corelibs$modifyResolvedModel(BakedModel original, ItemStack stack, @Nullable Level level, @Nullable LivingEntity entity, int seed) {
-        return ItemRenderEvents.MODIFY_RESOLVED_MODEL.invoker().onModifyResolvedModel(stack, level, entity, original);
+        return ItemRenderEvents.MODIFY_RESOLVED_MODEL.invoker().onModifyResolvedModel(level, entity, stack, original);
     }
 }

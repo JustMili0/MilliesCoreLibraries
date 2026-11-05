@@ -9,15 +9,15 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class BlockRenderEvents {
 
-    public static final Event<ModifyBatchedModel> MODIFY_BATCHED_MODEL = EventFactory.createArrayBacked(ModifyBatchedModel.class, callbacks -> (state, pos, level, model) -> {
+    public static final Event<ModifyBatchedModel> MODIFY_BATCHED_MODEL = EventFactory.createArrayBacked(ModifyBatchedModel.class, callbacks -> (blockGetter, state, pos, originalModel) -> {
         for (var event : callbacks) {
-            model = event.onModifyBatchedModel(state, pos, level, model);
+            originalModel = event.onModifyBatchedModel(blockGetter, state, pos, originalModel);
         }
-        return model;
+        return originalModel;
     });
 
     @FunctionalInterface
     public interface ModifyBatchedModel {
-        BakedModel onModifyBatchedModel(BlockState state, BlockPos pos, BlockAndTintGetter level, BakedModel model);
+        BakedModel onModifyBatchedModel(BlockAndTintGetter blockGetter, BlockState state, BlockPos pos, BakedModel originalModel);
     }
 }
