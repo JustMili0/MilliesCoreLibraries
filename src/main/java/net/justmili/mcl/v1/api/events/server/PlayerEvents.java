@@ -81,10 +81,8 @@ public class PlayerEvents {
 
     public static final Event<BreakBlock> BREAK_BLOCK = EventFactory.createArrayBacked(BreakBlock.class, callbacks -> (level, player, oldState, newState, pos, wasDestroyed) -> {
         for (var event : callbacks) {
-            var result = event.onBlockBroken(level, player, oldState, newState, pos, wasDestroyed);
-            if (result) return false;
+            event.onBlockBroken(level, player, oldState, newState, pos, wasDestroyed);
         }
-        return true;
     });
 
     // TODO: add block place event
@@ -164,7 +162,7 @@ public class PlayerEvents {
 
     @FunctionalInterface
     public interface BreakBlock {
-        boolean onBlockBroken(ServerLevel level, ServerPlayer player, BlockState oldState, BlockState newState, BlockPos pos, boolean wasDestroyed);
+        void onBlockBroken(ServerLevel level, ServerPlayer player, BlockState oldState, BlockState newState, BlockPos pos, boolean wasDestroyed);
     }
 
     @FunctionalInterface
