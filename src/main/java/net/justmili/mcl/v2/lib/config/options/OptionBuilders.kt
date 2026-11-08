@@ -5,22 +5,17 @@ import net.justmili.mcl.v2.lib.config.MConfigLoader
 import net.justmili.mcl.v2.lib.config.codecs.EnumCodec
 import net.justmili.mcl.v2.lib.config.items.CategoryItem
 import net.minecraft.resources.ResourceLocation
-import java.util.function.Predicate
 
 abstract class OptionBuilder<T : Any, B : OptionBuilder<T, B>>(private val loader: MConfigLoader, private val category: CategoryItem, private val key: String, private val codec: Codec<T>) {
     private var defaultValue: T? = null
-    private var flags: Array<out OptionFlags> = emptyArray()
+    private var flagMask = 0
     private var attachedImage: ResourceLocation? = null
     private var comment: String? = null
+    private var oldKey: String? = null
 
-    protected abstract fun self(): B
-
-    protected open fun getValidator(): Predicate<T> {
-        return Predicate {true}
-    }
-
-    protected open fun getBounds(): String? {
-        return null
+    @Suppress("UNCHECKED_CAST")
+    protected fun self(): B {
+        return this as B
     }
 
     protected fun setDefaultValue(value: T): B {
@@ -28,13 +23,15 @@ abstract class OptionBuilder<T : Any, B : OptionBuilder<T, B>>(private val loade
         return self()
     }
 
-    fun addFlags(vararg flags: OptionFlags): B {
-        this.flags = flags
-        return self()
+    protected open fun getLimit(): OptionBounds<T>? {
+        return null
     }
 
-    fun getFlags(): Array<out OptionFlags> {
-        return flags
+    fun addFlags(vararg flags: OptionFlags): B {
+        for (flag in flags) {
+            flagMask = flagMask or flag.mask
+        }
+        return self()
     }
 
     fun addImage(path: ResourceLocation): B {
@@ -42,40 +39,43 @@ abstract class OptionBuilder<T : Any, B : OptionBuilder<T, B>>(private val loade
         return self()
     }
 
-    fun getImage(): ResourceLocation? {
-        return attachedImage
+    fun addComment(comment: String): B {
+        this.comment = this.comment?.let { it + "\n" + comment } ?: comment
+        return self()
     }
 
-    fun addComment(comment: String): B {
-        this.comment = comment
+    fun tryGetOldConfigKeyValue(oldKey: String): B {
+        require(oldKey.isNotBlank()) { "Old key of config option '$key' can't be blank." }
+        this.oldKey = oldKey
         return self()
     }
 
     fun buildOption(): ConfigOption<T> {
-        val value = checkNotNull(defaultValue) {"Config option '$key' has no default value."}
-        val validator = getValidator()
-        require(validator.test(value)) {"Default value '$value' of config option '$key' does not meet its own limits."}
+        val value = checkNotNull(defaultValue) { "Config option '$key' has no default value." }
+        val limit = getLimit()
+        require(limit == null || limit.isValid(value)) { "Default value '$value' of config option '$key' does not meet its own limits." }
 
-        val option = ConfigOption(key, value, codec, validator, getBounds(), loader::save, *flags)
-        val image = attachedImage
-        if (image != null) option.attachedImage = image
-
-        val text = comment
-        if (text != null) option.comment = text
+        val option = ConfigOption(key, value, codec, limit, loader, flagMask)
+        option.oldKey = oldKey
+        option.attachedImage = attachedImage
+        option.comment = comment
 
         category.add(option)
         return option
     }
 }
 
+class CodecOptionBuilder<T : Any>(loader: MConfigLoader, category: CategoryItem, key: String, codec: Codec<T>) : OptionBuilder<T, CodecOptionBuilder<T>>(loader, category, key, codec) {
+
+    fun setDefault(value: T): CodecOptionBuilder<T> {
+        return setDefaultValue(value)
+    }
+}
+
 class BooleanOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: String) : OptionBuilder<Boolean, BooleanOptionBuilder>(loader, category, key, Codec.BOOL) {
 
-    override fun self(): BooleanOptionBuilder {
-        return this
-    }
-
-    override fun getBounds(): String {
-        return "Allowed values: true, false"
+    override fun getLimit(): OptionBounds<Boolean> {
+        return BooleanBounds
     }
 
     fun setDefault(value: Boolean): BooleanOptionBuilder {
@@ -86,17 +86,8 @@ class BooleanOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: S
 class StringOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: String) : OptionBuilder<String, StringOptionBuilder>(loader, category, key, Codec.STRING) {
     private var charLimit = Int.MAX_VALUE
 
-    override fun self(): StringOptionBuilder {
-        return this
-    }
-
-    override fun getValidator(): Predicate<String> {
-        val limit = charLimit
-        return Predicate {candidate: String -> candidate.length <= limit}
-    }
-
-    override fun getBounds(): String? {
-        return if (charLimit == Int.MAX_VALUE) null else "Maximum length: $charLimit"
+    override fun getLimit(): OptionBounds<String>? {
+        return if (charLimit == Int.MAX_VALUE) null else LengthBounds(charLimit)
     }
 
     fun setDefault(value: String): StringOptionBuilder {
@@ -104,37 +95,27 @@ class StringOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: St
     }
 
     fun setCharLimit(limit: Int): StringOptionBuilder {
-        require(limit >= 0) {"Character limit can't be negative."}
+        require(limit >= 0) { "Character limit can't be negative." }
         this.charLimit = limit
         return this
     }
 }
 
 abstract class NumberOptionBuilder<T, B : NumberOptionBuilder<T, B>>(loader: MConfigLoader, category: CategoryItem, key: String, codec: Codec<T>) : OptionBuilder<T, B>(loader, category, key, codec) where T : Comparable<T>, T : Any {
-    private var range: ClosedRange<T>? = null
+    private var range: RangeBounds<T>? = null
 
-    override fun getValidator(): Predicate<T> {
-        val limit = range
-        return Predicate {candidate: T -> limit == null || candidate in limit}
-    }
-
-    override fun getBounds(): String? {
-        val limit = range
-        return if (limit == null) null else "Allowed range: ${limit.start} to ${limit.endInclusive}"
+    override fun getLimit(): OptionBounds<T>? {
+        return range
     }
 
     protected fun setRangeLimit(min: T, max: T): B {
-        require(min <= max) {"Minimum can't be higher than maximum."}
-        this.range = min..max
+        require(min <= max) { "Minimum can't be higher than maximum." }
+        this.range = RangeBounds(min, max)
         return self()
     }
 }
 
 class IntOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: String) : NumberOptionBuilder<Int, IntOptionBuilder>(loader, category, key, Codec.INT) {
-
-    override fun self(): IntOptionBuilder {
-        return this
-    }
 
     fun setDefault(value: Int): IntOptionBuilder {
         return setDefaultValue(value)
@@ -147,10 +128,6 @@ class IntOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: Strin
 
 class LongOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: String) : NumberOptionBuilder<Long, LongOptionBuilder>(loader, category, key, Codec.LONG) {
 
-    override fun self(): LongOptionBuilder {
-        return this
-    }
-
     fun setDefault(value: Long): LongOptionBuilder {
         return setDefaultValue(value)
     }
@@ -161,10 +138,6 @@ class LongOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: Stri
 }
 
 class FloatOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: String) : NumberOptionBuilder<Float, FloatOptionBuilder>(loader, category, key, Codec.FLOAT) {
-
-    override fun self(): FloatOptionBuilder {
-        return this
-    }
 
     fun setDefault(value: Float): FloatOptionBuilder {
         return setDefaultValue(value)
@@ -177,10 +150,6 @@ class FloatOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: Str
 
 class DoubleOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: String) : NumberOptionBuilder<Double, DoubleOptionBuilder>(loader, category, key, Codec.DOUBLE) {
 
-    override fun self(): DoubleOptionBuilder {
-        return this
-    }
-
     fun setDefault(value: Double): DoubleOptionBuilder {
         return setDefaultValue(value)
     }
@@ -192,18 +161,11 @@ class DoubleOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: St
 
 class EnumOptionBuilder<E : Enum<E>>(loader: MConfigLoader, category: CategoryItem, key: String, private val type: Class<E>) : OptionBuilder<E, EnumOptionBuilder<E>>(loader, category, key, EnumCodec.of(type)) {
 
-    override fun self(): EnumOptionBuilder<E> {
-        return this
-    }
-
-    override fun getBounds(): String {
-        return "Allowed values: " + type.enumConstants.joinToString(", ") {it.name}
+    override fun getLimit(): OptionBounds<E> {
+        return EnumBounds(type)
     }
 
     fun setDefault(value: E): EnumOptionBuilder<E> {
         return setDefaultValue(value)
     }
 }
-
-// TODO: Add List<?>/Set support
-// TODO: Add (ARGB) color picker support

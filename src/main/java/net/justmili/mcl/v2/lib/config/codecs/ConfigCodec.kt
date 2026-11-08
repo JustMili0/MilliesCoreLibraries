@@ -2,7 +2,7 @@ package net.justmili.mcl.v2.lib.config.codecs
 
 import com.mojang.datafixers.util.Pair
 import com.mojang.serialization.*
-import net.justmili.mcl.CoreLibs
+import net.justmili.mcl.v2.lib.config.MConfigLogger
 import net.justmili.mcl.v2.lib.config.items.CategoryItem
 import net.justmili.mcl.v2.lib.config.options.ConfigOption
 
@@ -18,7 +18,7 @@ object ConfigCodec {
 
         val decoder = object : Decoder<CategoryItem> {
             override fun <T> decode(ops: DynamicOps<T>, input: T): DataResult<Pair<CategoryItem, T>> {
-                return ops.getMap(input).map {map ->
+                return ops.getMap(input).map { map ->
                     decodeCat(root, ops, map)
                     Pair.of(root, input)
                 }
@@ -32,9 +32,9 @@ object ConfigCodec {
         val builder = ops.mapBuilder()
         for (item in category.getChildren()) {
             if (item is ConfigOption<*>) {
-                item.encode(ops).ifPresent {value -> builder.add(item.key, value)}
+                item.encode(ops).ifPresent { value -> builder.add(item.key, value) }
             } else if (item is CategoryItem) {
-                encodeCat(item, ops, ops.empty()).result().ifPresent {value -> builder.add(item.getName(), value)}
+                encodeCat(item, ops, ops.empty()).result().ifPresent { value -> builder.add(item.getName(), value) }
             }
         }
         return builder.build(prefix)
@@ -44,10 +44,10 @@ object ConfigCodec {
         for (item in category.getChildren()) {
             if (item is ConfigOption<*>) {
                 val value = map.get(item.key)
-                if (value != null && !item.load(ops, value)) CoreLibs.LOGGER.warn("Invalid config option value of '{}'.", item.key)
+                if (value != null && !item.load(ops, value)) MConfigLogger.invalidValue(item)
             } else if (item is CategoryItem) {
                 val value = map.get(item.getName())
-                if (value != null) ops.getMap(value).result().ifPresent {childMap -> decodeCat(item, ops, childMap)}
+                if (value != null) ops.getMap(value).result().ifPresent { childMap -> decodeCat(item, ops, childMap) }
             }
         }
     }

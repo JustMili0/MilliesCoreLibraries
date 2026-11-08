@@ -9,13 +9,16 @@ object EnumCodec {
     @JvmStatic
     fun <E : Enum<E>> of(type: Class<E>): Codec<E> {
         val constants = type.enumConstants
-        val byName = constants.associateBy {nameOf(it).lowercase()}
-        require(byName.size == constants.size) {"Enum '${type.simpleName}' has constants with the same name."}
+        for (i in constants.indices) {
+            for (j in i + 1 until constants.size) {
+                require(!nameOf(constants[i]).equals(nameOf(constants[j]), true)) { "Enum '${type.simpleName}' has constants with the same name." }
+            }
+        }
 
-        return Codec.STRING.comapFlatMap<E>({name ->
-            val constant = byName[name.lowercase()]
-            if (constant != null) DataResult.success(constant) else DataResult.error<E> {"Unknown value '$name', allowed values: " + names(type)}
-        }, {constant -> nameOf(constant)})
+        return Codec.STRING.comapFlatMap<E>({ name ->
+            val constant = type.enumConstants.firstOrNull { nameOf(it).equals(name, true) }
+            if (constant != null) DataResult.success(constant) else DataResult.error<E> { "Unknown value '$name', allowed values: " + names(type) }
+        }, { constant -> nameOf(constant) })
     }
 
     @JvmStatic
@@ -25,6 +28,6 @@ object EnumCodec {
 
     @JvmStatic
     fun names(type: Class<out Enum<*>>): String {
-        return type.enumConstants.joinToString(", ") {nameOf(it)}
+        return type.enumConstants.joinToString(", ") { nameOf(it) }
     }
 }

@@ -1,8 +1,10 @@
 package net.justmili.mcl.v2.lib.config
 
+import com.mojang.serialization.Codec
 import net.justmili.mcl.v2.lib.config.items.CategoryItem
 import net.justmili.mcl.v2.lib.config.items.CommentItem
 import net.justmili.mcl.v2.lib.config.options.*
+import java.nio.file.Path
 import java.util.function.Consumer
 
 class MConfigBuilder @JvmOverloads constructor(modId: String, customFileName: String? = null, configType: ConfigTypes, fileType: FileTypes, createSubDirectory: Boolean = false) {
@@ -18,8 +20,14 @@ class MConfigBuilder @JvmOverloads constructor(modId: String, customFileName: St
         return root
     }
 
+    @JvmOverloads fun tryConvertOldConfig(oldPath: String, deleteOldFile: Boolean = true): MConfigBuilder {
+        loader.addForConversion(Path.of(oldPath), deleteOldFile)
+        return this
+    }
+
     open class ConfigBuilder(private val loader: MConfigLoader, private val category: CategoryItem) {
-        fun addComment(comment: String): ConfigBuilder {
+
+        open fun addComment(comment: String): ConfigBuilder {
             category.add(CommentItem(comment))
             return this
         }
@@ -59,8 +67,9 @@ class MConfigBuilder @JvmOverloads constructor(modId: String, customFileName: St
             return EnumOptionBuilder(loader, category, key, type)
         }
 
-        // TODO: Add List<?>/Set support
-        // TODO: Add (ARGB) color picker support
+        fun <T : Any> addOption(key: String, codec: Codec<T>): CodecOptionBuilder<T> {
+            return CodecOptionBuilder(loader, category, key, codec)
+        }
 
         fun build() {
             loader.buildOrLoad()
@@ -68,8 +77,9 @@ class MConfigBuilder @JvmOverloads constructor(modId: String, customFileName: St
     }
 
     class CategoryBuilder(loader: MConfigLoader, category: CategoryItem, private val child: CategoryItem) : ConfigBuilder(loader, category) {
-        fun setComment(comment: String): CategoryBuilder {
-            child.setComment(comment)
+
+        override fun addComment(comment: String): CategoryBuilder {
+            child.setComment(child.getComment()?.let { it + "\n" + comment } ?: comment)
             return this
         }
     }

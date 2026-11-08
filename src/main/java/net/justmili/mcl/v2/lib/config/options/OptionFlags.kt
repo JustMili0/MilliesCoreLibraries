@@ -12,13 +12,7 @@ enum class OptionFlags {
     REQUIRES_RENDERER_UPDATE,
     REQUIRES_VIDEOMODE_RELOAD;
 
-    private val id: ResourceLocation = CoreLibs.asId("config_option_flag." + this.name.lowercase())
-
-    fun getId(): ResourceLocation {
-        return id
-    }
-
-    fun getDescName(): String {
-        return name.lowercase().replace("requires_", "").replace("_", " ")
-    }
+    val mask: Int = 1 shl ordinal
+    val id: ResourceLocation = CoreLibs.asId("config_option_flag." + name.lowercase())
+    val descName: String = name.lowercase().replace("requires_", "").replace("_", " ")
 }

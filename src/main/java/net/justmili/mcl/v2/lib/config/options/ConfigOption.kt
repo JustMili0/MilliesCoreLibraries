@@ -2,18 +2,21 @@ package net.justmili.mcl.v2.lib.config.options
 
 import com.google.gson.*
 import com.mojang.serialization.*
-import net.justmili.mcl.CoreLibs
+import net.justmili.mcl.v2.lib.config.MConfigLoader
+import net.justmili.mcl.v2.lib.config.MConfigLogger
 import net.justmili.mcl.v2.lib.config.items.ConfigItem
 import net.minecraft.resources.ResourceLocation
+import java.nio.file.Path
 import java.util.*
-import java.util.function.Predicate
 
-class ConfigOption<T : Any>(val key: String, val default: T, private val codec: Codec<T>, private val validator: Predicate<T>, val bounds: String?, private val saver: Runnable, vararg flags: OptionFlags) : ConfigItem {
+class ConfigOption<T : Any>(val key: String, val default: T, private val codec: Codec<T>, private val limit: OptionBounds<in T>?, private val loader: MConfigLoader, val flagMask: Int) : ConfigItem {
     @Volatile private var value: T = default
     @Volatile private var synced: T? = null
-    val flags: Set<OptionFlags> = Collections.unmodifiableSet(flags.toCollection(EnumSet.noneOf(OptionFlags::class.java)))
     var attachedImage: ResourceLocation? = null
     var comment: String? = null
+    var oldKey: String? = null
+    val path: Path get() = loader.path
+    val bounds: String? get() = limit?.describe()
 
     fun get(): T {
         return synced ?: value
@@ -24,7 +27,7 @@ class ConfigOption<T : Any>(val key: String, val default: T, private val codec: 
         if (this.value == value) return true
 
         this.value = value
-        saver.run()
+        loader.save()
         return true
     }
 
@@ -43,12 +46,19 @@ class ConfigOption<T : Any>(val key: String, val default: T, private val codec: 
         return synced != null
     }
 
+    fun hasFlag(flag: OptionFlags): Boolean {
+        return (flagMask and flag.mask) != 0
+    }
+
     fun <R> encode(ops: DynamicOps<R>): Optional<R> {
-        return codec.encodeStart(ops, value).resultOrPartial {error -> CoreLibs.LOGGER.warn("Failed to encode config option '{}': {}", key, error)}
+        return codec.encodeStart(ops, value).resultOrPartial { error ->
+            MConfigLogger.encodeFail(this, error)
+        }
     }
 
     fun <R> load(ops: DynamicOps<R>, input: R): Boolean {
-        val decoded = codec.parse(ops, input).result().filter(validator).orElse(null) ?: return false
+        val decoded = codec.parse(ops, input).result().orElse(null) ?: return false
+        if (!isValid(decoded)) return false
 
         this.value = decoded
         return true
@@ -68,7 +78,7 @@ class ConfigOption<T : Any>(val key: String, val default: T, private val codec: 
     }
 
     private fun isValid(value: T): Boolean {
-        return validator.test(value)
+        return limit == null || limit.isValid(value)
     }
 
     private fun parseText(raw: String): JsonElement {

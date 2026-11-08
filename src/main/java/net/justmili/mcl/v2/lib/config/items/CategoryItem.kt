@@ -23,7 +23,11 @@ class CategoryItem(private val name: String, private var comment: String?) : Con
 
     fun add(item: ConfigItem) {
         val itemName = getItemName(item)
-        require(itemName == null || children.none {getItemName(it) == itemName}) {"Config option or category '$itemName' already exists in category '$name'."}
+        if (itemName != null) {
+            for (child in children) {
+                require(getItemName(child) != itemName) { "Config option or category '$itemName' already exists in category '$name'." }
+            }
+        }
         children.add(item)
     }
 

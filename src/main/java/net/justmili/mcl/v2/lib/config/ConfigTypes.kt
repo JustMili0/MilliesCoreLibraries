@@ -50,8 +50,8 @@ enum class ConfigTypes {
      */
     COMMON_SERVER_PRIORITY("common", "common-server");
 
-    private val suffix: String
-    private val altSuffix: String
+    val suffix: String
+    val altSuffix: String
 
     constructor(name: String) {
         this.suffix = name
@@ -63,11 +63,4 @@ enum class ConfigTypes {
         this.altSuffix = altName
     }
 
-    fun getSuffix(): String {
-        return suffix
-    }
-
-    fun getAltSuffix(): String {
-        return altSuffix
-    }
 }
