@@ -6,7 +6,7 @@
 # FIRST-PRIORITY TODO (EARLY BETA)
 - [EVERYONE] Finish all the events
 - [MILLIE] Rewrite config from `v1.config` to `v2.config`
-  - Support for more entry types (TODO: Color, Lists [List, Set])
+  - Support for more entry types (TODO: Color, Lists [List, Set, Either<A, B> thing to have e.g. Items or Item Tags, Blocks or Block Tags etc.])
   - Fix, rework and improve priority config synchronization
   - [APPELS] Add full TOML support (including for old file conversion)
 - [MILLIE] Finish reworking data generation utils
