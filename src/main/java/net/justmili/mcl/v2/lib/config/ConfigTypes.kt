@@ -1,6 +1,6 @@
 package net.justmili.mcl.v2.lib.config
 
-enum class ConfigTypes {
+enum class ConfigTypes(val type: String) {
     /**
      * Client-only configuration.
      *
@@ -34,7 +34,7 @@ enum class ConfigTypes {
      */
     // TODO: Redo to be more like what Vein n' Timber does for its few shared values - https://github.com/JustMili0/Vein-n-Timber
     // And finish the Javadoc for this one
-    COMMON_CLIENT_PRIORITY("common", "common-client"),
+    COMMON_CLIENT_PRIORITY("common-client"),
 
     /**
      * Common configuration where the server's values take priority.
@@ -48,19 +48,5 @@ enum class ConfigTypes {
      * File name matches COMMON unless a COMMON config already exists.
      * Config values synchronize at join.
      */
-    COMMON_SERVER_PRIORITY("common", "common-server");
-
-    val suffix: String
-    val altSuffix: String
-
-    constructor(name: String) {
-        this.suffix = name
-        this.altSuffix = name
-    }
-
-    constructor(name: String, altName: String) {
-        this.suffix = name
-        this.altSuffix = altName
-    }
-
+    COMMON_SERVER_PRIORITY("common-server");
 }

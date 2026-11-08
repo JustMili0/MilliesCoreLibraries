@@ -9,27 +9,19 @@ import java.nio.file.Path
 
 class MConfigLoader(modId: String, customFileName: String?, configType: ConfigTypes, fileType: FileTypes, createSubDirectory: Boolean) {
     val path: Path
-    private val root = CategoryItem("root", null)
+    val root = CategoryItem("root", null)
     private val serializer = getSerializer(fileType)
     private var convertLoader: OldConfigLoader? = null
 
     init {
         val configDir = Platform.CONFIG_DIR
         val directory = if (createSubDirectory) configDir.resolve(modId) else configDir
-        val extension = fileType.extension
         val usesSuffix = customFileName != null || !createSubDirectory
         val fileName = customFileName ?: modId
 
-        // Uses alternative suffix for Common Priority config files if a regular common config exists
-        val primaryPath = getPath(directory, fileName, configType.suffix, extension, usesSuffix)
-        val alternativePath = getPath(directory, fileName, configType.altSuffix, extension, usesSuffix)
-        val usesAltSuffix = CLAIMED_PATHS.contains(primaryPath) && primaryPath != alternativePath
-        this.path = if (usesAltSuffix) alternativePath else primaryPath
-
+        this.path = getPath(directory, fileName, configType.type, fileType.extension, usesSuffix)
         if (!CLAIMED_PATHS.add(path)) MConfigLogger.pathInUse(path)
     }
-
-    fun getRoot() = root
 
     internal fun addForConversion(oldPath: Path, deleteOldFile: Boolean) {
         val oldConfigs = convertLoader ?: OldConfigLoader().also { this.convertLoader = it }

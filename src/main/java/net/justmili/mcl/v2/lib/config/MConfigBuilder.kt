@@ -10,7 +10,7 @@ import java.util.function.Consumer
 class MConfigBuilder @JvmOverloads constructor(modId: String, customFileName: String? = null, configType: ConfigTypes, fileType: FileTypes, createSubDirectory: Boolean = false) {
     private val loader = MConfigLoader(modId, customFileName, configType, fileType, createSubDirectory)
 
-    fun create() = ConfigBuilder(loader, loader.getRoot())
+    fun create() = ConfigBuilder(loader, loader.root)
     fun create(content: Consumer<ConfigBuilder>): ConfigBuilder {
         val root = create()
         content.accept(root)
