@@ -13,7 +13,7 @@ import java.util.*
 object PropertiesIO : ConfigIO {
 
     override fun validate(path: Path, root: CategoryItem) {
-        if (root.getChildren().any { it is CategoryItem }) MConfigLogger.unsupportedElement(path, "categories", "element not supported in .properties file format")
+        if (root.getChildren().any { it is CategoryItem }) MConfigLogger.unsupportedElement(path, "categories", "element not supported in this format")
         checkForDupedKeys(path, root.getChildren(), HashSet())
     }
 

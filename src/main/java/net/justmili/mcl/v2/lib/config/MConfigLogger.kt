@@ -21,5 +21,5 @@ internal object MConfigLogger {
     private fun dev(message: String, vararg arguments: Any?) = if (Platform.IS_DEV_ENV) LOGGER.warn(message, *arguments) else {
     }
 
-    private fun getName(path: Path): Path = return Platform.CONFIG_DIR.relativize(path)
+    private fun getName(path: Path): Path = Platform.CONFIG_DIR.relativize(path)
 }

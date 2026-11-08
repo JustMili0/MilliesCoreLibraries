@@ -157,6 +157,9 @@ public class TestConfig {
                         .setDefault("")
                         .addComment("Some empty string value")
                         .buildOption();
+
+                    cat2.addCategory("Cat-in-cat 3", cat3 -> {
+                    }).addComment("Empty category");
                 });
 
                 cat0EndBool = cat0.addBoolOption("cat0EndBool")
