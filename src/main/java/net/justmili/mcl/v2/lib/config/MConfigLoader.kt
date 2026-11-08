@@ -29,42 +29,48 @@ class MConfigLoader(modId: String, customFileName: String?, configType: ConfigTy
         if (!CLAIMED_PATHS.add(path)) MConfigLogger.pathInUse(path)
     }
 
-    fun getRoot(): CategoryItem {
-        return root
-    }
+    fun getRoot() = root
 
     internal fun addForConversion(oldPath: Path, deleteOldFile: Boolean) {
         val oldConfigs = convertLoader ?: OldConfigLoader().also { this.convertLoader = it }
         oldConfigs.add(oldPath, deleteOldFile)
     }
 
-    @Synchronized internal fun tryWrite(): Boolean {
-        if (serializer.write(path, root)) return true
-        MConfigLogger.writeFail(path)
-        return false
-    }
-
-    @Synchronized internal fun tryRead(): Boolean {
-        if (serializer.load(path, root)) return true
-        MConfigLogger.readFail(path)
-        return false
-    }
-
-    @Synchronized fun reload(): Boolean {
-        if (Files.exists(path)) return tryRead()
-        tryWrite()
-        return false
-    }
-
-    @Synchronized internal fun buildOrLoad() {
-        serializer.validate(path, root)
-        if (Files.exists(path)) {
-            if (tryRead()) tryWrite()
-        } else {
-            convertLoader?.importInto(root)
-            if (tryWrite()) convertLoader?.deleteConverted()
+    internal fun tryWrite(): Boolean {
+        synchronized(path) {
+            if (serializer.write(path, root)) return true
+            MConfigLogger.writeFail(path)
+            return false
         }
-        convertLoader = null
+    }
+
+    internal fun tryRead(): Boolean {
+        synchronized(path) {
+            if (serializer.load(path, root)) return true
+            MConfigLogger.readFail(path)
+            return false
+        }
+    }
+
+    fun reload(): Boolean {
+        synchronized(path) {
+            if (Files.exists(path)) return tryRead()
+            tryWrite()
+            return false
+        }
+    }
+
+    internal fun buildOrLoad() {
+        synchronized(path) {
+            serializer.validate(path, root)
+            if (Files.exists(path)) {
+                if (tryRead()) tryWrite()
+            } else {
+                convertLoader?.importInto(root)
+                if (tryWrite()) convertLoader?.deleteConverted()
+            }
+            convertLoader = null
+        }
     }
 
     private fun getSerializer(fileType: FileTypes): ConfigIO {

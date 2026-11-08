@@ -2,12 +2,14 @@ package net.justmili.mcl.v2.lib.config.converter
 
 import com.google.gson.*
 import net.justmili.mcl.v2.lib.config.MConfigLogger
+import net.justmili.mcl.v2.lib.util.common.FileIO
 import java.io.IOException
 import java.lang.ref.SoftReference
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.io.path.bufferedReader
 
 class OldConfigConverter(val path: Path, val deleteAfter: Boolean) {
     private var finder: ((String) -> JsonElement?)? = null
@@ -42,7 +44,7 @@ class OldConfigConverter(val path: Path, val deleteAfter: Boolean) {
 
     private fun readJson(): Boolean {
         val root = try {
-            Files.newBufferedReader(path).use { reader -> JsonParser.parseReader(reader) }
+            path.bufferedReader(options = FileIO.READ_ONLY).use { reader -> JsonParser.parseReader(reader) }
         } catch (e: IOException) {
             return fail(e.message)
         } catch (e: JsonParseException) {

@@ -2,11 +2,11 @@ package net.justmili.mcl.v2.lib.config.serializers
 
 import com.google.gson.*
 import com.mojang.serialization.JsonOps
-import net.justmili.mcl.v1.lib.util.common.FileIO
 import net.justmili.mcl.v2.lib.config.MConfigLogger
 import net.justmili.mcl.v2.lib.config.codecs.ConfigCodec
 import net.justmili.mcl.v2.lib.config.items.*
 import net.justmili.mcl.v2.lib.config.options.ConfigOption
+import net.justmili.mcl.v2.lib.util.common.FileIO
 import java.io.IOException
 import java.io.Writer
 import java.nio.file.Files
