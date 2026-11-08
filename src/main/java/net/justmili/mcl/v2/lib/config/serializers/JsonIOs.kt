@@ -147,9 +147,7 @@ private object SharedJsonIO {
 
     fun load(path: Path, root: CategoryItem): Boolean {
         return try {
-            Files.newBufferedReader(path).use { reader ->
-                ConfigCodec.of(root).parse(JsonOps.INSTANCE, JsonParser.parseReader(reader)).resultOrPartial { error -> MConfigLogger.readFail(path, error) }.isPresent
-            }
+            Files.newBufferedReader(path).use { reader -> ConfigCodec.of(root).parse(JsonOps.INSTANCE, JsonParser.parseReader(reader)).resultOrPartial { error -> MConfigLogger.readFail(path, error) }.isPresent }
         } catch (e: IOException) {
             MConfigLogger.readFail(path, e.message)
             false

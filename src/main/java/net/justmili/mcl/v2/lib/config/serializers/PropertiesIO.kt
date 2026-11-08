@@ -33,6 +33,9 @@ object PropertiesIO : ConfigIO {
         } catch (e: IOException) {
             MConfigLogger.readFail(path, e.message)
             return false
+        } catch (e: IllegalArgumentException) {
+            MConfigLogger.readFail(path, e.message)
+            return false
         }
 
         loadItems(properties, root.getChildren())

@@ -38,9 +38,8 @@ class MConfigLoader(modId: String, customFileName: String?, configType: ConfigTy
 
     internal fun tryRead(): Boolean {
         synchronized(path) {
-            if (serializer.load(path, root)) return true
-            MConfigLogger.readFail(path)
-            return false
+            // Serializers log read issues, tryRead() doesn't have to
+            return serializer.load(path, root)
         }
     }
 

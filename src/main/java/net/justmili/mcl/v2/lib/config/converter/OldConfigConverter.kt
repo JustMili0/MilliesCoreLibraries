@@ -1,6 +1,7 @@
 package net.justmili.mcl.v2.lib.config.converter
 
 import com.google.gson.*
+import net.justmili.mcl.v1.lib.util.Platform
 import net.justmili.mcl.v2.lib.config.MConfigLogger
 import net.justmili.mcl.v2.lib.util.common.FileIO
 import java.io.IOException
@@ -84,7 +85,7 @@ class OldConfigConverter(val path: Path, val deleteAfter: Boolean) {
     }
 
     private fun fail(reason: String?): Boolean {
-        MConfigLogger.readFail(path, reason)
+        if (Platform.IS_DEV_ENV) MConfigLogger.readFail(path, reason)
         return false
     }
 
