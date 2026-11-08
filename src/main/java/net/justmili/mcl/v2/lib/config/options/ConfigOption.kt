@@ -27,7 +27,7 @@ class ConfigOption<T : Any>(val key: String, val default: T, private val codec: 
         if (this.value == value) return true
 
         this.value = value
-        loader.save()
+        loader.tryWrite()
         return true
     }
 

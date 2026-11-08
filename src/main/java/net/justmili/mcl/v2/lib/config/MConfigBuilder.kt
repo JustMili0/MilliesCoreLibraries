@@ -20,6 +20,10 @@ class MConfigBuilder @JvmOverloads constructor(modId: String, customFileName: St
         return root
     }
 
+    fun reload(): Boolean {
+        return loader.reload()
+    }
+
     @JvmOverloads fun tryConvertOldConfig(oldPath: String, deleteOldFile: Boolean = true): MConfigBuilder {
         loader.addForConversion(Path.of(oldPath), deleteOldFile)
         return this

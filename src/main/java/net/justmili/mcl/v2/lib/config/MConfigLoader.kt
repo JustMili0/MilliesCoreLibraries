@@ -38,19 +38,33 @@ class MConfigLoader(modId: String, customFileName: String?, configType: ConfigTy
         oldConfigs.add(oldPath, deleteOldFile)
     }
 
-    @Synchronized fun buildOrLoad() {
-        serializer.validate(path, root)
-        if (Files.exists(path)) {
-            if (serializer.load(path, root)) save()
-        } else {
-            convertLoader?.importInto(root)
-            if (serializer.write(path, root)) convertLoader?.deleteConverted()
-        }
-        convertLoader = null
+    @Synchronized internal fun tryWrite(): Boolean {
+        if (serializer.write(path, root)) return true
+        MConfigLogger.writeFail(path)
+        return false
     }
 
-    @Synchronized fun save() {
-        if (!serializer.write(path, root)) MConfigLogger.writeFail(path)
+    @Synchronized internal fun tryRead(): Boolean {
+        if (serializer.load(path, root)) return true
+        MConfigLogger.readFail(path)
+        return false
+    }
+
+    @Synchronized fun reload(): Boolean {
+        if (Files.exists(path)) return tryRead()
+        tryWrite()
+        return false
+    }
+
+    @Synchronized internal fun buildOrLoad() {
+        serializer.validate(path, root)
+        if (Files.exists(path)) {
+            if (tryRead()) tryWrite()
+        } else {
+            convertLoader?.importInto(root)
+            if (tryWrite()) convertLoader?.deleteConverted()
+        }
+        convertLoader = null
     }
 
     private fun getSerializer(fileType: FileTypes): ConfigIO {
