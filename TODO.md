@@ -6,7 +6,6 @@
 # FIRST-PRIORITY TODO (EARLY BETA)
 - [EVERYONE] Finish all the events
 - [MILLIE] Rewrite config from `v1.config` to `v2.config`
-  - Re-read config values after `/reload`
   - Support for more entry types (TODO: Color, Lists [List, Set])
   - Fix, rework and improve priority config synchronization
   - [APPELS] Add full TOML support (including for old file conversion)
