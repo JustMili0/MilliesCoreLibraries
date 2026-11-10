@@ -1,17 +1,16 @@
 package net.justmili.mcl.v2.lib.config.options
 
 import com.mojang.serialization.Codec
-import net.justmili.mcl.v2.lib.codecs.ColorCodec
-import net.justmili.mcl.v2.lib.codecs.EnumCodec
+import net.justmili.mcl.v2.lib.codecs.*
 import net.justmili.mcl.v2.lib.config.MConfigLoader
 import net.justmili.mcl.v2.lib.config.items.CategoryItem
 import net.justmili.mcl.v2.lib.util.common.Colors
 import net.minecraft.resources.ResourceLocation
 import java.awt.Color
 
-abstract class OptionBuilder<O : Any, B : OptionBuilder<O, B>>(private val loader: MConfigLoader, private val category: CategoryItem, protected val key: String, private var codec: Codec<O>) {
+abstract class OptionBuilder<O : Any, B : OptionBuilder<O, B>>(protected val loader: MConfigLoader, private val category: CategoryItem, protected val key: String, protected val codec: Codec<O>) {
     private var defaultValue: O? = null
-    private var flagMask = 0
+    protected var flagMask = 0
     private var attachedImage: ResourceLocation? = null
     private var comment: String? = null
     private var oldKey: String? = null
@@ -24,13 +23,11 @@ abstract class OptionBuilder<O : Any, B : OptionBuilder<O, B>>(private val loade
         return self()
     }
 
-    protected fun setCodec(codec: Codec<O>) {
-        this.codec = codec
-    }
-
     protected open fun getLimit(): OptionBounds<O>? = null
 
     protected open fun isText() = false
+
+    protected open fun create(value: O, limit: OptionBounds<O>?) = ConfigOption(key, value, codec, limit, loader, flagMask, isText())
 
     fun addFlags(vararg flags: OptionFlags): B {
         for (flag in flags) {
@@ -55,12 +52,12 @@ abstract class OptionBuilder<O : Any, B : OptionBuilder<O, B>>(private val loade
         return self()
     }
 
-    fun buildOption(): ConfigOption<O> {
+    open fun buildOption(): ConfigOption<O> {
         val value = checkNotNull(defaultValue) { "Config option '$key' has no default value." }
         val limit = getLimit()
         require(limit == null || limit.isValid(value)) { "Default value '$value' of config option '$key' does not meet its own limits." }
 
-        val option = ConfigOption(key, value, codec, limit, loader, flagMask, isText())
+        val option = create(value, limit)
         option.oldKey = oldKey
         option.attachedImage = attachedImage
         option.comment = comment
@@ -148,4 +145,11 @@ class ArgbOptionBuilder(loader: MConfigLoader, cat: CategoryItem, key: String) :
     fun setDefault(hex: String) = setColor(parseHex(hex))
     fun setDefault(argb: Int) = setColor(Color(argb, true))
     fun setDefault(a: Float, r: Float, g: Float, b: Float) = setColor(Color(r, g, b, a))
+}
+
+class ListOptionBuilder<E : Any>(loader: MConfigLoader, cat: CategoryItem, key: String, codec: Codec<E>, private val collapse: Boolean) : OptionBuilder<@JvmSuppressWildcards List<E>, ListOptionBuilder<E>>(loader, cat, key, ListCodec.of(codec, collapse)) {
+    override fun getLimit() = if (collapse) UniqueBounds else null
+    override fun create(value: List<E>, limit: OptionBounds<List<E>>?) = ListConfigOption(key, ListCodec.normalize(value, collapse), codec, limit, loader, flagMask, collapse)
+    override fun buildOption() = super.buildOption() as ListConfigOption<E>
+    fun setDefault(vararg elements: E) = setDefaultValue(elements.asList())
 }
