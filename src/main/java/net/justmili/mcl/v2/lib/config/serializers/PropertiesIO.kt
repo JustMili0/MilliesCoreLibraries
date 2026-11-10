@@ -13,8 +13,8 @@ import java.util.*
 object PropertiesIO : ConfigIO {
 
     override fun validate(path: Path, root: CategoryItem) {
-        if (root.getChildren().any { it is CategoryItem }) MConfigLogger.unsupportedElement(path, "categories", "element not supported in this format")
-        checkForDupedKeys(path, root.getChildren(), HashSet())
+        if (root.children.any { it is CategoryItem }) MConfigLogger.unsupportedElement(path, "categories", "element not supported in this format")
+        checkForDupedKeys(path, root.children, HashSet())
     }
 
     override fun write(path: Path, root: CategoryItem): Boolean {
@@ -22,7 +22,7 @@ object PropertiesIO : ConfigIO {
             writer.write(ConfigIO.TOKEN_POUND)
             writer.write(path.fileName.toString())
             writer.write("\n\n")
-            writeItems(writer, root.getChildren())
+            writeItems(writer, root.children)
         }
     }
 
@@ -38,14 +38,14 @@ object PropertiesIO : ConfigIO {
             return false
         }
 
-        loadItems(properties, root.getChildren())
+        loadItems(properties, root.children)
         return true
     }
 
     private fun checkForDupedKeys(path: Path, items: List<ConfigItem>, keys: MutableSet<String>) {
         for (item in items) {
             if (item is CategoryItem) {
-                checkForDupedKeys(path, item.getChildren(), keys)
+                checkForDupedKeys(path, item.children, keys)
             } else if (item is ConfigOption<*>) {
                 require(keys.add(item.key)) {
                     "Duplicate config option '${item.key}' detected in '${path.fileName}' after flattening categories."
@@ -58,12 +58,10 @@ object PropertiesIO : ConfigIO {
         for (item in items) {
             when (item) {
                 is CategoryItem -> {
-                    ConfigIO.eachCommentLine(item.getComment()) { text, from, to -> writeComment(writer, text, from, to) }
-                    writeItems(writer, item.getChildren())
+                    writeCommentBlock(writer, item.comment)
+                    writeItems(writer, item.children)
                 }
-
-                is CommentItem -> ConfigIO.eachCommentLine(item.text) { text, from, to -> writeComment(writer, text, from, to) }
-
+                is CommentItem -> writeCommentBlock(writer, item.text)
                 is ConfigOption<*> -> {
                     ConfigIO.eachCommentLine(item) { text, from, to -> writeComment(writer, text, from, to) }
                     writer.write(item.key)
@@ -73,6 +71,10 @@ object PropertiesIO : ConfigIO {
                 }
             }
         }
+    }
+
+    private fun writeCommentBlock(writer: Writer, comment: String?) {
+        if (ConfigIO.eachCommentLine(comment) { text, from, to -> writeComment(writer, text, from, to) }) writer.write("\n")
     }
 
     private fun writeComment(writer: Writer, text: String, from: Int, to: Int) {
@@ -100,7 +102,7 @@ object PropertiesIO : ConfigIO {
     private fun loadItems(properties: Properties, items: List<ConfigItem>) {
         for (item in items) {
             if (item is CategoryItem) {
-                loadItems(properties, item.getChildren())
+                loadItems(properties, item.children)
             } else if (item is ConfigOption<*>) {
                 val raw = properties.getProperty(item.key) ?: continue
                 if (!item.loadText(raw)) MConfigLogger.invalidValue(item)

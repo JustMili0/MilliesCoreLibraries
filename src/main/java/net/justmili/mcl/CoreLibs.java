@@ -16,7 +16,7 @@ public class CoreLibs implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(CoreLibs.class);
     public static final String ID = "corelibs";
     public static final String NAME = "Millie's Core Libraries";
-    public static final String BUILD = "0.2.7b";
+    public static final String BUILD = "0.2.8b";
 
     @Override
     public void onInitialize() {

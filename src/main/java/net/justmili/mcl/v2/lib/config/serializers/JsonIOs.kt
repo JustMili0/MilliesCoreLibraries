@@ -19,7 +19,7 @@ object JsonIO : ConfigIO {
     override fun write(path: Path, root: CategoryItem): Boolean {
         return FileIO.write(path) { writer ->
             writer.write("{\n")
-            writeItems(writer, root.getChildren(), ConfigIO.INDENT, intArrayOf(0))
+            writeItems(writer, root.children, ConfigIO.INDENT, intArrayOf(0))
             writer.write("\n}\n")
         }
     }
@@ -38,7 +38,6 @@ object JsonIO : ConfigIO {
                     writeComment(writer, separator, indent, commentIndex, text, from, to)
                     separator = LINE_SEPARATOR
                 }
-
                 is ConfigOption<*> -> {
                     ConfigIO.eachCommentLine(item) { text, from, to ->
                         writeComment(writer, separator, indent, commentIndex, text, from, to)
@@ -48,15 +47,14 @@ object JsonIO : ConfigIO {
                     SharedJsonIO.writeValue(writer, item)
                     separator = LINE_SEPARATOR
                 }
-
                 is CategoryItem -> {
-                    ConfigIO.eachCommentLine(item.getComment()) { text, from, to ->
+                    ConfigIO.eachCommentLine(item.comment) { text, from, to ->
                         writeComment(writer, separator, indent, commentIndex, text, from, to)
                         separator = LINE_SEPARATOR
                     }
-                    writeKey(writer, separator, indent, item.getName())
+                    writeKey(writer, separator, indent, item.name)
                     writer.write("{\n")
-                    writeItems(writer, item.getChildren(), indent + ConfigIO.INDENT, commentIndex)
+                    writeItems(writer, item.children, indent + ConfigIO.INDENT, commentIndex)
                     writer.write("\n")
                     writer.write(indent)
                     writer.write("}")
@@ -90,7 +88,7 @@ object Json5IO : ConfigIO {
     override fun write(path: Path, root: CategoryItem): Boolean {
         return FileIO.write(path) { writer ->
             writer.write("{\n")
-            writeItems(writer, root.getChildren(), ConfigIO.INDENT)
+            writeItems(writer, root.children, ConfigIO.INDENT)
             writer.write("}\n")
         }
     }
@@ -107,20 +105,21 @@ object Json5IO : ConfigIO {
             val isLastItem = i == lastItemIndex
 
             when (item) {
-                is CommentItem -> ConfigIO.eachCommentLine(item.text) { text, from, to -> writeComment(writer, indent, text, from, to) }
-
+                is CommentItem -> {
+                    val wrote = ConfigIO.eachCommentLine(item.text) { text, from, to -> writeComment(writer, indent, text, from, to) }
+                    if (wrote && i != items.lastIndex) writer.write("\n")
+                }
                 is ConfigOption<*> -> {
                     ConfigIO.eachCommentLine(item) { text, from, to -> writeComment(writer, indent, text, from, to) }
                     writeKey(writer, indent, item.key)
                     SharedJsonIO.writeValue(writer, item)
                     writer.write(if (isLastItem) "\n" else ",\n\n")
                 }
-
                 is CategoryItem -> {
-                    ConfigIO.eachCommentLine(item.getComment()) { text, from, to -> writeComment(writer, indent, text, from, to) }
-                    writeKey(writer, indent, item.getName())
+                    ConfigIO.eachCommentLine(item.comment) { text, from, to -> writeComment(writer, indent, text, from, to) }
+                    writeKey(writer, indent, item.name)
                     writer.write("{\n")
-                    writeItems(writer, item.getChildren(), indent + ConfigIO.INDENT)
+                    writeItems(writer, item.children, indent + ConfigIO.INDENT)
                     writer.write(indent)
                     writer.write(if (isLastItem) "}\n" else "},\n\n")
                 }

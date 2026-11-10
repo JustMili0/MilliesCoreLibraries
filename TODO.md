@@ -6,9 +6,9 @@
 # FIRST-PRIORITY TODO (EARLY BETA)
 - [EVERYONE] Finish all the events
 - [MILLIE] Rewrite config from `v1.config` to `v2.config`
-  - Fix comment spaces in `.properties` format
-  - Add support for `List<T>` options
-  - Add support for `Set` options
+  - Add support for List options with `collapseDuplicates` boolean and a special `.addToList(E... elements)`/`.removeFromList(E... elements)` along 
+  side `.set(list)`
+    - Has to be efficient on small and large scale lists
   - Add support for registry entry/tag options (e.g. `minecraft:oak_log` or `#minecraft:logs`, `minecraft:diamond_ore` or `#minecraft:diamond_ores`)
     - Saved as an id or a tag key (via `ExtraCodecs.TAG_OR_ELEMENT_ID`), only resolved when checked, so stays correct after datapack reload
     - No properties/NBT comparing like Mojang's `BlockPredicateArgument`/`ItemPredicateArgument` does, it's just a list of entries and tags

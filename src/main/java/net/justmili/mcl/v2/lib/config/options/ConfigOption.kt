@@ -9,9 +9,9 @@ import net.minecraft.resources.ResourceLocation
 import java.nio.file.Path
 import java.util.*
 
-class ConfigOption<T : Any>(val key: String, val default: T, private val codec: Codec<T>, private val limit: OptionBounds<in T>?, private val loader: MConfigLoader, val flagMask: Int, private val isText: Boolean) : ConfigItem {
-    @Volatile private var value: T = default
-    @Volatile private var synced: T? = null
+class ConfigOption<O : Any>(val key: String, val default: O, private val codec: Codec<O>, private val limit: OptionBounds<in O>?, private val loader: MConfigLoader, val flagMask: Int, private val isText: Boolean) : ConfigItem {
+    @Volatile private var value: O = default
+    @Volatile private var synced: O? = null
     var attachedImage: ResourceLocation? = null
     var comment: String? = null
     var oldKey: String? = null
@@ -20,7 +20,7 @@ class ConfigOption<T : Any>(val key: String, val default: T, private val codec: 
 
     fun get() = synced ?: value
 
-    fun set(value: T): Boolean {
+    fun set(value: O): Boolean {
         if (!isValid(value)) return false
         if (this.value == value) return true
 
@@ -29,7 +29,7 @@ class ConfigOption<T : Any>(val key: String, val default: T, private val codec: 
         return true
     }
 
-    fun setSynced(value: T): Boolean {
+    fun setSynced(value: O): Boolean {
         if (!isValid(value)) return false
 
         this.synced = value
@@ -56,7 +56,7 @@ class ConfigOption<T : Any>(val key: String, val default: T, private val codec: 
 
     fun toText() = textOf(value)
 
-    private fun textOf(value: T): String {
+    private fun textOf(value: O): String {
         val element = codec.encodeStart(JsonOps.INSTANCE, value).resultOrPartial { error -> MConfigLogger.encodeFail(this, error) }.orElse(null) ?: return ""
         return if (element is JsonPrimitive) element.asString else element.toString()
     }
@@ -76,7 +76,7 @@ class ConfigOption<T : Any>(val key: String, val default: T, private val codec: 
         })
     }
 
-    private fun isValid(value: T) = limit == null || limit.isValid(value)
+    private fun isValid(value: O) = limit == null || limit.isValid(value)
 
     private fun parseText(raw: String): JsonElement {
         return try {

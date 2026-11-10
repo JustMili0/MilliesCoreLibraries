@@ -19,14 +19,14 @@ interface ConfigIO {
         const val TOKEN_KEY: String = "_c"
         const val INDENT: String = "  "
 
-        inline fun eachCommentLine(comment: String?, action: (String, Int, Int) -> Unit) {
-            val text = addPeriod(comment) ?: return
+        inline fun eachCommentLine(comment: String?, action: (String, Int, Int) -> Unit): Boolean {
+            val text = addPeriod(comment) ?: return false
             var start = 0
             while (true) {
                 val end = text.indexOf('\n', start)
                 if (end < 0) {
                     action(text, start, text.length)
-                    return
+                    return true
                 }
                 action(text, start, end)
                 start = end + 1
