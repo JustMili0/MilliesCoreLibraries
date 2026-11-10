@@ -4,7 +4,6 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.*;
 import net.justmili.mcl.v1.api.events.server.*;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 
 public final class ServerEventsBridge {
@@ -27,18 +26,16 @@ public final class ServerEventsBridge {
         // Use Events
         UseItemCallback.EVENT.register((player, level, hand) -> {
             var stack = player.getItemInHand(hand);
-            UseEvents.ITEM_POST.invoker().onUseItemPost(level, player, hand, stack);
-            return InteractionResultHolder.pass(stack);
+            var result = UseEvents.ITEM_POST.invoker().onUseItemPost(level, player, hand, stack);
+            return new InteractionResultHolder<>(result, stack);
         });
         UseBlockCallback.EVENT.register((player, level, hand, hitResult) -> {
             var pos = hitResult.getBlockPos();
             var state = level.getBlockState(pos);
-            UseEvents.BLOCK_POST.invoker().onUseBlockPost(level, player, hand, pos, state, InteractionResult.PASS);
-            return InteractionResult.PASS;
+            return UseEvents.BLOCK_POST.invoker().onUseBlockPost(level, player, hand, hitResult, state, pos);
         });
         UseEntityCallback.EVENT.register((player, level, hand, entity, hitResult) -> {
-            UseEvents.ENTITY_POST.invoker().onUseEntityPost(level, player, hand, entity, InteractionResult.PASS);
-            return InteractionResult.PASS;
+            return UseEvents.ENTITY_POST.invoker().onUseEntityPost(level, player, hand, hitResult, entity);
         });
     }
 }
