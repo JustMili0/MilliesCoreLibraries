@@ -1,9 +1,8 @@
 package net.justmili.mcl.config;
 
-import net.justmili.mcl.CoreLibs;
+import com.mojang.serialization.Codec;
 import net.justmili.mcl.v2.lib.config.*;
-import net.justmili.mcl.v2.lib.config.options.ConfigOption;
-import net.justmili.mcl.v2.lib.config.options.OptionFlags;
+import net.justmili.mcl.v2.lib.config.options.*;
 import net.justmili.mcl.v2.lib.util.common.Colors;
 import net.minecraft.util.Mth;
 
@@ -36,6 +35,7 @@ public class TestConfig {
     public static ConfigOption<TestConfigEnum> rootEnum;
     public static ConfigOption<Color> rgb;
     public static ConfigOption<Color> argb;
+    public static ListConfigOption<String> cat2List;
 
     // Function made only for purpose of this example test
     private static MConfigBuilder builderOfType(FileTypes ext) {
@@ -58,6 +58,7 @@ public class TestConfig {
                 .setDefault("C95E35") // or 0xC95E35, or 0.7882f, 0.3686f, 0.2078f
                 .addComment("Some RGB color value (HEX)")
                 .buildOption();
+
             argb = root.addArgbColorOption("rootARGB")
                 .setDefault(0xFFC95E35) // or "FFC95E35", or 1.0f, 0.7882f, 0.3686f, 0.2078f
                 .addComment("Some ARGB color value (HEX)")
@@ -67,12 +68,14 @@ public class TestConfig {
                 .setDefault(10)
                 .addComment("Some integer value")
                 .buildOption();
+
             rootIntRanged = root.addIntOption("rootIntRanged")
                 .setDefault(10)
                 .setRange(0, 99)
                 .addComment("Value with flags")
                 .addFlags(OptionFlags.REQUIRES_ASSETS_RELOAD, OptionFlags.REQUIRES_DATA_RELOAD)
                 .buildOption();
+
             rootIntRangedNeg = root.addIntOption("rootIntRangedNeg")
                 .setDefault(-10)
                 .setRange(-99, -1)
@@ -84,43 +87,52 @@ public class TestConfig {
                 .buildOption();
 
             root.addCategory("Root Category", cat0 -> {
+
                 cat0StartBool = cat0.addBoolOption("cat0StartBool")
                     .setDefault(true)
                     .addComment("Some boolean value")
                     .buildOption();
+
                 cat0StartInt = cat0.addIntOption("cat0StartInt")
                     .setDefault(25)
                     .setRange(1, 100)
                     .addComment("Some ranged integer value")
                     .buildOption();
+
                 cat0StartString = cat0.addStringOption("cat0StartString")
                     .setDefault("Hello")
                     .addComment("Some string value")
                     .buildOption();
 
                 cat0.addCategory("Cat-in-cat 1", cat1 -> {
+
                     cat1Bool = cat1.addBoolOption("cat1Bool")
                         .setDefault(false)
                         .addComment("Some boolean value")
                         .buildOption();
+
                     cat1Int = cat1.addIntOption("cat1Int")
                         .setDefault(5)
                         .setRange(0, 10)
                         .addComment("Some ranged integer value")
                         .buildOption();
+
                     cat1Long = cat1.addLongOption("cat1Long")
                         .setDefault(1000000L)
                         .addComment("Some long value")
                         .buildOption();
+
                     cat1Float = cat1.addFloatOption("cat1Float")
                         .setDefault(0.69f)
                         .setRange(0f, 1f)
                         .addComment("Some ranged float value")
                         .buildOption();
+
                     cat1Double = cat1.addDoubleOption("cat1Double")
                         .setDefault(4.2)
                         .addComment("Some double value")
                         .buildOption();
+
                     cat1String = cat1.addStringOption("cat1String")
                         .setDefault("Short text")
                         .setCharLimit(32)
@@ -133,11 +145,13 @@ public class TestConfig {
                     .setRange(100L, 1000000L)
                     .addComment("Some ranged long value")
                     .buildOption();
+
                 cat0MidFloat = cat0.addFloatOption("cat0MidFloat")
                     .setDefault(1.0f)
                     .setRange(0f, 5f)
                     .addComment("Some ranged float value")
                     .buildOption();
+
                 cat0MidDouble = cat0.addDoubleOption("cat0MidDouble")
                     .setDefault(0.25)
                     .setRange(0.0, 1.0)
@@ -145,36 +159,46 @@ public class TestConfig {
                     .buildOption();
 
                 cat0.addCategory("Cat-in-cat 2", cat2 -> {
+
+                    cat2List = cat2.addListOption("cat2List", Codec.STRING, true)
+                        .setDefault("a", "b", "a", "c", "c", "c")
+                        .addComment("Some unique string list")
+                        .buildOption();
+
                     cat2Bool = cat2.addBoolOption("cat2Bool")
                         .setDefault(true)
                         .addComment("Some boolean value with a flag")
                         .addFlags(OptionFlags.REQUIRES_GAME_RESTART)
                         .buildOption();
+
                     cat2Int = cat2.addIntOption("cat2Int")
                         .setDefault(-5)
                         .setRange(-10, -1)
                         .addComment("Some negative ranged integer value")
                         .buildOption();
+
                     cat2Long = cat2.addLongOption("cat2Long")
                         .setDefault(-500L)
                         .setRange(-1000L, 0L)
                         .addComment("Some negative ranged long value")
                         .buildOption();
+
                     cat2Float = cat2.addFloatOption("cat2Float")
                         .setDefault(-1.5f)
                         .addComment("Some float value")
                         .buildOption();
+
                     cat2Double = cat2.addDoubleOption("cat2Double")
                         .setDefault(Mth.PI)
                         .addComment("Some double value")
                         .buildOption();
+
                     cat2String = cat2.addStringOption("cat2String")
                         .setDefault("")
                         .addComment("Some empty string value")
                         .buildOption();
 
-                    cat2.addCategory("Cat-in-cat 3", cat3 -> {
-                    }).addComment("Empty category");
+                    cat2.addCategory("Cat-in-cat 3", cat3 -> {}).addComment("Empty category");
                 });
 
                 cat0EndBool = cat0.addBoolOption("cat0EndBool")

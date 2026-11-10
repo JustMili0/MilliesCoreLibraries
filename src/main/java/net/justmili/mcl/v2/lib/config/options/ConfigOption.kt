@@ -9,8 +9,9 @@ import net.minecraft.resources.ResourceLocation
 import java.nio.file.Path
 import java.util.*
 
-class ConfigOption<O : Any>(val key: String, val default: O, private val codec: Codec<O>, private val limit: OptionBounds<in O>?, private val loader: MConfigLoader, val flagMask: Int, private val isText: Boolean) : ConfigItem {
-    @Volatile private var value: O = default
+open class ConfigOption<O : Any>(val key: String, val default: O, private val codec: Codec<O>, private val limit: OptionBounds<in O>?, private val loader: MConfigLoader, val flagMask: Int, private val isText: Boolean) : ConfigItem {
+    @Volatile protected var value: O = default
+        private set
     @Volatile private var synced: O? = null
     var attachedImage: ResourceLocation? = null
     var comment: String? = null
@@ -20,7 +21,7 @@ class ConfigOption<O : Any>(val key: String, val default: O, private val codec: 
 
     fun get() = synced ?: value
 
-    fun set(value: O): Boolean {
+    open fun set(value: O): Boolean {
         if (!isValid(value)) return false
         if (this.value == value) return true
 
@@ -29,7 +30,7 @@ class ConfigOption<O : Any>(val key: String, val default: O, private val codec: 
         return true
     }
 
-    fun setSynced(value: O): Boolean {
+    open fun setSynced(value: O): Boolean {
         if (!isValid(value)) return false
 
         this.synced = value
@@ -64,6 +65,7 @@ class ConfigOption<O : Any>(val key: String, val default: O, private val codec: 
     internal fun getDefaultsComment(): String {
         return when (default) {
             is String, is Number, is Boolean -> default.toString()
+            is Collection<*> -> if (default.isEmpty()) "" else textOf(default)
             else -> textOf(default)
         }
     }
