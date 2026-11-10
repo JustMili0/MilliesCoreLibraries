@@ -1,6 +1,6 @@
 package net.justmili.mcl.v2.lib.config.options
 
-import net.justmili.mcl.v2.lib.config.codecs.EnumCodec
+import net.justmili.mcl.v2.lib.codecs.EnumCodec
 import java.awt.Color
 
 interface OptionBounds<in T> {

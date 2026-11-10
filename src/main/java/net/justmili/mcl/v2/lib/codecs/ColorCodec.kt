@@ -1,4 +1,4 @@
-package net.justmili.mcl.v2.lib.config.codecs
+package net.justmili.mcl.v2.lib.codecs
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
@@ -9,6 +9,7 @@ object ColorCodec {
     @JvmField val RGB: Codec<Color> = of(false)
     @JvmField val ARGB: Codec<Color> = of(true)
 
+    @JvmStatic
     fun of(hasAlpha: Boolean): Codec<Color> {
         return Codec.STRING.comapFlatMap({ text ->
             val color = Colors.hexToColor(text, hasAlpha)

@@ -6,6 +6,7 @@ import net.justmili.mcl.v2.lib.config.options.ConfigOption;
 // Temporary test config for testing converting old config files
 // Conversion example mod: https://modrinth.com/mod/true_end
 // Note: this could be used later in actual True End
+@Deprecated(forRemoval = true)
 public class TestTEConfig {
     public static final MConfigBuilder client = new MConfigBuilder("true_end", null, ConfigTypes.CLIENT, FileTypes.JSON5, true);
     public static final MConfigBuilder common = new MConfigBuilder("true_end", null, ConfigTypes.COMMON, FileTypes.JSON5, true);

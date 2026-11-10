@@ -64,16 +64,16 @@ public class UseEvents {
 
     @FunctionalInterface
     public interface ItemPost {
-        void onUseItemPost(Level level, Player player, InteractionHand hand, ItemStack stack);
+        InteractionResult onUseItemPost(Level level, Player player, InteractionHand hand, ItemStack stack);
     }
 
     @FunctionalInterface
     public interface BlockPost {
-        void onUseBlockPost(Level level, Player player, InteractionHand hand, BlockPos pos, BlockState state, InteractionResult result);
+        InteractionResult onUseBlockPost(Level level, Player player, InteractionHand hand, BlockPos pos, BlockState state, InteractionResult result);
     }
 
     @FunctionalInterface
     public interface EntityPost {
-        void onUseEntityPost(Level level, Player player, InteractionHand hand, Entity entity, InteractionResult result);
+        InteractionResult onUseEntityPost(Level level, Player player, InteractionHand hand, Entity entity, InteractionResult result);
     }
 }

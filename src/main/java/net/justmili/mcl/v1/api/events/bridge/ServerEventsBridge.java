@@ -24,9 +24,6 @@ public final class ServerEventsBridge {
             PlayerEvents.ATTACK_ENTITY.invoker().onAttackedEntity(player, level, entity, hand, hitResult));
         // TODO: finish hooking up PlayerEvents
 
-        // PlayerAdvancementEvents
-        // TODO: add
-
         // Use Events
         UseItemCallback.EVENT.register((player, level, hand) -> {
             var stack = player.getItemInHand(hand);

@@ -1,9 +1,9 @@
 package net.justmili.mcl.v2.lib.config.options
 
 import com.mojang.serialization.Codec
+import net.justmili.mcl.v2.lib.codecs.ColorCodec
+import net.justmili.mcl.v2.lib.codecs.EnumCodec
 import net.justmili.mcl.v2.lib.config.MConfigLoader
-import net.justmili.mcl.v2.lib.config.codecs.ColorCodec
-import net.justmili.mcl.v2.lib.config.codecs.EnumCodec
 import net.justmili.mcl.v2.lib.config.items.CategoryItem
 import net.justmili.mcl.v2.lib.util.common.Colors
 import net.minecraft.resources.ResourceLocation

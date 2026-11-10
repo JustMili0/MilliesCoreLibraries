@@ -1,4 +1,4 @@
-package net.justmili.mcl.v2.lib.config.codecs
+package net.justmili.mcl.v2.lib.codecs
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult

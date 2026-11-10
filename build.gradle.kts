@@ -150,6 +150,13 @@ tasks {
     }
 }
 
+// Try excluding files from jars that don't need them
+sourceSets.main {
+    if (stonecutter.eval(stonecutter.current.version, ">=1.20.5")) {
+        java.exclude("**/CompoundTags.java")
+    }
+}
+
 publishMods {
     file = loomx.modJar.flatMap { it.archiveFile }
     modLoaders.add("fabric")
