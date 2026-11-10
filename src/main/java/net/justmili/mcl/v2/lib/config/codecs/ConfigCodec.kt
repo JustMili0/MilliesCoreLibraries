@@ -30,23 +30,23 @@ object ConfigCodec {
 
     private fun <T> encodeCat(category: CategoryItem, ops: DynamicOps<T>, prefix: T): DataResult<T> {
         val builder = ops.mapBuilder()
-        for (item in category.getChildren()) {
+        for (item in category.children) {
             if (item is ConfigOption<*>) {
                 item.encode(ops).ifPresent { value -> builder.add(item.key, value) }
             } else if (item is CategoryItem) {
-                encodeCat(item, ops, ops.empty()).result().ifPresent { value -> builder.add(item.getName(), value) }
+                encodeCat(item, ops, ops.empty()).result().ifPresent { value -> builder.add(item.name, value) }
             }
         }
         return builder.build(prefix)
     }
 
     private fun <T> decodeCat(category: CategoryItem, ops: DynamicOps<T>, map: MapLike<T>) {
-        for (item in category.getChildren()) {
+        for (item in category.children) {
             if (item is ConfigOption<*>) {
                 val value = map.get(item.key)
                 if (value != null && !item.load(ops, value)) MConfigLogger.invalidValue(item)
             } else if (item is CategoryItem) {
-                val value = map.get(item.getName())
+                val value = map.get(item.name)
                 if (value != null) ops.getMap(value).result().ifPresent { childMap -> decodeCat(item, ops, childMap) }
             }
         }

@@ -11,6 +11,7 @@ class MConfigBuilder @JvmOverloads constructor(modId: String, customFileName: St
     private val loader = MConfigLoader(modId, customFileName, configType, fileType, createSubDirectory)
 
     fun create() = ConfigBuilder(loader, loader.root)
+
     fun create(content: Consumer<ConfigBuilder>): ConfigBuilder {
         val root = create()
         content.accept(root)
@@ -55,7 +56,7 @@ class MConfigBuilder @JvmOverloads constructor(modId: String, customFileName: St
     class CategoryBuilder(loader: MConfigLoader, category: CategoryItem, private val child: CategoryItem) : ConfigBuilder(loader, category) {
 
         override fun addComment(comment: String): CategoryBuilder {
-            child.setComment(child.getComment()?.let { it + "\n" + comment } ?: comment)
+            child.comment = child.comment?.let { it + "\n" + comment } ?: comment
             return this
         }
     }

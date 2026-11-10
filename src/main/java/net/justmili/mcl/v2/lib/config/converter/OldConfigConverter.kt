@@ -31,9 +31,7 @@ class OldConfigConverter(val path: Path, val deleteAfter: Boolean) {
         return success
     }
 
-    fun find(key: String): JsonElement? {
-        return finder?.invoke(key)
-    }
+    fun find(key: String) = finder?.invoke(key)
 
     fun delete() {
         try {

@@ -30,7 +30,7 @@ class OldConfigLoader {
     }
 
     private fun importValues(category: CategoryItem) {
-        for (item in category.getChildren()) {
+        for (item in category.children) {
             if (item is CategoryItem) {
                 importValues(item)
             } else if (item is ConfigOption<*>) {
