@@ -45,7 +45,8 @@ class MConfigBuilder @JvmOverloads constructor(modId: String, customFileName: St
         fun addFloatOption(key: String) = FloatOptionBuilder(loader, category, key)
         fun addDoubleOption(key: String) = DoubleOptionBuilder(loader, category, key)
         fun <E : Enum<E>> addEnumOption(key: String, type: Class<E>) = EnumOptionBuilder(loader, category, key, type)
-        fun addColorOption(key: String) = ColorOptionBuilder(loader, category, key)
+        fun addRgbColorOption(key: String) = RgbOptionBuilder(loader, category, key)
+        fun addArgbColorOption(key: String) = ArgbOptionBuilder(loader, category, key)
         fun <T : Any> addOption(key: String, codec: Codec<T>) = CodecOptionBuilder(loader, category, key, codec)
 
         fun build() = loader.buildOrLoad()

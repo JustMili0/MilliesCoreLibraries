@@ -9,34 +9,28 @@ import net.justmili.mcl.v2.lib.util.common.Colors
 import net.minecraft.resources.ResourceLocation
 import java.awt.Color
 
-abstract class OptionBuilder<T : Any, B : OptionBuilder<T, B>>(private val loader: MConfigLoader, private val category: CategoryItem, protected val key: String, private var codec: Codec<T>) {
-    private var defaultValue: T? = null
+abstract class OptionBuilder<O : Any, B : OptionBuilder<O, B>>(private val loader: MConfigLoader, private val category: CategoryItem, protected val key: String, private var codec: Codec<O>) {
+    private var defaultValue: O? = null
     private var flagMask = 0
     private var attachedImage: ResourceLocation? = null
     private var comment: String? = null
     private var oldKey: String? = null
 
     @Suppress("UNCHECKED_CAST")
-    protected fun self(): B {
-        return this as B
-    }
+    protected fun self() = this as B
 
-    protected fun setDefaultValue(value: T): B {
+    protected fun setDefaultValue(value: O): B {
         this.defaultValue = value
         return self()
     }
 
-    protected fun setCodec(codec: Codec<T>) {
+    protected fun setCodec(codec: Codec<O>) {
         this.codec = codec
     }
 
-    protected open fun getLimit(): OptionBounds<T>? {
-        return null
-    }
+    protected open fun getLimit(): OptionBounds<O>? = null
 
-    protected open fun isText(): Boolean {
-        return false
-    }
+    protected open fun isText() = false
 
     fun addFlags(vararg flags: OptionFlags): B {
         for (flag in flags) {
@@ -61,7 +55,7 @@ abstract class OptionBuilder<T : Any, B : OptionBuilder<T, B>>(private val loade
         return self()
     }
 
-    fun buildOption(): ConfigOption<T> {
+    fun buildOption(): ConfigOption<O> {
         val value = checkNotNull(defaultValue) { "Config option '$key' has no default value." }
         val limit = getLimit()
         require(limit == null || limit.isValid(value)) { "Default value '$value' of config option '$key' does not meet its own limits." }
@@ -76,36 +70,21 @@ abstract class OptionBuilder<T : Any, B : OptionBuilder<T, B>>(private val loade
     }
 }
 
-class CodecOptionBuilder<T : Any>(loader: MConfigLoader, category: CategoryItem, key: String, codec: Codec<T>) : OptionBuilder<T, CodecOptionBuilder<T>>(loader, category, key, codec) {
-
-    fun setDefault(value: T): CodecOptionBuilder<T> {
-        return setDefaultValue(value)
-    }
+class CodecOptionBuilder<O : Any>(loader: MConfigLoader, cat: CategoryItem, key: String, codec: Codec<O>) : OptionBuilder<O, CodecOptionBuilder<O>>(loader, cat, key, codec) {
+    fun setDefault(value: O) = setDefaultValue(value)
 }
 
-class BooleanOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: String) : OptionBuilder<Boolean, BooleanOptionBuilder>(loader, category, key, Codec.BOOL) {
-
-    override fun getLimit(): OptionBounds<Boolean> {
-        return BooleanBounds
-    }
-
-    fun setDefault(value: Boolean): BooleanOptionBuilder {
-        return setDefaultValue(value)
-    }
+class BooleanOptionBuilder(loader: MConfigLoader, cat: CategoryItem, key: String) : OptionBuilder<Boolean, BooleanOptionBuilder>(loader, cat, key, Codec.BOOL) {
+    override fun getLimit() = BooleanBounds
+    fun setDefault(value: Boolean) = setDefaultValue(value)
 }
 
-class StringOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: String) : OptionBuilder<String, StringOptionBuilder>(loader, category, key, Codec.STRING) {
+class StringOptionBuilder(loader: MConfigLoader, cat: CategoryItem, key: String) : OptionBuilder<String, StringOptionBuilder>(loader, cat, key, Codec.STRING) {
     private var charLimit = Int.MAX_VALUE
 
     // Doesn't need to override isText
-
-    override fun getLimit(): OptionBounds<String>? {
-        return if (charLimit == Int.MAX_VALUE) null else LengthBounds(charLimit)
-    }
-
-    fun setDefault(value: String): StringOptionBuilder {
-        return setDefaultValue(value)
-    }
+    override fun getLimit() = if (charLimit == Int.MAX_VALUE) null else LengthBounds(charLimit)
+    fun setDefault(value: String) = setDefaultValue(value)
 
     fun setCharLimit(limit: Int): StringOptionBuilder {
         require(limit >= 0) { "Character limit can't be negative." }
@@ -114,121 +93,59 @@ class StringOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: St
     }
 }
 
-abstract class NumberOptionBuilder<T, B : NumberOptionBuilder<T, B>>(loader: MConfigLoader, category: CategoryItem, key: String, codec: Codec<T>) : OptionBuilder<T, B>(loader, category, key, codec) where T : Comparable<T>, T : Any {
-    private var range: RangeBounds<T>? = null
+abstract class NumberOptionBuilder<O, B : NumberOptionBuilder<O, B>>(loader: MConfigLoader, cat: CategoryItem, key: String, codec: Codec<O>) : OptionBuilder<O, B>(loader, cat, key, codec) where O : Comparable<O>, O : Any {
+    private var range: RangeBounds<O>? = null
 
-    override fun getLimit(): OptionBounds<T>? {
-        return range
-    }
+    override fun getLimit() = range
 
-    protected fun setRangeLimit(min: T, max: T): B {
+    protected fun setRangeLimit(min: O, max: O): B {
         require(min <= max) { "Minimum can't be higher than maximum." }
         this.range = RangeBounds(min, max)
         return self()
     }
 }
 
-class IntOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: String) : NumberOptionBuilder<Int, IntOptionBuilder>(loader, category, key, Codec.INT) {
-
-    fun setDefault(value: Int): IntOptionBuilder {
-        return setDefaultValue(value)
-    }
-
-    fun setRange(min: Int, max: Int): IntOptionBuilder {
-        return setRangeLimit(min, max)
-    }
+class IntOptionBuilder(loader: MConfigLoader, cat: CategoryItem, key: String) : NumberOptionBuilder<Int, IntOptionBuilder>(loader, cat, key, Codec.INT) {
+    fun setDefault(value: Int) = setDefaultValue(value)
+    fun setRange(min: Int, max: Int) = setRangeLimit(min, max)
 }
 
-class LongOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: String) : NumberOptionBuilder<Long, LongOptionBuilder>(loader, category, key, Codec.LONG) {
-
-    fun setDefault(value: Long): LongOptionBuilder {
-        return setDefaultValue(value)
-    }
-
-    fun setRange(min: Long, max: Long): LongOptionBuilder {
-        return setRangeLimit(min, max)
-    }
+class LongOptionBuilder(loader: MConfigLoader, cat: CategoryItem, key: String) : NumberOptionBuilder<Long, LongOptionBuilder>(loader, cat, key, Codec.LONG) {
+    fun setDefault(value: Long) = setDefaultValue(value)
+    fun setRange(min: Long, max: Long) = setRangeLimit(min, max)
 }
 
-class FloatOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: String) : NumberOptionBuilder<Float, FloatOptionBuilder>(loader, category, key, Codec.FLOAT) {
-
-    fun setDefault(value: Float): FloatOptionBuilder {
-        return setDefaultValue(value)
-    }
-
-    fun setRange(min: Float, max: Float): FloatOptionBuilder {
-        return setRangeLimit(min, max)
-    }
+class FloatOptionBuilder(loader: MConfigLoader, cat: CategoryItem, key: String) : NumberOptionBuilder<Float, FloatOptionBuilder>(loader, cat, key, Codec.FLOAT) {
+    fun setDefault(value: Float) = setDefaultValue(value)
+    fun setRange(min: Float, max: Float) = setRangeLimit(min, max)
 }
 
-class DoubleOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: String) : NumberOptionBuilder<Double, DoubleOptionBuilder>(loader, category, key, Codec.DOUBLE) {
-
-    fun setDefault(value: Double): DoubleOptionBuilder {
-        return setDefaultValue(value)
-    }
-
-    fun setRange(min: Double, max: Double): DoubleOptionBuilder {
-        return setRangeLimit(min, max)
-    }
+class DoubleOptionBuilder(loader: MConfigLoader, cat: CategoryItem, key: String) : NumberOptionBuilder<Double, DoubleOptionBuilder>(loader, cat, key, Codec.DOUBLE) {
+    fun setDefault(value: Double) = setDefaultValue(value)
+    fun setRange(min: Double, max: Double) = setRangeLimit(min, max)
 }
 
-class EnumOptionBuilder<E : Enum<E>>(loader: MConfigLoader, category: CategoryItem, key: String, private val type: Class<E>) : OptionBuilder<E, EnumOptionBuilder<E>>(loader, category, key, EnumCodec.of(type)) {
-
-    override fun isText(): Boolean {
-        return true
-    }
-
-    override fun getLimit(): OptionBounds<E> {
-        return EnumBounds(type)
-    }
-
-    fun setDefault(value: E): EnumOptionBuilder<E> {
-        return setDefaultValue(value)
-    }
+class EnumOptionBuilder<E : Enum<E>>(loader: MConfigLoader, cat: CategoryItem, key: String, private val type: Class<E>) : OptionBuilder<E, EnumOptionBuilder<E>>(loader, cat, key, EnumCodec.of(type)) {
+    override fun isText() = true
+    override fun getLimit() = EnumBounds(type)
+    fun setDefault(value: E) = setDefaultValue(value)
 }
 
-class ColorOptionBuilder(loader: MConfigLoader, category: CategoryItem, key: String) : OptionBuilder<Color, ColorOptionBuilder>(loader, category, key, ColorCodec.RGB) {
-    private var hasAlpha = false
+abstract class ColorOptionBuilder<B : ColorOptionBuilder<B>>(loader: MConfigLoader, cat: CategoryItem, key: String, private val hasAlpha: Boolean) : OptionBuilder<Color, B>(loader, cat, key, if (hasAlpha) ColorCodec.ARGB else ColorCodec.RGB) {
+    override fun isText() = true
+    override fun getLimit() = if (hasAlpha) ArgbBounds else RgbBounds
+    protected fun setColor(color: Color) = setDefaultValue(color)
+    protected fun parseHex(hex: String) = requireNotNull(Colors.hexToColor(hex, hasAlpha)) { "Default color '$hex' of config option '$key' is not a valid hex color." }
+}
 
-    override fun isText(): Boolean {
-        return true
-    }
+class RgbOptionBuilder(loader: MConfigLoader, cat: CategoryItem, key: String) : ColorOptionBuilder<RgbOptionBuilder>(loader, cat, key, false) {
+    fun setDefault(hex: String) = setColor(parseHex(hex))
+    fun setDefault(rgb: Int) = setColor(Color(rgb))
+    fun setDefault(r: Float, g: Float, b: Float) = setColor(Color(r, g, b))
+}
 
-    override fun getLimit(): OptionBounds<Color> {
-        return if (hasAlpha) ArgbBounds else RgbBounds
-    }
-
-    fun setDefaultRgb(hex: String): ColorOptionBuilder {
-        return setColor(parseHex(hex, false), false)
-    }
-
-    fun setDefaultRgb(rgb: Int): ColorOptionBuilder {
-        return setColor(Colors.intToColor(rgb, false), false)
-    }
-
-    fun setDefaultRgb(r: Float, g: Float, b: Float): ColorOptionBuilder {
-        return setColor(Colors.floatToColor(r, g, b), false)
-    }
-
-    fun setDefaultArgb(hex: String): ColorOptionBuilder {
-        return setColor(parseHex(hex, true), true)
-    }
-
-    fun setDefaultArgb(argb: Int): ColorOptionBuilder {
-        return setColor(Colors.intToColor(argb, true), true)
-    }
-
-    fun setDefaultArgb(a: Float, r: Float, g: Float, b: Float): ColorOptionBuilder {
-        return setColor(Colors.floatToColor(a, r, g, b), true)
-    }
-
-    private fun setColor(color: Color, hasAlpha: Boolean): ColorOptionBuilder {
-        this.hasAlpha = hasAlpha
-        setCodec(if (hasAlpha) ColorCodec.ARGB else ColorCodec.RGB)
-        return setDefaultValue(color)
-    }
-
-    private fun parseHex(hex: String, hasAlpha: Boolean): Color {
-        return requireNotNull(Colors.hexToColor(hex, hasAlpha)) { "Default color '$hex' of config option '$key' is not a valid hex color." }
-    }
+class ArgbOptionBuilder(loader: MConfigLoader, cat: CategoryItem, key: String) : ColorOptionBuilder<ArgbOptionBuilder>(loader, cat, key, true) {
+    fun setDefault(hex: String) = setColor(parseHex(hex))
+    fun setDefault(argb: Int) = setColor(Color(argb, true))
+    fun setDefault(a: Float, r: Float, g: Float, b: Float) = setColor(Color(r, g, b, a))
 }

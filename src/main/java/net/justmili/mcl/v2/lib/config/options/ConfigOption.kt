@@ -18,9 +18,7 @@ class ConfigOption<T : Any>(val key: String, val default: T, private val codec: 
     val path: Path get() = loader.path
     val bounds: String? get() = limit?.describe()
 
-    fun get(): T {
-        return synced ?: value
-    }
+    fun get() = synced ?: value
 
     fun set(value: T): Boolean {
         if (!isValid(value)) return false
@@ -42,19 +40,11 @@ class ConfigOption<T : Any>(val key: String, val default: T, private val codec: 
         this.synced = null
     }
 
-    fun isSynced(): Boolean {
-        return synced != null
-    }
+    fun isSynced() = synced != null
 
-    fun hasFlag(flag: OptionFlags): Boolean {
-        return (flagMask and flag.mask) != 0
-    }
+    fun hasFlag(flag: OptionFlags) =  (flagMask and flag.mask) != 0
 
-    fun <R> encode(ops: DynamicOps<R>): Optional<R> {
-        return codec.encodeStart(ops, value).resultOrPartial { error ->
-            MConfigLogger.encodeFail(this, error)
-        }
-    }
+    fun <R> encode(ops: DynamicOps<R>): Optional<R> = codec.encodeStart(ops, value).resultOrPartial { error -> MConfigLogger.encodeFail(this, error) }
 
     fun <R> load(ops: DynamicOps<R>, input: R): Boolean {
         val decoded = codec.parse(ops, input).result().orElse(null) ?: return false
@@ -64,9 +54,7 @@ class ConfigOption<T : Any>(val key: String, val default: T, private val codec: 
         return true
     }
 
-    fun toText(): String {
-        return textOf(value)
-    }
+    fun toText() = textOf(value)
 
     private fun textOf(value: T): String {
         val element = codec.encodeStart(JsonOps.INSTANCE, value).resultOrPartial { error -> MConfigLogger.encodeFail(this, error) }.orElse(null) ?: return ""
@@ -88,9 +76,7 @@ class ConfigOption<T : Any>(val key: String, val default: T, private val codec: 
         })
     }
 
-    private fun isValid(value: T): Boolean {
-        return limit == null || limit.isValid(value)
-    }
+    private fun isValid(value: T) = limit == null || limit.isValid(value)
 
     private fun parseText(raw: String): JsonElement {
         return try {

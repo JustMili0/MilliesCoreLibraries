@@ -3,9 +3,9 @@ package net.justmili.mcl.v2.lib.config.options
 import net.justmili.mcl.v2.lib.codecs.EnumCodec
 import java.awt.Color
 
-interface OptionBounds<in T> {
+interface OptionBounds<in O> {
 
-    fun isValid(value: T): Boolean {
+    fun isValid(value: O): Boolean {
         return true
     }
 
@@ -37,9 +37,9 @@ class LengthBounds(private val max: Int) : OptionBounds<String> {
     }
 }
 
-class RangeBounds<T : Comparable<T>>(private val min: T, private val max: T) : OptionBounds<T> {
+class RangeBounds<O : Comparable<O>>(private val min: O, private val max: O) : OptionBounds<O> {
 
-    override fun isValid(value: T): Boolean {
+    override fun isValid(value: O): Boolean {
         return value in min..max
     }
 

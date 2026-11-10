@@ -54,12 +54,12 @@ public class TestConfig {
             root.addComment("Config root comment");
             root.addComment("Second root comment\nwith two lines");
 
-            rgb = root.addColorOption("rootRGB")
-                .setDefaultRgb("C95E35") // or 0xC95E35, or 0.7882f, 0.3686f, 0.2078f
+            rgb = root.addRgbColorOption("rootRGB")
+                .setDefault("C95E35") // or 0xC95E35, or 0.7882f, 0.3686f, 0.2078f
                 .addComment("Some RGB color value (HEX)")
                 .buildOption();
-            argb = root.addColorOption("rootARGB")
-                .setDefaultArgb("FFC95E35") // or 0xFFC95E35, or 1.0f, 0.7882f, 0.3686f, 0.2078f
+            argb = root.addArgbColorOption("rootARGB")
+                .setDefault(0xFFC95E35) // or "FFC95E35", or 1.0f, 0.7882f, 0.3686f, 0.2078f
                 .addComment("Some ARGB color value (HEX)")
                 .buildOption();
 
