@@ -1,6 +1,7 @@
 package net.justmili.mcl.v2.lib.config.options
 
 import net.justmili.mcl.v2.lib.config.codecs.EnumCodec
+import java.awt.Color
 
 interface OptionBounds<in T> {
 
@@ -44,5 +45,23 @@ class RangeBounds<T : Comparable<T>>(private val min: T, private val max: T) : O
 
     override fun describe(): String {
         return "Allowed range: $min to $max"
+    }
+}
+
+object RgbBounds : OptionBounds<Color> {
+
+    override fun isValid(value: Color): Boolean {
+        return value.alpha == 255
+    }
+
+    override fun describe(): String {
+        return "Format: #RRGGBB"
+    }
+}
+
+object ArgbBounds : OptionBounds<Color> {
+
+    override fun describe(): String {
+        return "Format: #AARRGGBB"
     }
 }

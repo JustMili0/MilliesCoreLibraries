@@ -9,7 +9,7 @@ import net.minecraft.resources.ResourceLocation
 import java.nio.file.Path
 import java.util.*
 
-class ConfigOption<T : Any>(val key: String, val default: T, private val codec: Codec<T>, private val limit: OptionBounds<in T>?, private val loader: MConfigLoader, val flagMask: Int) : ConfigItem {
+class ConfigOption<T : Any>(val key: String, val default: T, private val codec: Codec<T>, private val limit: OptionBounds<in T>?, private val loader: MConfigLoader, val flagMask: Int, private val isText: Boolean) : ConfigItem {
     @Volatile private var value: T = default
     @Volatile private var synced: T? = null
     var attachedImage: ResourceLocation? = null
@@ -65,14 +65,25 @@ class ConfigOption<T : Any>(val key: String, val default: T, private val codec: 
     }
 
     fun toText(): String {
-        val element = encode(JsonOps.INSTANCE).orElse(null) ?: return ""
+        return textOf(value)
+    }
+
+    private fun textOf(value: T): String {
+        val element = codec.encodeStart(JsonOps.INSTANCE, value).resultOrPartial { error -> MConfigLogger.encodeFail(this, error) }.orElse(null) ?: return ""
         return if (element is JsonPrimitive) element.asString else element.toString()
     }
 
-    fun loadText(raw: String): Boolean {
-        return load(JsonOps.INSTANCE, when (default) {
-            is String -> JsonPrimitive(raw)
-            is Enum<*> -> JsonPrimitive(raw.trim())
+    internal fun getDefaultsComment(): String {
+        return when (default) {
+            is String, is Number, is Boolean -> default.toString()
+            else -> textOf(default)
+        }
+    }
+
+    internal fun loadText(raw: String): Boolean {
+        return load(JsonOps.INSTANCE, when {
+            default is String -> JsonPrimitive(raw)
+            isText -> JsonPrimitive(raw.trim())
             else -> parseText(raw)
         })
     }

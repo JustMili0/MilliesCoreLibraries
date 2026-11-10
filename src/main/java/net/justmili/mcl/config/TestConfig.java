@@ -1,9 +1,13 @@
 package net.justmili.mcl.config;
 
+import net.justmili.mcl.CoreLibs;
 import net.justmili.mcl.v2.lib.config.*;
 import net.justmili.mcl.v2.lib.config.options.ConfigOption;
 import net.justmili.mcl.v2.lib.config.options.OptionFlags;
+import net.justmili.mcl.v2.lib.util.common.Colors;
 import net.minecraft.util.Mth;
+
+import java.awt.*;
 
 @Deprecated(since = "corelibs:1.0.0", forRemoval = true)
 public class TestConfig {
@@ -30,6 +34,8 @@ public class TestConfig {
     public static ConfigOption<Double> cat2Double;
     public static ConfigOption<String> cat2String;
     public static ConfigOption<TestConfigEnum> rootEnum;
+    public static ConfigOption<Color> rgb;
+    public static ConfigOption<Color> argb;
 
     // Function made only for purpose of this example test
     private static MConfigBuilder builderOfType(FileTypes ext) {
@@ -47,6 +53,15 @@ public class TestConfig {
         builder.create(root -> {
             root.addComment("Config root comment");
             root.addComment("Second root comment\nwith two lines");
+
+            rgb = root.addColorOption("rootRGB")
+                .setDefaultRgb("C95E35") // or 0xC95E35, or 0.7882f, 0.3686f, 0.2078f
+                .addComment("Some RGB color value (HEX)")
+                .buildOption();
+            argb = root.addColorOption("rootARGB")
+                .setDefaultArgb("FFC95E35") // or 0xFFC95E35, or 1.0f, 0.7882f, 0.3686f, 0.2078f
+                .addComment("Some ARGB color value (HEX)")
+                .buildOption();
 
             rootInt = root.addIntOption("rootInt")
                 .setDefault(10)
@@ -168,5 +183,7 @@ public class TestConfig {
                     .buildOption();
             });
         }).build();
+
+        argb.set(Colors.floatToColor(0.6f, 0.4f, 0.4f, 0.4f));
     }
 }

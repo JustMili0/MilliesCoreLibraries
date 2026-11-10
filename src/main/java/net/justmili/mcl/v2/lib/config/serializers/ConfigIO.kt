@@ -1,6 +1,5 @@
 package net.justmili.mcl.v2.lib.config.serializers
 
-import net.justmili.mcl.v2.lib.config.codecs.EnumCodec
 import net.justmili.mcl.v2.lib.config.items.CategoryItem
 import net.justmili.mcl.v2.lib.config.options.ConfigOption
 import net.justmili.mcl.v2.lib.config.options.OptionFlags
@@ -20,32 +19,6 @@ interface ConfigIO {
         const val TOKEN_KEY: String = "_c"
         const val INDENT: String = "  "
 
-        fun addPeriod(comment: String?): String? {
-            if (comment.isNullOrBlank()) return null
-            val stripped = comment.trimEnd()
-            return if (stripped.last() in ".!?:;*-~") stripped else "$stripped."
-        }
-
-        fun getFlagLine(option: ConfigOption<*>): String {
-            val line = StringBuilder("Requires: ")
-            var first = true
-            for (flag in OptionFlags.entries) {
-                if (!option.hasFlag(flag)) continue
-                if (!first) line.append(", ")
-                line.append(flag.descName)
-                first = false
-            }
-            return line.toString()
-        }
-
-        fun getDefaultLine(option: ConfigOption<*>): String {
-            val default = ((option.default as? Enum<*>)?.let { EnumCodec.nameOf(it) } ?: option.default.toString())
-                .replace("\r", "\\r").replace("\n", "\\n")
-            val defaultText = if (default.isEmpty()) "Empty by default" else "Default: $default"
-            val bounds = option.bounds
-            return if (bounds == null) defaultText else "$bounds - $defaultText"
-        }
-
         inline fun eachCommentLine(comment: String?, action: (String, Int, Int) -> Unit) {
             val text = addPeriod(comment) ?: return
             var start = 0
@@ -63,11 +36,36 @@ interface ConfigIO {
         inline fun eachCommentLine(option: ConfigOption<*>, action: (String, Int, Int) -> Unit) {
             eachCommentLine(option.comment, action)
             if (option.flagMask != 0) {
-                val line = getFlagLine(option)
+                val line = getFlagsLine(option)
                 action(line, 0, line.length)
             }
-            val line = getDefaultLine(option)
+            val line = getDefaultsLine(option)
             action(line, 0, line.length)
+        }
+
+        fun addPeriod(comment: String?): String? {
+            if (comment.isNullOrBlank()) return null
+            val stripped = comment.trimEnd()
+            return if (stripped.last() in ".!?:;*-~") stripped else "$stripped."
+        }
+
+        fun getFlagsLine(option: ConfigOption<*>): String {
+            val line = StringBuilder("Requires: ")
+            var first = true
+            for (flag in OptionFlags.entries) {
+                if (!option.hasFlag(flag)) continue
+                if (!first) line.append(", ")
+                line.append(flag.descName)
+                first = false
+            }
+            return line.toString()
+        }
+
+        fun getDefaultsLine(option: ConfigOption<*>): String {
+            val defaultsBase = option.getDefaultsComment().replace("\r", "\\r").replace("\n", "\\n")
+            val defaultsFormatted = if (defaultsBase.isEmpty()) "Empty by default" else "Default: $defaultsBase"
+            val bounds = option.bounds
+            return if (bounds == null) defaultsFormatted else "$bounds - $defaultsFormatted"
         }
     }
 }

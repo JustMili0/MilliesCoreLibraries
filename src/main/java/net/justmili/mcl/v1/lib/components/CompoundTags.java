@@ -1,13 +1,9 @@
-//? if <= 1.20.5 {
 package net.justmili.mcl.v1.lib.components;
 
 import net.minecraft.world.item.ItemStack;
 
 @Deprecated(since = "1.20.5", forRemoval = true)
 public final class CompoundTags {
-    private CompoundTags() {
-    }
-
     public static final String ITEM_ID = "id";
     public static final String ITEM_COUNT = "Count";
     public static final String ITEM_TAG = "tag";
@@ -102,4 +98,3 @@ public final class CompoundTags {
         return props != null && props.canAlwaysEat();
     }
 }
-//?}
