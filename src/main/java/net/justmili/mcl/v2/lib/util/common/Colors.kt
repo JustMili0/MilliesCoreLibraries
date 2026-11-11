@@ -5,6 +5,17 @@ import java.awt.Color
 object Colors {
     private const val HEX = "0123456789ABCDEF"
     private const val OPAQUE = 0xFF000000.toInt()
+    private const val INVALID = 0xFFFF00DC.toInt()
+
+    @JvmStatic
+    fun colorToInt(color: Color, hasAlpha: Boolean = false): Int {
+        return if (hasAlpha) color.rgb else color.rgb or OPAQUE
+    }
+
+    @JvmStatic
+    fun colorToHex(color: Color, hasAlpha: Boolean = false): String {
+        return intToHex(color.rgb, hasAlpha)
+    }
 
     @JvmStatic
     fun floatToColor(a: Float, r: Float, g: Float, b: Float): Color {
@@ -23,7 +34,7 @@ object Colors {
 
     @JvmStatic
     fun floatToInt(r: Float, g: Float, b: Float): Int {
-        return floatToInt(1.0f, r, g, b)
+        return floatToInt(1f, r, g, b)
     }
 
     @JvmStatic
@@ -37,34 +48,27 @@ object Colors {
     }
 
     @JvmStatic
-    fun intToColor(value: Int, hasAlpha: Boolean): Color {
+    fun intToColor(value: Int, hasAlpha: Boolean = false): Color {
         return Color(value, hasAlpha)
     }
 
     @JvmStatic
-    fun intToHex(value: Int, hasAlpha: Boolean): String {
+    fun intToHex(value: Int, hasAlpha: Boolean = false): String {
         val digits = if (hasAlpha) 8 else 6
-        val chars = CharArray(digits + 1)
-        chars[0] = '#'
-        for (i in 1..digits) {
-            chars[i] = HEX[(value ushr ((digits - i) * 4)) and 15]
+        val chars = CharArray(digits)
+        for (i in 0 until digits) {
+            chars[i] = HEX[(value ushr ((digits - 1 - i) * 4)) and 15]
         }
         return String(chars)
     }
 
     @JvmStatic
-    fun colorToHex(color: Color, hasAlpha: Boolean): String {
-        return intToHex(color.rgb, hasAlpha)
+    fun hexToColor(text: String, hasAlpha: Boolean = false): Color {
+        return intToColor(hexToInt(text, hasAlpha), hasAlpha)
     }
 
     @JvmStatic
-    fun hexToColor(text: String, hasAlpha: Boolean): Color? {
-        val value = hexToInt(text, hasAlpha) ?: return null
-        return intToColor(value, true)
-    }
-
-    @JvmStatic
-    fun hexToInt(text: String, hasAlpha: Boolean): Int? {
+    fun hexToInt(text: String, hasAlpha: Boolean = false): Int {
         var start = 0
         var end = text.length
         while (start < end && text[start].isWhitespace()) start++
@@ -77,19 +81,19 @@ object Colors {
         }
 
         val length = end - start
-        if (length != 6 && length != 8) return null
+        if (length != 6 && length != 8) return INVALID
 
         var value = 0
         for (i in start until end) {
             val digit = hexDigit(text[i])
-            if (digit < 0) return null
+            if (digit < 0) return INVALID
             value = (value shl 4) or digit
         }
         return if (hasAlpha && length == 8) value else value or OPAQUE
     }
 
     private fun channel(value: Float, name: String): Int {
-        require(value in 0.0f..1.0f) { "Color parameter outside of expected range: $name" }
+        require(value in 0f..1f) { "Color parameter outside of expected range: $name" }
         return (value * 255 + 0.5).toInt()
     }
 

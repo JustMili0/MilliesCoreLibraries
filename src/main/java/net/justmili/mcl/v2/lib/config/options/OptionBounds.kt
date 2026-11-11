@@ -22,17 +22,17 @@ class RangeBounds<O : Comparable<O>>(private val min: O, private val max: O) : O
     override fun describe() = "Allowed range: $min to $max"
 }
 
-class EnumBounds(private val type: Class<out Enum<*>>) : OptionBounds<Any> {
-    override fun describe() = "Allowed values: " + EnumCodec.names(type)
+class EnumBounds(private val enum: Class<out Enum<*>>) : OptionBounds<Any> {
+    override fun describe() = "Allowed values: " + EnumCodec.names(enum)
 }
 
 object RgbBounds : OptionBounds<Color> {
     override fun isValid(value: Color) = value.alpha == 255
-    override fun describe() = "Format: #RRGGBB"
+    override fun describe() = "Format: RRGGBB"
 }
 
 object ArgbBounds : OptionBounds<Color> {
-    override fun describe() = "Format: #AARRGGBB"
+    override fun describe() = "Format: AARRGGBB"
 }
 
 object UniqueBounds : OptionBounds<Any> {

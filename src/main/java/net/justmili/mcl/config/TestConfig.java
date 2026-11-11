@@ -1,6 +1,7 @@
 package net.justmili.mcl.config;
 
 import com.mojang.serialization.Codec;
+import net.justmili.mcl.v2.lib.codecs.ColorCodec;
 import net.justmili.mcl.v2.lib.config.*;
 import net.justmili.mcl.v2.lib.config.options.*;
 import net.justmili.mcl.v2.lib.util.common.Colors;
@@ -35,7 +36,8 @@ public class TestConfig {
     public static ConfigOption<TestConfigEnum> rootEnum;
     public static ConfigOption<Color> rgb;
     public static ConfigOption<Color> argb;
-    public static ListConfigOption<String> cat2List;
+    public static ListConfigOption<String> cat2StringList;
+    public static ListConfigOption<Color> cat1ColorList;
 
     // Function made only for purpose of this example test
     private static MConfigBuilder builderOfType(FileTypes ext) {
@@ -60,7 +62,7 @@ public class TestConfig {
                 .buildOption();
 
             argb = root.addArgbColorOption("rootARGB")
-                .setDefault(0xFFC95E35) // or "FFC95E35", or 1.0f, 0.7882f, 0.3686f, 0.2078f
+                .setDefault(0xFFC95E35) // or "FFC95E35", or 1f, 0.7882f, 0.3686f, 0.2078f
                 .addComment("Some ARGB color value (HEX)")
                 .buildOption();
 
@@ -106,6 +108,11 @@ public class TestConfig {
 
                 cat0.addCategory("Cat-in-cat 1", cat1 -> {
 
+                    cat1ColorList = cat1.addListOption("cat1ColorList", ColorCodec.ARGB_HEX, true)
+                        .setDefault(Colors.hexToColor("D73823C3", true), new Color(1f, 1f, 1f, 1f))
+                        .addComment("Some colors list")
+                        .buildOption();
+
                     cat1Bool = cat1.addBoolOption("cat1Bool")
                         .setDefault(false)
                         .addComment("Some boolean value")
@@ -147,7 +154,7 @@ public class TestConfig {
                     .buildOption();
 
                 cat0MidFloat = cat0.addFloatOption("cat0MidFloat")
-                    .setDefault(1.0f)
+                    .setDefault(1f)
                     .setRange(0f, 5f)
                     .addComment("Some ranged float value")
                     .buildOption();
@@ -160,7 +167,7 @@ public class TestConfig {
 
                 cat0.addCategory("Cat-in-cat 2", cat2 -> {
 
-                    cat2List = cat2.addListOption("cat2List", Codec.STRING, true)
+                    cat2StringList = cat2.addListOption("cat2List", Codec.STRING, true)
                         .setDefault("a", "b", "a", "c", "c", "c")
                         .addComment("Some unique string list")
                         .buildOption();

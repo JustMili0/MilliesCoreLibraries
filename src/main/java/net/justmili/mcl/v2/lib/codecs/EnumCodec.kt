@@ -7,17 +7,16 @@ import net.minecraft.util.StringRepresentable
 object EnumCodec {
 
     @JvmStatic
-    fun <E : Enum<E>> of(type: Class<E>): Codec<E> {
-        val constants = type.enumConstants
+    fun <E : Enum<E>> of(enum: Class<E>): Codec<E> {
+        val constants = enum.enumConstants
         for (i in constants.indices) {
             for (j in i + 1 until constants.size) {
-                require(!nameOf(constants[i]).equals(nameOf(constants[j]), true)) { "Enum '${type.simpleName}' has constants with the same name." }
+                require(!nameOf(constants[i]).equals(nameOf(constants[j]), true)) { "Enum '${enum.simpleName}' has constants with the same name." }
             }
         }
-
         return Codec.STRING.comapFlatMap<E>({ name ->
-            val constant = type.enumConstants.firstOrNull { nameOf(it).equals(name, true) }
-            if (constant != null) DataResult.success(constant) else DataResult.error<E> { "Unknown value '$name', allowed values: " + names(type) }
+            val constant = enum.enumConstants.firstOrNull { nameOf(it).equals(name, true) }
+            if (constant != null) DataResult.success(constant) else DataResult.error<E> { "Unknown value '$name', allowed values: " + names(enum) }
         }, { constant -> nameOf(constant) })
     }
 
@@ -27,7 +26,7 @@ object EnumCodec {
     }
 
     @JvmStatic
-    fun names(type: Class<out Enum<*>>): String {
-        return type.enumConstants.joinToString(", ") { nameOf(it) }
+    fun names(enum: Class<out Enum<*>>): String {
+        return enum.enumConstants.joinToString(", ") { nameOf(it) }
     }
 }

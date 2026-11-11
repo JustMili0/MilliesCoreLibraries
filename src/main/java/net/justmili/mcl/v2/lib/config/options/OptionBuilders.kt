@@ -122,17 +122,17 @@ class DoubleOptionBuilder(loader: MConfigLoader, cat: CategoryItem, key: String)
     fun setRange(min: Double, max: Double) = setRangeLimit(min, max)
 }
 
-class EnumOptionBuilder<E : Enum<E>>(loader: MConfigLoader, cat: CategoryItem, key: String, private val type: Class<E>) : OptionBuilder<E, EnumOptionBuilder<E>>(loader, cat, key, EnumCodec.of(type)) {
+class EnumOptionBuilder<E : Enum<E>>(loader: MConfigLoader, cat: CategoryItem, key: String, private val enum: Class<E>) : OptionBuilder<E, EnumOptionBuilder<E>>(loader, cat, key, EnumCodec.of(enum)) {
     override fun isText() = true
-    override fun getLimit() = EnumBounds(type)
+    override fun getLimit() = EnumBounds(enum)
     fun setDefault(value: E) = setDefaultValue(value)
 }
 
-abstract class ColorOptionBuilder<B : ColorOptionBuilder<B>>(loader: MConfigLoader, cat: CategoryItem, key: String, private val hasAlpha: Boolean) : OptionBuilder<Color, B>(loader, cat, key, if (hasAlpha) ColorCodec.ARGB else ColorCodec.RGB) {
+abstract class ColorOptionBuilder<B : ColorOptionBuilder<B>>(loader: MConfigLoader, cat: CategoryItem, key: String, private val hasAlpha: Boolean) : OptionBuilder<Color, B>(loader, cat, key, if (hasAlpha) ColorCodec.ARGB_HEX else ColorCodec.RGB_HEX) {
     override fun isText() = true
     override fun getLimit() = if (hasAlpha) ArgbBounds else RgbBounds
     protected fun setColor(color: Color) = setDefaultValue(color)
-    protected fun parseHex(hex: String) = requireNotNull(Colors.hexToColor(hex, hasAlpha)) { "Default color '$hex' of config option '$key' is not a valid hex color." }
+    protected fun parseHex(hex: String) = Colors.hexToColor(hex, hasAlpha)
 }
 
 class RgbOptionBuilder(loader: MConfigLoader, cat: CategoryItem, key: String) : ColorOptionBuilder<RgbOptionBuilder>(loader, cat, key, false) {
