@@ -39,6 +39,14 @@ public class TestConfig {
     public static ListConfigOption<String> cat2StringList;
     public static ListConfigOption<Color> cat1ColorList;
 
+    public enum TestConfigEnum {
+        VALUE_0,
+        VALUE_1,
+        VALUE_2,
+        VALUE_3,
+        VALUE_4
+    }
+
     // Function made only for purpose of this example test
     private static MConfigBuilder builderOfType(FileTypes ext) {
         return new MConfigBuilder("examplemod", null, ConfigTypes.COMMON, ext, true);

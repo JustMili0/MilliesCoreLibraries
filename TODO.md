@@ -13,6 +13,7 @@
   - [MILLIE] Fix, rework and improve priority config synchronization
   - [APPELS] Add full TOML support (including for old file conversion)
 - [MILLIE] Finish reworking data generation utils
+- Use `Config.enableDebug` where `Platform.IS_DEV_ENV` is used etc. generally use for logging extra info that'd only be useful for a developer
 - [EVERYONE] Port everything to all versions
   - Additionally exclude some files from being included in some jars at all
 
