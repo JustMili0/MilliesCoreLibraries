@@ -13,53 +13,6 @@ public final class NbtUtil {
         return new CustomDataBuilder();
     }
 
-    public static final class CustomDataBuilder {
-        private final CompoundTag tag = new CompoundTag();
-
-        private CustomDataBuilder() {
-        }
-
-        public CustomDataBuilder addBool(String key, boolean value) {
-            tag.putBoolean(key, value);
-            return this;
-        }
-
-        public CustomDataBuilder addInt(String key, int value) {
-            tag.putInt(key, value);
-            return this;
-        }
-
-        public CustomDataBuilder addLong(String key, long value) {
-            tag.putLong(key, value);
-            return this;
-        }
-
-        public CustomDataBuilder addDouble(String key, double value) {
-            tag.putDouble(key, value);
-            return this;
-        }
-
-        public CustomDataBuilder addFloat(String key, float value) {
-            tag.putFloat(key, value);
-            return this;
-        }
-
-        public CustomDataBuilder addString(String key, String value) {
-            tag.putString(key, value);
-            return this;
-        }
-
-        public ItemStack applyToStack(ItemStack stack) {
-            stack.getOrCreateTag().merge(tag);
-            return stack;
-        }
-
-        public ItemStack overwriteStack(ItemStack stack) {
-            stack.setTag(tag.copy());
-            return stack;
-        }
-    }
-
     public static boolean getBool(ItemStack stack, String key, boolean orElse) {
         var tag = tagOf(stack);
         return tag.contains(key, Tag.TAG_ANY_NUMERIC)? tag.getBoolean(key) : orElse;
@@ -105,5 +58,52 @@ public final class NbtUtil {
     private static CompoundTag tagOf(ItemStack stack) {
         var tag = stack.getTag();
         return tag == null? new CompoundTag() : tag;
+    }
+
+    public static final class CustomDataBuilder {
+        private final CompoundTag tag = new CompoundTag();
+
+        private CustomDataBuilder() {
+        }
+
+        public CustomDataBuilder addBool(String key, boolean value) {
+            tag.putBoolean(key, value);
+            return this;
+        }
+
+        public CustomDataBuilder addInt(String key, int value) {
+            tag.putInt(key, value);
+            return this;
+        }
+
+        public CustomDataBuilder addLong(String key, long value) {
+            tag.putLong(key, value);
+            return this;
+        }
+
+        public CustomDataBuilder addDouble(String key, double value) {
+            tag.putDouble(key, value);
+            return this;
+        }
+
+        public CustomDataBuilder addFloat(String key, float value) {
+            tag.putFloat(key, value);
+            return this;
+        }
+
+        public CustomDataBuilder addString(String key, String value) {
+            tag.putString(key, value);
+            return this;
+        }
+
+        public ItemStack applyToStack(ItemStack stack) {
+            stack.getOrCreateTag().merge(tag);
+            return stack;
+        }
+
+        public ItemStack overwriteStack(ItemStack stack) {
+            stack.setTag(tag.copy());
+            return stack;
+        }
     }
 }

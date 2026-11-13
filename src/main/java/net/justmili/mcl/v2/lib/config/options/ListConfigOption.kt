@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec
 import net.justmili.mcl.v2.lib.codecs.ListCodec
 import net.justmili.mcl.v2.lib.config.MConfigLoader
 
-class ListConfigOption<E : Any>(key: String, default: List<E>, codec: Codec<List<E>>, limit: OptionBounds<List<E>>?, loader: MConfigLoader, flagMask: Int, private val collapse: Boolean) : ConfigOption<@JvmSuppressWildcards List<E>>(key, default, codec, limit, loader, flagMask, false) {
+class ListConfigOption<E : Any>(key: String, default: List<E>, codec: Codec<List<E>>, limit: OptionBounds<List<E>>?, loader: MConfigLoader, flagMask: Int, private val collapse: Boolean) : ConfigOption<@JvmSuppressWildcards List<E>>(key, default, codec, limit, flagMask, false, loader) {
 
     override fun set(value: List<E>) = super.set(ListCodec.normalize(value, collapse))
 

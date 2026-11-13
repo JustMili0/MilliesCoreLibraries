@@ -25,7 +25,7 @@ public final class RecipeDatagen {
     public static InventoryChangeTrigger.TriggerInstance has(ItemLike itemLike) {
         return new InventoryChangeTrigger.TriggerInstance(
             ContextAwarePredicate.ANY, MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY,
-            new ItemPredicate[]{ItemPredicate.Builder.item().of(itemLike).build()}
+            new ItemPredicate[]{ ItemPredicate.Builder.item().of(itemLike).build() }
         );
     }
 

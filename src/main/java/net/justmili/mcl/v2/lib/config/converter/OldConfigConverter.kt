@@ -1,7 +1,6 @@
 package net.justmili.mcl.v2.lib.config.converter
 
 import com.google.gson.*
-import net.justmili.mcl.v1.lib.util.Platform
 import net.justmili.mcl.v2.lib.config.MConfigLogger
 import net.justmili.mcl.v2.lib.util.common.FileIO
 import java.io.IOException
@@ -10,7 +9,6 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
-import kotlin.io.path.bufferedReader
 
 class OldConfigConverter(val path: Path, val deleteAfter: Boolean) {
     private var finder: ((String) -> JsonElement?)? = null
@@ -43,7 +41,7 @@ class OldConfigConverter(val path: Path, val deleteAfter: Boolean) {
 
     private fun readJson(): Boolean {
         val root = try {
-            path.bufferedReader(options = FileIO.READ_ONLY).use { reader -> JsonParser.parseReader(reader) }
+            FileIO.bufferedReader(path).use { reader -> JsonParser.parseReader(reader) }
         } catch (e: IOException) {
             return fail(e.message)
         } catch (e: JsonParseException) {
@@ -58,7 +56,7 @@ class OldConfigConverter(val path: Path, val deleteAfter: Boolean) {
     private fun readProperties(): Boolean {
         val properties = Properties()
         try {
-            Files.newBufferedReader(path).use { reader -> properties.load(reader) }
+            FileIO.bufferedReader(path).use { reader -> properties.load(reader) }
         } catch (e: IOException) {
             return fail(e.message)
         } catch (e: IllegalArgumentException) {
@@ -83,7 +81,7 @@ class OldConfigConverter(val path: Path, val deleteAfter: Boolean) {
     }
 
     private fun fail(reason: String?): Boolean {
-        if (Platform.IS_DEV_ENV) MConfigLogger.readFail(path, reason)
+        if (MConfigLogger.IS_DEBUG) MConfigLogger.readFail(path, reason)
         return false
     }
 

@@ -4,6 +4,8 @@ import com.mojang.serialization.Codec
 import net.justmili.mcl.v2.lib.config.items.CategoryItem
 import net.justmili.mcl.v2.lib.config.items.CommentItem
 import net.justmili.mcl.v2.lib.config.options.*
+import net.justmili.mcl.v2.lib.config.serializers.ConfigIO
+import net.minecraft.network.chat.Component
 import java.nio.file.Path
 import java.util.function.Consumer
 
@@ -27,7 +29,9 @@ class MConfigBuilder @JvmOverloads constructor(modId: String, customFileName: St
 
     open class ConfigBuilder(private val loader: MConfigLoader, private val category: CategoryItem) {
 
-        open fun addComment(comment: String): ConfigBuilder {
+        fun addComment(comment: String) = addComment(Component.literal(comment))
+
+        open fun addComment(comment: Component): ConfigBuilder {
             category.add(CommentItem(comment))
             return this
         }
@@ -56,8 +60,8 @@ class MConfigBuilder @JvmOverloads constructor(modId: String, customFileName: St
 
     class CategoryBuilder(loader: MConfigLoader, category: CategoryItem, private val child: CategoryItem) : ConfigBuilder(loader, category) {
 
-        override fun addComment(comment: String): CategoryBuilder {
-            child.comment = child.comment?.let { it + "\n" + comment } ?: comment
+        override fun addComment(comment: Component): CategoryBuilder {
+            child.comment = ConfigIO.joinComments(child.comment, comment)
             return this
         }
     }

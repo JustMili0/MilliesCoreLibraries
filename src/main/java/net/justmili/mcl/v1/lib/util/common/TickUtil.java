@@ -8,16 +8,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class TickUtil {
     private static final ConcurrentLinkedQueue<WorkItem> queue = new ConcurrentLinkedQueue<>();
 
-    private static class WorkItem {
-        Runnable task;
-        int processTicks;
-
-        WorkItem(Runnable task, int ticks) {
-            this.task = task;
-            this.processTicks = ticks;
-        }
-    }
-
     public static void initProcessQueue() {
         TickEvents.SERVER_POST.register(server -> queue.removeIf(item -> {
             if (--item.processTicks <= 0) {
@@ -34,5 +24,15 @@ public class TickUtil {
 
     public static void serverTickExecute(MinecraftServer server, Runnable task) {
         if (server != null) server.execute(task);
+    }
+
+    private static class WorkItem {
+        Runnable task;
+        int processTicks;
+
+        WorkItem(Runnable task, int ticks) {
+            this.task = task;
+            this.processTicks = ticks;
+        }
     }
 }

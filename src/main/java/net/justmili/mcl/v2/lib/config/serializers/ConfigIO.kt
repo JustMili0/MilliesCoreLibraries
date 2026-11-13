@@ -3,6 +3,7 @@ package net.justmili.mcl.v2.lib.config.serializers
 import net.justmili.mcl.v2.lib.config.items.CategoryItem
 import net.justmili.mcl.v2.lib.config.options.ConfigOption
 import net.justmili.mcl.v2.lib.config.options.OptionFlags
+import net.minecraft.network.chat.Component
 import java.nio.file.Path
 
 interface ConfigIO {
@@ -33,9 +34,13 @@ interface ConfigIO {
             }
         }
 
+        inline fun eachCommentLine(comment: Component?, action: (String, Int, Int) -> Unit): Boolean = eachCommentLine(comment?.string, action)
+
+        fun joinComments(first: Component?, second: Component): Component = if (first == null) second else Component.empty().append(first).append("\n").append(second)
+
         inline fun eachCommentLine(option: ConfigOption<*>, action: (String, Int, Int) -> Unit) {
             eachCommentLine(option.comment, action)
-            if (option.flagMask != 0) {
+            if (option.flags != 0) {
                 val line = getFlagsLine(option)
                 action(line, 0, line.length)
             }
@@ -55,7 +60,7 @@ interface ConfigIO {
             for (flag in OptionFlags.entries) {
                 if (!option.hasFlag(flag)) continue
                 if (!first) line.append(", ")
-                line.append(flag.descName)
+                line.append(flag.name.lowercase().replace("requires_", "").replace("_", " "))
                 first = false
             }
             return line.toString()

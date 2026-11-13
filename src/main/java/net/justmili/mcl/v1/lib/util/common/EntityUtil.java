@@ -224,9 +224,6 @@ public class EntityUtil {
         return entity.level().getBlockCollisions(entity, bbOffset).iterator().hasNext();
     }
 
-    public record MobData(Class<?> entityClass, double range, double runSpeed) {
-    }
-
     public static <T extends Mob> List<T> getNearby(ServerPlayer player, Class<T> mob, double radius) {
         return player.level().getEntitiesOfClass(mob, player.getBoundingBox().inflate(radius));
     }
@@ -248,5 +245,8 @@ public class EntityUtil {
     public static <T extends Mob> void executeForNearby(ServerPlayer player, Class<?> entityClass, double range, double speed, BiConsumer<T, Double> action) {
         //noinspection unchecked
         getNearby(player, entityClass.asSubclass(Mob.class), range).forEach(mob -> action.accept((T) mob, speed));
+    }
+
+    public record MobData(Class<?> entityClass, double range, double runSpeed) {
     }
 }

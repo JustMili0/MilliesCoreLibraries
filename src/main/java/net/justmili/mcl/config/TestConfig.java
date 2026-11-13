@@ -39,14 +39,6 @@ public class TestConfig {
     public static ListConfigOption<String> cat2StringList;
     public static ListConfigOption<Color> cat1ColorList;
 
-    public enum TestConfigEnum {
-        VALUE_0,
-        VALUE_1,
-        VALUE_2,
-        VALUE_3,
-        VALUE_4
-    }
-
     // Function made only for purpose of this example test
     private static MConfigBuilder builderOfType(FileTypes ext) {
         return new MConfigBuilder("examplemod", null, ConfigTypes.COMMON, ext, true);
@@ -213,7 +205,8 @@ public class TestConfig {
                         .addComment("Some empty string value")
                         .buildOption();
 
-                    cat2.addCategory("Cat-in-cat 3", cat3 -> {}).addComment("Empty category");
+                    cat2.addCategory("Cat-in-cat 3", cat3 -> {
+                    }).addComment("Empty category");
                 });
 
                 cat0EndBool = cat0.addBoolOption("cat0EndBool")
@@ -224,5 +217,13 @@ public class TestConfig {
         }).build();
 
         argb.set(Colors.floatToColor(0.6f, 0.4f, 0.4f, 0.4f));
+    }
+
+    public enum TestConfigEnum {
+        VALUE_0,
+        VALUE_1,
+        VALUE_2,
+        VALUE_3,
+        VALUE_4
     }
 }

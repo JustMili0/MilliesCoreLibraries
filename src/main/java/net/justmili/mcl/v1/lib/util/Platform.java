@@ -10,14 +10,14 @@ import java.util.Collection;
 import java.util.Optional;
 
 public class Platform {
-    private static final FabricLoader LOADER = FabricLoader.getInstance();
     public static final String PLATFORM = "fabric";
     public static final String GAME_VERSION = SharedConstants.getCurrentVersion().getId();
+    private static final FabricLoader LOADER = FabricLoader.getInstance();
     public static final boolean IS_DEV_ENV = LOADER.isDevelopmentEnvironment();
     public static final EnvType GAME_ENV = LOADER.getEnvironmentType();
     public static final Path GAME_DIR = LOADER.getGameDir();
-    public static final Path CONFIG_DIR = LOADER.getConfigDir();
     public static final Path MODS_DIR = Path.of(GAME_DIR.toString(), "mods");
+    public static final Path CONFIG_DIR = LOADER.getConfigDir();
     public static final Collection<ModContainer> MODS = LOADER.getAllMods();
     public static final Collection<String> MOD_IDS = MODS.stream().map(mod -> mod.getMetadata().getId()).toList();
     public static final int MOD_COUNT = MODS.size();
