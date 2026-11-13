@@ -1,8 +1,9 @@
 package net.justmili.mcl.v2.lib.config.items
 
 import net.justmili.mcl.v2.lib.config.options.ConfigOption
+import net.minecraft.network.chat.Component
 
-class CategoryItem(val name: String, var comment: String?) : ConfigItem {
+class CategoryItem(val name: String, var comment: Component?) : ConfigItem {
     val children: MutableList<ConfigItem> = ArrayList()
 
     fun add(item: ConfigItem) {

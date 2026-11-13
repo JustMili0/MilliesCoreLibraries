@@ -43,7 +43,7 @@ public class BlockBehaviorUtil {
         return BlockBehaviour.Properties.of()
             .mapColor((blockState) -> blockState.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y? topMapColor : sideMapColor)
             .instrument(NoteBlockInstrument.BASS)
-            .strength(2.0F)
+            .strength(2f)
             .sound(SoundType.WOOD)
             .ignitedByLava();
     }
@@ -52,7 +52,7 @@ public class BlockBehaviorUtil {
         return BlockBehaviour.Properties.of()
             .mapColor((blockState) -> blockState.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y? topMapColor : sideMapColor)
             .instrument(NoteBlockInstrument.BASS)
-            .strength(2.0F)
+            .strength(2f)
             .sound(soundType)
             .ignitedByLava();
     }
@@ -60,7 +60,7 @@ public class BlockBehaviorUtil {
     public static BlockBehaviour.Properties leaves() {
         return BlockBehaviour.Properties.of()
             .mapColor(MapColor.PLANT)
-            .strength(0.2F)
+            .strength(0.2f)
             .randomTicks()
             .sound(SoundType.GRASS)
             .noOcclusion()
@@ -77,7 +77,7 @@ public class BlockBehaviorUtil {
          *  stone - BlockSetType.STONE, 20, false
          */
 
-        return BlockBehaviour.Properties.of().noCollission().strength(0.5F).pushReaction(PushReaction.DESTROY);
+        return BlockBehaviour.Properties.of().noCollission().strength(0.5f).pushReaction(PushReaction.DESTROY);
     }
 
     private static boolean ocelotOrParrot(BlockState state, BlockGetter blockGetter, BlockPos pos, EntityType<?> entity) {

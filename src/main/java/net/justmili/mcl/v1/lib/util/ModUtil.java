@@ -4,6 +4,14 @@ import org.slf4j.Logger;
 
 public class ModUtil {
 
+    public static void specialInitMessage(Logger logger, String modName, String modId, String modVersion, VersionType versionType) {
+        if (versionType.hasWarning()) {
+            logger.info("Initializing {} ({}) version {} ({})", modName, modId, modVersion, versionType.getWarning());
+        } else {
+            logger.info("Initializing {} ({}) version {}", modName, modId, modVersion);
+        }
+    }
+
     public enum VersionType {
         EXPERIMENTAL("Experimental build! Possibly unstable."),
         EARLY_DEV_ALPHA("Dev-only build! Possibly unstable."),
@@ -26,14 +34,6 @@ public class ModUtil {
 
         public boolean hasWarning() {
             return !warning.isEmpty();
-        }
-    }
-
-    public static void specialInitMessage(Logger logger, String modName, String modId, String modVersion, VersionType versionType) {
-        if (versionType.hasWarning()) {
-            logger.info("Initializing {} ({}) version {} ({})", modName, modId, modVersion, versionType.getWarning());
-        } else {
-            logger.info("Initializing {} ({}) version {}", modName, modId, modVersion);
         }
     }
 }

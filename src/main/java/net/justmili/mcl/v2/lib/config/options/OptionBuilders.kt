@@ -4,7 +4,9 @@ import com.mojang.serialization.Codec
 import net.justmili.mcl.v2.lib.codecs.*
 import net.justmili.mcl.v2.lib.config.MConfigLoader
 import net.justmili.mcl.v2.lib.config.items.CategoryItem
+import net.justmili.mcl.v2.lib.config.serializers.ConfigIO
 import net.justmili.mcl.v2.lib.util.common.Colors
+import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import java.awt.Color
 
@@ -12,7 +14,7 @@ abstract class OptionBuilder<O : Any, B : OptionBuilder<O, B>>(protected val loa
     private var defaultValue: O? = null
     protected var flagMask = 0
     private var attachedImage: ResourceLocation? = null
-    private var comment: String? = null
+    private var comment: Component? = null
     private var oldKey: String? = null
 
     @Suppress("UNCHECKED_CAST")
@@ -27,11 +29,11 @@ abstract class OptionBuilder<O : Any, B : OptionBuilder<O, B>>(protected val loa
 
     protected open fun isText() = false
 
-    protected open fun create(value: O, limit: OptionBounds<O>?) = ConfigOption(key, value, codec, limit, loader, flagMask, isText())
+    protected open fun create(value: O, limit: OptionBounds<O>?) = ConfigOption(key, value, codec, limit, flagMask, isText(), loader)
 
     fun addFlags(vararg flags: OptionFlags): B {
         for (flag in flags) {
-            flagMask = flagMask or flag.mask
+            flagMask = flagMask or flag.flag
         }
         return self()
     }
@@ -41,8 +43,10 @@ abstract class OptionBuilder<O : Any, B : OptionBuilder<O, B>>(protected val loa
         return self()
     }
 
-    fun addComment(comment: String): B {
-        this.comment = this.comment?.let { it + "\n" + comment } ?: comment
+    fun addComment(comment: String) = addComment(Component.literal(comment))
+
+    fun addComment(comment: Component): B {
+        this.comment = ConfigIO.joinComments(this.comment, comment)
         return self()
     }
 
@@ -55,7 +59,7 @@ abstract class OptionBuilder<O : Any, B : OptionBuilder<O, B>>(protected val loa
     open fun buildOption(): ConfigOption<O> {
         val value = checkNotNull(defaultValue) { "Config option '$key' has no default value." }
         val limit = getLimit()
-        require(limit == null || limit.isValid(value)) { "Default value '$value' of config option '$key' does not meet its own limits." }
+        require(limit == null || limit.clamp(value) == value) { "Default value '$value' of config option '$key' does not meet its own limits." }
 
         val option = create(value, limit)
         option.oldKey = oldKey
@@ -122,17 +126,17 @@ class DoubleOptionBuilder(loader: MConfigLoader, cat: CategoryItem, key: String)
     fun setRange(min: Double, max: Double) = setRangeLimit(min, max)
 }
 
-class EnumOptionBuilder<E : Enum<E>>(loader: MConfigLoader, cat: CategoryItem, key: String, private val type: Class<E>) : OptionBuilder<E, EnumOptionBuilder<E>>(loader, cat, key, EnumCodec.of(type)) {
+class EnumOptionBuilder<E : Enum<E>>(loader: MConfigLoader, cat: CategoryItem, key: String, private val enum: Class<E>) : OptionBuilder<E, EnumOptionBuilder<E>>(loader, cat, key, EnumCodec.of(enum)) {
     override fun isText() = true
-    override fun getLimit() = EnumBounds(type)
+    override fun getLimit() = EnumBounds(enum)
     fun setDefault(value: E) = setDefaultValue(value)
 }
 
-abstract class ColorOptionBuilder<B : ColorOptionBuilder<B>>(loader: MConfigLoader, cat: CategoryItem, key: String, private val hasAlpha: Boolean) : OptionBuilder<Color, B>(loader, cat, key, if (hasAlpha) ColorCodec.ARGB else ColorCodec.RGB) {
+abstract class ColorOptionBuilder<B : ColorOptionBuilder<B>>(loader: MConfigLoader, cat: CategoryItem, key: String, private val hasAlpha: Boolean) : OptionBuilder<Color, B>(loader, cat, key, if (hasAlpha) ColorCodec.ARGB_HEX else ColorCodec.RGB_HEX) {
     override fun isText() = true
     override fun getLimit() = if (hasAlpha) ArgbBounds else RgbBounds
     protected fun setColor(color: Color) = setDefaultValue(color)
-    protected fun parseHex(hex: String) = requireNotNull(Colors.hexToColor(hex, hasAlpha)) { "Default color '$hex' of config option '$key' is not a valid hex color." }
+    protected fun parseHex(hex: String) = Colors.hexToColor(hex, hasAlpha)
 }
 
 class RgbOptionBuilder(loader: MConfigLoader, cat: CategoryItem, key: String) : ColorOptionBuilder<RgbOptionBuilder>(loader, cat, key, false) {
@@ -148,7 +152,7 @@ class ArgbOptionBuilder(loader: MConfigLoader, cat: CategoryItem, key: String) :
 }
 
 class ListOptionBuilder<E : Any>(loader: MConfigLoader, cat: CategoryItem, key: String, codec: Codec<E>, private val collapse: Boolean) : OptionBuilder<@JvmSuppressWildcards List<E>, ListOptionBuilder<E>>(loader, cat, key, ListCodec.of(codec, collapse)) {
-    override fun getLimit() = if (collapse) UniqueBounds else null
+    override fun getLimit() = if (collapse) UniqueBounds<E>() else null
     override fun create(value: List<E>, limit: OptionBounds<List<E>>?) = ListConfigOption(key, ListCodec.normalize(value, collapse), codec, limit, loader, flagMask, collapse)
     override fun buildOption() = super.buildOption() as ListConfigOption<E>
     fun setDefault(vararg elements: E) = setDefaultValue(elements.asList())

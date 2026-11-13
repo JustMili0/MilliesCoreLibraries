@@ -12,7 +12,6 @@ enum class OptionFlags {
     REQUIRES_RENDERER_UPDATE,
     REQUIRES_VIDEOMODE_RELOAD;
 
-    val mask: Int = 1 shl ordinal
+    val flag: Int = 1 shl ordinal
     val id: ResourceLocation = CoreLibs.asId("config_option_flag." + name.lowercase())
-    val descName: String = name.lowercase().replace("requires_", "").replace("_", " ")
 }

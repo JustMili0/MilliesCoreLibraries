@@ -4,9 +4,9 @@ import net.justmili.mcl.v2.lib.config.MConfigLogger
 import net.justmili.mcl.v2.lib.config.items.*
 import net.justmili.mcl.v2.lib.config.options.ConfigOption
 import net.justmili.mcl.v2.lib.util.common.FileIO
+import net.minecraft.network.chat.Component
 import java.io.IOException
 import java.io.Writer
-import java.nio.file.Files
 import java.nio.file.Path
 import java.util.*
 
@@ -29,7 +29,7 @@ object PropertiesIO : ConfigIO {
     override fun load(path: Path, root: CategoryItem): Boolean {
         val properties = Properties()
         try {
-            Files.newBufferedReader(path).use { reader -> properties.load(reader) }
+            FileIO.bufferedReader(path).use { reader -> properties.load(reader) }
         } catch (e: IOException) {
             MConfigLogger.readFail(path, e.message)
             return false
@@ -61,6 +61,7 @@ object PropertiesIO : ConfigIO {
                     writeCommentBlock(writer, item.comment)
                     writeItems(writer, item.children)
                 }
+
                 is CommentItem -> writeCommentBlock(writer, item.text)
                 is ConfigOption<*> -> {
                     ConfigIO.eachCommentLine(item) { text, from, to -> writeComment(writer, text, from, to) }
@@ -73,7 +74,7 @@ object PropertiesIO : ConfigIO {
         }
     }
 
-    private fun writeCommentBlock(writer: Writer, comment: String?) {
+    private fun writeCommentBlock(writer: Writer, comment: Component?) {
         if (ConfigIO.eachCommentLine(comment) { text, from, to -> writeComment(writer, text, from, to) }) writer.write("\n")
     }
 

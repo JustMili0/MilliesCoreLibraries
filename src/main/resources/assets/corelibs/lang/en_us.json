@@ -1,3 +1,4 @@
 {
-  "corelibs.config.screen.title": "Millie's Core Libraries"
+  "corelibs.config.screen.title": "Millie's Core Libraries",
+  "corelibs.config.comment.debug": "Enables additional debug information for actions executed by Millie's Core Libraries"
 }

@@ -6,7 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.function.UnaryOperator;
 
-@SuppressWarnings({"UnstableApiUsage"})
+@SuppressWarnings({ "UnstableApiUsage" })
 public class FdaUtil {
     public static boolean getBool(AttachmentTarget target, AttachmentType<Boolean> variable) {
         return get(target, variable, false);

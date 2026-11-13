@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.function.IntPredicate;
 
 public class Maths {
-    private static final int FLOAT_STEPS = 1 << 24;
     public static final int MAX_INT = Integer.MAX_VALUE;
     public static final int MIN_INT = Integer.MIN_VALUE;
     public static final long MAX_LONG = Long.MAX_VALUE;
@@ -47,6 +46,7 @@ public class Maths {
     public static final int TICKS_PER_MINUTE = TICKS_PER_SECOND * 60;
     public static final int TICKS_PER_HOUR = TICKS_PER_MINUTE * 60;
     public static final int TICKS_PER_DAY = TICKS_PER_HOUR * 24;
+    private static final int FLOAT_STEPS = 1 << 24;
     public static RandomSource random = RandomSource.create();
 
     public static void setSeed(long seed) {

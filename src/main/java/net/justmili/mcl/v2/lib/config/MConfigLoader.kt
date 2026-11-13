@@ -31,7 +31,7 @@ class MConfigLoader(modId: String, customFileName: String?, configType: ConfigTy
     internal fun tryWrite(): Boolean {
         synchronized(path) {
             if (serializer.write(path, root)) return true
-            MConfigLogger.writeFail(path)
+            MConfigLogger.writeFail(path, "unknown") // TODO: make it give a proper error message
             return false
         }
     }

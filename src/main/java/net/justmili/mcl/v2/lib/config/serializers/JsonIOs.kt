@@ -9,7 +9,6 @@ import net.justmili.mcl.v2.lib.config.options.ConfigOption
 import net.justmili.mcl.v2.lib.util.common.FileIO
 import java.io.IOException
 import java.io.Writer
-import java.nio.file.Files
 import java.nio.file.Path
 
 object JsonIO : ConfigIO {
@@ -38,6 +37,7 @@ object JsonIO : ConfigIO {
                     writeComment(writer, separator, indent, commentIndex, text, from, to)
                     separator = LINE_SEPARATOR
                 }
+
                 is ConfigOption<*> -> {
                     ConfigIO.eachCommentLine(item) { text, from, to ->
                         writeComment(writer, separator, indent, commentIndex, text, from, to)
@@ -47,6 +47,7 @@ object JsonIO : ConfigIO {
                     SharedJsonIO.writeValue(writer, item)
                     separator = LINE_SEPARATOR
                 }
+
                 is CategoryItem -> {
                     ConfigIO.eachCommentLine(item.comment) { text, from, to ->
                         writeComment(writer, separator, indent, commentIndex, text, from, to)
@@ -109,12 +110,14 @@ object Json5IO : ConfigIO {
                     val wrote = ConfigIO.eachCommentLine(item.text) { text, from, to -> writeComment(writer, indent, text, from, to) }
                     if (wrote && i != items.lastIndex) writer.write("\n")
                 }
+
                 is ConfigOption<*> -> {
                     ConfigIO.eachCommentLine(item) { text, from, to -> writeComment(writer, indent, text, from, to) }
                     writeKey(writer, indent, item.key)
                     SharedJsonIO.writeValue(writer, item)
                     writer.write(if (isLastItem) "\n" else ",\n\n")
                 }
+
                 is CategoryItem -> {
                     ConfigIO.eachCommentLine(item.comment) { text, from, to -> writeComment(writer, indent, text, from, to) }
                     writeKey(writer, indent, item.name)
@@ -146,7 +149,7 @@ private object SharedJsonIO {
 
     fun load(path: Path, root: CategoryItem): Boolean {
         return try {
-            Files.newBufferedReader(path).use { reader -> ConfigCodec.of(root).parse(JsonOps.INSTANCE, JsonParser.parseReader(reader)).resultOrPartial { error -> MConfigLogger.readFail(path, error) }.isPresent }
+            FileIO.bufferedReader(path).use { reader -> ConfigCodec.of(root).parse(JsonOps.INSTANCE, JsonParser.parseReader(reader)).resultOrPartial { error -> MConfigLogger.readFail(path, error) }.isPresent }
         } catch (e: IOException) {
             MConfigLogger.readFail(path, e.message)
             false
