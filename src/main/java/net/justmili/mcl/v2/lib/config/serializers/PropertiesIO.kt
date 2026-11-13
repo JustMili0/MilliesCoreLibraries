@@ -26,7 +26,7 @@ object PropertiesIO : ConfigIO {
         }
     }
 
-    override fun load(path: Path, root: CategoryItem): Boolean {
+    override fun read(path: Path, root: CategoryItem): Boolean {
         val properties = Properties()
         try {
             FileIO.bufferedReader(path).use { reader -> properties.load(reader) }

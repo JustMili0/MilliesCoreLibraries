@@ -23,7 +23,7 @@ object JsonIO : ConfigIO {
         }
     }
 
-    override fun load(path: Path, root: CategoryItem): Boolean {
+    override fun read(path: Path, root: CategoryItem): Boolean {
         return SharedJsonIO.load(path, root)
     }
 
@@ -94,7 +94,7 @@ object Json5IO : ConfigIO {
         }
     }
 
-    override fun load(path: Path, root: CategoryItem): Boolean {
+    override fun read(path: Path, root: CategoryItem): Boolean {
         return SharedJsonIO.load(path, root)
     }
 

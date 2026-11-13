@@ -11,7 +11,7 @@ class TomlIO : ConfigIO {
         TODO("Not yet implemented")
     }
 
-    override fun load(path: Path, root: CategoryItem): Boolean {
+    override fun read(path: Path, root: CategoryItem): Boolean {
         TODO("Not yet implemented")
     }
 }

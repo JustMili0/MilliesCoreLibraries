@@ -30,16 +30,15 @@ class MConfigLoader(modId: String, customFileName: String?, configType: ConfigTy
 
     internal fun tryWrite(): Boolean {
         synchronized(path) {
-            if (serializer.write(path, root)) return true
-            MConfigLogger.writeFail(path, "unknown") // TODO: make it give a proper error message
-            return false
+            // FileIO write logs write issues, tryWrite() doesn't have to
+            return serializer.write(path, root)
         }
     }
 
     internal fun tryRead(): Boolean {
         synchronized(path) {
             // Serializers log read issues, tryRead() doesn't have to
-            return serializer.load(path, root)
+            return serializer.read(path, root)
         }
     }
 

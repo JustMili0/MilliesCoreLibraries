@@ -12,7 +12,6 @@ internal object MConfigLogger {
     val IS_DEBUG: Boolean get() = Platform.IS_DEV_ENV || Config.enableDebug?.get() == true
 
     fun readFail(path: Path, reason: String? = "invalid") = LOGGER.error("Could not read from file '{}': {}", getName(path), reason)
-    fun writeFail(path: Path, reason: String? = "invalid") = LOGGER.error("Could not write to file '{}': {}", getName(path), reason)
     fun deleteFail(path: Path, reason: String? = "invalid") = dev("Could not delete file '{}': {}", getName(path), reason)
     fun encodeFail(option: ConfigOption<*>, reason: String) = dev("Could not encode option '{}' of '{}': {}", option.key, getName(option.path), reason)
     fun invalidValue(option: ConfigOption<*>, key: String? = option.key) = LOGGER.warn("Invalid value for option '{}' in '{}'", key, getName(option.path))
