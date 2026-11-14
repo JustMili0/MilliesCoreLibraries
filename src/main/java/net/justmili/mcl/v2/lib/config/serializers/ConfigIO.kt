@@ -12,7 +12,7 @@ interface ConfigIO {
 
     fun read(path: Path, root: CategoryItem): Boolean
 
-    fun validate(path: Path, root: CategoryItem)
+    fun validate(path: Path, root: CategoryItem) {}
 
     companion object {
         const val TOKEN_SLASH: String = "// "
