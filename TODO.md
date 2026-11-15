@@ -7,10 +7,6 @@
 # FIRST-PRIORITY TODO (EARLY BETA)
 - [EVERYONE] Finish all the events
 - Rewrite config from `v1.config` to `v2.config`
-  - [MILLIE] Add support for registry entry/tag options (e.g. `minecraft:oak_log` or `#minecraft:logs`, `minecraft:diamond_ore` or `#minecraft:diamond_ores`)
-    - Saved as an id or a tag key (via `ExtraCodecs.TAG_OR_ELEMENT_ID`), only resolved when checked, so stays correct after datapack reload
-    - No properties/NBT comparing like Mojang's `BlockPredicateArgument`/`ItemPredicateArgument` does, it's just a list of entries and tags
-    - Not generalized, only for what vanilla already provides (blocks, items, entity types, enchantments (1.21+), biomes, etc.)
   - [MILLIE] Fix, rework and improve priority config synchronization
   - [APPELS] Add full TOML support (including for old file conversion)
 - [MILLIE] Finish reworking data generation utils
