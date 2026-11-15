@@ -60,7 +60,7 @@ open class ConfigOption<O : Any>(val key: String, val default: O, val codec: Cod
 
     fun toText() = textOf(value)
 
-    private fun textOf(value: O): String {
+    fun textOf(value: O): String {
         val element = codec.encodeStart(JsonOps.INSTANCE, value).resultOrPartial { error -> MConfigLogger.encodeFail(this, error) }.orElse(null) ?: return ""
         return if (element is JsonPrimitive && value !is Collection<*>) element.asString else element.toString()
     }
@@ -92,9 +92,7 @@ open class ConfigOption<O : Any>(val key: String, val default: O, val codec: Cod
     }
 
     // Boolean, String with no limit, numbers with no set range and other just print their value, the rest get their limit info from their bounds
-    override fun toString() = "ConfigOption<$codec>($key)[value=${toText()}${limit?.info(value)?.let { ", $it" } ?: ""}, ${flagsText()}]"
-
-    protected fun flagsText() = "flags=" + OptionFlags.NAMES.keys.filter { hasFlag(it) }.joinToString(", ", "[", "]")
+    override fun toString() = "ConfigOption<$codec>($key)[value=${toText()}${limit?.info(value)?.let { ", $it" } ?: ""}]"
 }
 
 open class ListConfigOption<E : Any>(key: String, default: List<E>, codec: Codec<List<E>>, limit: OptionBounds<List<E>>?, flagId: Int, loader: MConfigLoader, val collapse: Boolean)
@@ -114,7 +112,7 @@ open class ListConfigOption<E : Any>(key: String, default: List<E>, codec: Codec
         }
     }
 
-    override fun toString() = "${javaClass.simpleName}<$codec>($key)[collapse=$collapse, value=$value, ${flagsText()}]"
+    override fun toString() = "${javaClass.simpleName}<$codec>($key)[collapse=$collapse, value=$value]"
 }
 
 class HolderSetConfigOption<E : Any>(key: String, default: List<TagOrElementLocation>, codec: Codec<List<TagOrElementLocation>>, limit: OptionBounds<List<TagOrElementLocation>>?, flagId: Int, loader: MConfigLoader, private val registry: Registry<E>)
