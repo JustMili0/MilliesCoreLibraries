@@ -16,17 +16,14 @@ public class CoreLibs implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(CoreLibs.class);
     public static final String ID = "corelibs";
     public static final String NAME = "Millie's Core Libraries";
-    public static final String BUILD = "0.2.10b";
+    public static final String BUILD = "0.3.4b";
 
     @Override
     public void onInitialize() {
         ModUtil.specialInitMessage(LOGGER, NAME, ID, BUILD, ModUtil.VersionType.EARLY_DEV_BETA);
 
         Config.initCommon();
-        if (Platform.IS_DEV_ENV) {
-            TestConfig.initCommon();
-            TestTEConfig.initCommon();
-        }
+        ExampleConfig.initCommon();
 
         ServerEventsBridge.init();
         SyncPriorityConfigs.initS2C();

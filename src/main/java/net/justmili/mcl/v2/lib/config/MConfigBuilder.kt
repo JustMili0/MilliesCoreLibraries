@@ -5,12 +5,17 @@ import net.justmili.mcl.v2.lib.config.items.CategoryItem
 import net.justmili.mcl.v2.lib.config.items.CommentItem
 import net.justmili.mcl.v2.lib.config.options.*
 import net.justmili.mcl.v2.lib.config.serializers.ConfigIO
+import net.minecraft.core.Registry
 import net.minecraft.network.chat.Component
 import java.nio.file.Path
 import java.util.function.Consumer
 
-class MConfigBuilder @JvmOverloads constructor(modId: String, customFileName: String? = null, configType: ConfigTypes, fileType: FileTypes, createSubDirectory: Boolean = false) {
+class MConfigBuilder @JvmOverloads constructor(val modId: String, val customFileName: String? = null, val configType: ConfigTypes, val fileType: FileTypes, val createSubDirectory: Boolean = false) {
     private val loader = MConfigLoader(modId, customFileName, configType, fileType, createSubDirectory)
+
+    fun get() = this
+
+    override fun toString() = "MConfigBuilder[$modId:${customFileName ?: configType.type}/${fileType.name.lowercase()}]"
 
     fun create() = ConfigBuilder(loader, loader.root)
 
@@ -53,6 +58,7 @@ class MConfigBuilder @JvmOverloads constructor(modId: String, customFileName: St
         fun addRgbColorOption(key: String) = RgbOptionBuilder(loader, category, key)
         fun addArgbColorOption(key: String) = ArgbOptionBuilder(loader, category, key)
         @JvmOverloads fun <E : Any> addListOption(key: String, codec: Codec<E>, collapse: Boolean = false) = ListOptionBuilder(loader, category, key, codec, collapse)
+        fun <T : Any> addHolderSetOption(key: String, registry: Registry<T>) = HolderSetOptionBuilder(loader, category, key, registry)
         fun <T : Any> addOption(key: String, codec: Codec<T>) = CodecOptionBuilder(loader, category, key, codec)
 
         fun build() = loader.buildOrLoad()

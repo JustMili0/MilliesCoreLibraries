@@ -1,13 +1,19 @@
 package net.justmili.mcl.v2.lib.config.options
 
+import com.google.gson.JsonPrimitive
 import com.mojang.serialization.Codec
+import com.mojang.serialization.JsonOps
 import net.justmili.mcl.v2.lib.codecs.*
 import net.justmili.mcl.v2.lib.config.MConfigLoader
 import net.justmili.mcl.v2.lib.config.items.CategoryItem
 import net.justmili.mcl.v2.lib.config.serializers.ConfigIO
 import net.justmili.mcl.v2.lib.util.common.Colors
+import net.minecraft.core.Registry
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.tags.TagKey
+import net.minecraft.util.ExtraCodecs
+import net.minecraft.util.ExtraCodecs.TagOrElementLocation
 import java.awt.Color
 
 abstract class OptionBuilder<O : Any, B : OptionBuilder<O, B>>(protected val loader: MConfigLoader, private val category: CategoryItem, protected val key: String, protected val codec: Codec<O>) {
@@ -156,4 +162,45 @@ class ListOptionBuilder<E : Any>(loader: MConfigLoader, cat: CategoryItem, key: 
     override fun create(value: List<E>, limit: OptionBounds<List<E>>?) = ListConfigOption(key, ListCodec.normalize(value, collapse), codec, limit, loader, flagMask, collapse)
     override fun buildOption() = super.buildOption() as ListConfigOption<E>
     fun setDefault(vararg elements: E) = setDefaultValue(elements.asList())
+}
+
+class HolderSetOptionBuilder<T : Any>(loader: MConfigLoader, cat: CategoryItem, key: String, private val registry: Registry<T>) : OptionBuilder<@JvmSuppressWildcards List<TagOrElementLocation>, HolderSetOptionBuilder<T>>(loader, cat, key, ListCodec.of(ExtraCodecs.TAG_OR_ELEMENT_ID, true)) {
+    private val defaults = ArrayList<TagOrElementLocation>()
+
+    override fun getLimit() = UniqueBounds<TagOrElementLocation>()
+    override fun create(value: List<TagOrElementLocation>, limit: OptionBounds<List<TagOrElementLocation>>?) = HolderSetConfigOption(key, ListCodec.normalize(value, true), codec, limit, loader, flagMask, registry)
+
+    override fun buildOption(): HolderSetConfigOption<T> {
+        setDefaultValue(defaults.toList())
+        @Suppress("UNCHECKED_CAST")
+        return super.buildOption() as HolderSetConfigOption<T>
+    }
+
+    fun addDefault(vararg values: T): HolderSetOptionBuilder<T> {
+        for (value in values) {
+            val id = checkNotNull(registry.getKey(value)) { "Default value '$value' of option '$key' is not in registry '${registry.key()}'." }
+            defaults.add(TagOrElementLocation(id, false))
+        }
+        return this
+    }
+
+    @SafeVarargs
+    fun addDefault(vararg tags: TagKey<T>): HolderSetOptionBuilder<T> {
+        for (tag in tags) defaults.add(TagOrElementLocation(tag.location(), true))
+        return this
+    }
+
+    fun addDefault(vararg ids: ResourceLocation): HolderSetOptionBuilder<T> {
+        for (id in ids) defaults.add(TagOrElementLocation(id, false))
+        return this
+    }
+
+    fun addDefault(vararg entries: String): HolderSetOptionBuilder<T> {
+        for (entry in entries) {
+            defaults.add(ExtraCodecs.TAG_OR_ELEMENT_ID.parse(JsonOps.INSTANCE, JsonPrimitive(entry)).result().orElseThrow {
+                IllegalArgumentException("Default value '$entry' of option '$key' is not a valid id or tag.")
+            })
+        }
+        return this
+    }
 }

@@ -1,16 +1,20 @@
 package net.justmili.mcl.config;
 
 import com.mojang.serialization.Codec;
+import net.justmili.mcl.CoreLibs;
 import net.justmili.mcl.v2.lib.codecs.ColorCodec;
 import net.justmili.mcl.v2.lib.config.*;
 import net.justmili.mcl.v2.lib.config.options.*;
 import net.justmili.mcl.v2.lib.util.common.Colors;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 
 import java.awt.*;
 
-@Deprecated(since = "corelibs:1.0.0", forRemoval = true)
-public class TestConfig {
+public class ExampleConfig {
     public static ConfigOption<Integer> rootInt;
     public static ConfigOption<Integer> rootIntRanged;
     public static ConfigOption<Integer> rootIntRangedNeg;
@@ -38,17 +42,22 @@ public class TestConfig {
     public static ConfigOption<Color> argb;
     public static ListConfigOption<String> cat2StringList;
     public static ListConfigOption<Color> cat1ColorList;
-
-    // Function made only for purpose of this example test
-    private static MConfigBuilder builderOfType(FileTypes ext) {
-        return new MConfigBuilder("examplemod", null, ConfigTypes.COMMON, ext, true);
-    }
+    public static HolderSetConfigOption<Block> rootHolderSet;
 
     public static void initCommon() {
+        // Return and don't init anything if exampleMode is off
+        if (!Config.enableExampleMode.get()) return;
+
+        // Init config files for each file type
         for (var type : FileTypes.getEntries()) {
-            if (type == FileTypes.TOML) continue;
+            if (type == FileTypes.TOML) continue; // TOML isn't finished
             buildWith(builderOfType(type));
         }
+    }
+
+    // Functions made only for purpose of this example
+    private static MConfigBuilder builderOfType(FileTypes ext) {
+        return new MConfigBuilder("examplemod", null, ConfigTypes.COMMON, ext, true);
     }
 
     private static void buildWith(MConfigBuilder builder) {
@@ -56,14 +65,22 @@ public class TestConfig {
             root.addComment("Config root comment");
             root.addComment("Second root comment\nwith two lines");
 
+            /// RGB and ARGB values can be input as a HEX color string, an integer or float values
             rgb = root.addRgbColorOption("rootRGB")
                 .setDefault("C95E35") // or 0xC95E35, or 0.7882f, 0.3686f, 0.2078f
                 .addComment("Some RGB color value (HEX)")
                 .buildOption();
-
             argb = root.addArgbColorOption("rootARGB")
                 .setDefault(0xFFC95E35) // or "FFC95E35", or 1f, 0.7882f, 0.3686f, 0.2078f
                 .addComment("Some ARGB color value (HEX)")
+                .buildOption();
+
+            /// For multiple type defaults, HolderSet options need each type be its own addDefault
+            rootHolderSet = root.addHolderSetOption("rootHolderSet", BuiltInRegistries.BLOCK)
+                .addDefault(Blocks.OAK_LOG, Blocks.SPRUCE_LOG)
+                .addDefault(BlockTags.LOGS, BlockTags.LOGS_THAT_BURN)
+                .addDefault("minecraft:oak_planks", "#minecraft:planks")
+                .addComment("A HolderSet of registry IDs and tags")
                 .buildOption();
 
             rootInt = root.addIntOption("rootInt")
@@ -108,6 +125,7 @@ public class TestConfig {
 
                 cat0.addCategory("Cat-in-cat 1", cat1 -> {
 
+                    /// Lists can be of anything, as long as it's of the same type
                     cat1ColorList = cat1.addListOption("cat1ColorList", ColorCodec.ARGB_HEX, true)
                         .setDefault(Colors.hexToColor("D73823C3", true), new Color(1f, 1f, 1f, 1f))
                         .addComment("Some colors list")
@@ -217,6 +235,13 @@ public class TestConfig {
         }).build();
 
         argb.set(Colors.floatToColor(0.6f, 0.4f, 0.4f, 0.4f));
+        CoreLibs.LOGGER.info("{}@{}", builder, rootInt.toString());
+        CoreLibs.LOGGER.info("{}@{}", builder, cat0StartString.toString());
+        CoreLibs.LOGGER.info("{}@{}", builder, rootEnum.toString());
+        CoreLibs.LOGGER.info("{}@{}", builder, argb.toString());
+        CoreLibs.LOGGER.info("{}@{}", builder, cat2StringList.toString());
+        CoreLibs.LOGGER.info("{}@{}", builder, cat1ColorList.toString());
+        CoreLibs.LOGGER.info("{}@{}", builder, rootHolderSet.toString());
     }
 
     public enum TestConfigEnum {
