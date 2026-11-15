@@ -54,10 +54,10 @@ interface ConfigIO {
         fun getFlagsLine(option: ConfigOption<*>): String {
             val line = StringBuilder("Requires: ")
             var first = true
-            for (flag in OptionFlags.entries) {
+            for ((flag, name) in OptionFlags.NAMES) {
                 if (!option.hasFlag(flag)) continue
                 if (!first) line.append(", ")
-                line.append(flag.name.lowercase().replace("requires_", "").replace("_", " "))
+                line.append(name)
                 first = false
             }
             return line.toString()

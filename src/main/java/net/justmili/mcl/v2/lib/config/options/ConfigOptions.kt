@@ -24,7 +24,7 @@ open class ConfigOption<O : Any>(val key: String, val default: O, val codec: Cod
     var comment: String? = null
     var oldKey: String? = null
     val path: Path get() = loader.path
-    val bounds: String? get() = limit?.describe()
+    val bounds: String? get() = limit?.info()
 
     fun get() = synced ?: value
 
@@ -47,7 +47,7 @@ open class ConfigOption<O : Any>(val key: String, val default: O, val codec: Cod
 
     fun isSynced() = synced != null
 
-    fun hasFlag(flag: OptionFlags) = (flagId and flag.flagId) != 0
+    fun hasFlag(flag: Int) = (flagId and flag) != 0
 
     fun <R> encode(ops: DynamicOps<R>): Optional<R> = codec.encodeStart(ops, value).resultOrPartial { error -> MConfigLogger.encodeFail(this, error) }
 
@@ -91,10 +91,13 @@ open class ConfigOption<O : Any>(val key: String, val default: O, val codec: Cod
         }
     }
 
-    override fun toString() = "ConfigOption<$codec>($key)[$value]"
+    // Boolean, String with no limit, numbers with no set range and other just print their value, the rest get their limit info from their bounds
+    override fun toString() = "ConfigOption<$codec>($key)[value=${toText()}${limit?.info(value)?.let { ", $it" } ?: ""}, ${flagsText()}]"
+
+    protected fun flagsText() = "flags=" + OptionFlags.NAMES.keys.filter { hasFlag(it) }.joinToString(", ", "[", "]")
 }
 
-open class ListConfigOption<E : Any>(key: String, default: List<E>, codec: Codec<List<E>>, limit: OptionBounds<List<E>>?, flagId: Int, loader: MConfigLoader, private val collapse: Boolean)
+open class ListConfigOption<E : Any>(key: String, default: List<E>, codec: Codec<List<E>>, limit: OptionBounds<List<E>>?, flagId: Int, loader: MConfigLoader, val collapse: Boolean)
     : ConfigOption<@JvmSuppressWildcards List<E>>(key, default, codec, limit, flagId, false, loader) {
     override fun set(value: List<E>) = super.set(ListCodec.normalize(value, collapse))
     override fun setSynced(value: List<E>) = super.setSynced(ListCodec.normalize(value, collapse))
@@ -111,7 +114,7 @@ open class ListConfigOption<E : Any>(key: String, default: List<E>, codec: Codec
         }
     }
 
-    override fun toString() = "ListConfigOption<$codec>($key)[$value]"
+    override fun toString() = "${javaClass.simpleName}<$codec>($key)[collapse=$collapse, value=$value, ${flagsText()}]"
 }
 
 class HolderSetConfigOption<E : Any>(key: String, default: List<TagOrElementLocation>, codec: Codec<List<TagOrElementLocation>>, limit: OptionBounds<List<TagOrElementLocation>>?, flagId: Int, loader: MConfigLoader, private val registry: Registry<E>)
@@ -120,7 +123,6 @@ class HolderSetConfigOption<E : Any>(key: String, default: List<TagOrElementLoca
     fun contains(holder: Holder<E>): Boolean {
         return get().any { entry -> if (entry.tag()) holder.`is`(TagKey.create(registry.key(), entry.id())) else holder.`is`(entry.id()) }
     }
-    override fun toString() = "HolderSetConfigOption<$codec>($key)[$value]"
 
     /**
      * Gets the values covered by this option as a [HolderSet].
