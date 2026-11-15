@@ -16,6 +16,7 @@ internal object MConfigLogger {
     fun encodeFail(option: ConfigOption<*>, reason: String) = dev("Could not encode option '{}' of '{}': {}", option.key, getName(option.path), reason)
     fun invalidValue(option: ConfigOption<*>, key: String? = option.key) = LOGGER.warn("Invalid value for option '{}' in '{}'", key, getName(option.path))
     fun unsupportedElement(path: Path, element: String, reason: String) = dev("Unsupported element(s) '{}' in file '{}': {}", element, getName(path), reason)
+    fun missingHolder(option: ConfigOption<*>, type: String, id: String) = dev("Missing {} '{}' for option '{}' of '{}'", type, id, option.key, getName(option.path))
     fun pathInUse(path: Path) = dev("File name '{}' already in use by a different file. They will overwrite eachother.", getName(path))
 
     private fun dev(message: String, vararg arguments: Any?) = if (IS_DEBUG) LOGGER.warn(message, *arguments) else {

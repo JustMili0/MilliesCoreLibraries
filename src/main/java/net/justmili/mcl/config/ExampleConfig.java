@@ -80,6 +80,7 @@ public class ExampleConfig {
                 .addDefault(Blocks.OAK_LOG, Blocks.SPRUCE_LOG)
                 .addDefault(BlockTags.LOGS, BlockTags.LOGS_THAT_BURN)
                 .addDefault("minecraft:oak_planks", "#minecraft:planks")
+                .addFlags(OptionFlags.REQUIRES_DATAPACK_RELOAD) // This time it actually does need datapack reload
                 .addComment("A HolderSet of registry IDs and tags")
                 .buildOption();
 
@@ -92,7 +93,7 @@ public class ExampleConfig {
                 .setDefault(10)
                 .setRange(0, 99)
                 .addComment("Value with flags")
-                .addFlags(OptionFlags.REQUIRES_ASSETS_RELOAD, OptionFlags.REQUIRES_DATA_RELOAD)
+                .addFlags(OptionFlags.REQUIRES_ASSETS_RELOAD, OptionFlags.REQUIRES_DATAPACK_RELOAD)
                 .buildOption();
 
             rootIntRangedNeg = root.addIntOption("rootIntRangedNeg")
