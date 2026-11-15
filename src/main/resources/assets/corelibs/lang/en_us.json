@@ -1,5 +1,3 @@
 {
-  "corelibs.config.screen.title": "Millie's Core Libraries",
-  "corelibs.config.comment.debug": "Enables additional debug information for actions executed by Millie's Core Libraries",
-  "corelibs.config.comment.examplemode": "Enables generation of \"examplemod\" config files. Used for testing."
+  "corelibs.config.screen.title": "Millie's Core Libraries"
 }

@@ -9,7 +9,6 @@ import net.justmili.mcl.v2.lib.config.items.CategoryItem
 import net.justmili.mcl.v2.lib.config.serializers.ConfigIO
 import net.justmili.mcl.v2.lib.util.common.Colors
 import net.minecraft.core.Registry
-import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
 import net.minecraft.util.ExtraCodecs
@@ -20,7 +19,7 @@ abstract class OptionBuilder<O : Any, B : OptionBuilder<O, B>>(protected val loa
     private var defaultValue: O? = null
     protected var flagId = 0
     private var attachedImage: ResourceLocation? = null
-    private var comment: Component? = null
+    private var comment: String? = null
     private var oldKey: String? = null
 
     @Suppress("UNCHECKED_CAST")
@@ -49,9 +48,7 @@ abstract class OptionBuilder<O : Any, B : OptionBuilder<O, B>>(protected val loa
         return self()
     }
 
-    fun addComment(comment: String) = addComment(Component.literal(comment))
-
-    fun addComment(comment: Component): B {
+    fun addComment(comment: String): B {
         this.comment = ConfigIO.joinComments(this.comment, comment)
         return self()
     }

@@ -8,7 +8,6 @@ import net.justmili.mcl.v2.lib.config.MConfigLogger
 import net.justmili.mcl.v2.lib.config.items.ConfigItem
 import net.minecraft.core.Holder
 import net.minecraft.core.Registry
-import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
 import net.minecraft.util.ExtraCodecs.TagOrElementLocation
@@ -19,7 +18,7 @@ open class ConfigOption<O : Any>(val key: String, val default: O, val codec: Cod
     @Volatile protected var value: O = default
     @Volatile private var synced: O? = null
     var attachedImage: ResourceLocation? = null
-    var comment: Component? = null
+    var comment: String? = null
     var oldKey: String? = null
     val path: Path get() = loader.path
     val bounds: String? get() = limit?.describe()

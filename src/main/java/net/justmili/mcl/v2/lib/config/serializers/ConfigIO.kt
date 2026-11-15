@@ -3,7 +3,6 @@ package net.justmili.mcl.v2.lib.config.serializers
 import net.justmili.mcl.v2.lib.config.items.CategoryItem
 import net.justmili.mcl.v2.lib.config.options.ConfigOption
 import net.justmili.mcl.v2.lib.config.options.OptionFlags
-import net.minecraft.network.chat.Component
 import java.nio.file.Path
 
 interface ConfigIO {
@@ -20,6 +19,8 @@ interface ConfigIO {
         const val TOKEN_KEY: String = "_c"
         const val INDENT: String = "  "
 
+        fun joinComments(first: String?, second: String) = first?.let { "$it\n$second" } ?: second
+
         inline fun eachCommentLine(comment: String?, action: (String, Int, Int) -> Unit): Boolean {
             val text = addPeriod(comment) ?: return false
             var start = 0
@@ -33,10 +34,6 @@ interface ConfigIO {
                 start = end + 1
             }
         }
-
-        inline fun eachCommentLine(comment: Component?, action: (String, Int, Int) -> Unit): Boolean = eachCommentLine(comment?.string, action)
-
-        fun joinComments(first: Component?, second: Component): Component = if (first == null) second else Component.empty().append(first).append("\n").append(second)
 
         inline fun eachCommentLine(option: ConfigOption<*>, action: (String, Int, Int) -> Unit) {
             eachCommentLine(option.comment, action)

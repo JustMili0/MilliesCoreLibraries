@@ -4,7 +4,6 @@ import net.justmili.mcl.v2.lib.config.MConfigLogger
 import net.justmili.mcl.v2.lib.config.items.*
 import net.justmili.mcl.v2.lib.config.options.ConfigOption
 import net.justmili.mcl.v2.lib.util.common.FileIO
-import net.minecraft.network.chat.Component
 import java.io.IOException
 import java.io.Writer
 import java.nio.file.Path
@@ -74,7 +73,7 @@ object PropertiesIO : ConfigIO {
         }
     }
 
-    private fun writeCommentBlock(writer: Writer, comment: Component?) {
+    private fun writeCommentBlock(writer: Writer, comment: String?) {
         if (ConfigIO.eachCommentLine(comment) { text, from, to -> writeComment(writer, text, from, to) }) writer.write("\n")
     }
 

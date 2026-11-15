@@ -6,7 +6,6 @@ import net.justmili.mcl.v2.lib.config.items.CommentItem
 import net.justmili.mcl.v2.lib.config.options.*
 import net.justmili.mcl.v2.lib.config.serializers.ConfigIO
 import net.minecraft.core.Registry
-import net.minecraft.network.chat.Component
 import java.nio.file.Path
 import java.util.function.Consumer
 
@@ -34,9 +33,7 @@ class MConfigBuilder @JvmOverloads constructor(val modId: String, val customFile
 
     open class ConfigBuilder(private val loader: MConfigLoader, private val category: CategoryItem) {
 
-        fun addComment(comment: String) = addComment(Component.literal(comment))
-
-        open fun addComment(comment: Component): ConfigBuilder {
+        open fun addComment(comment: String): ConfigBuilder {
             category.add(CommentItem(comment))
             return this
         }
@@ -66,7 +63,7 @@ class MConfigBuilder @JvmOverloads constructor(val modId: String, val customFile
 
     class CategoryBuilder(loader: MConfigLoader, category: CategoryItem, private val child: CategoryItem) : ConfigBuilder(loader, category) {
 
-        override fun addComment(comment: Component): CategoryBuilder {
+        override fun addComment(comment: String): CategoryBuilder {
             child.comment = ConfigIO.joinComments(child.comment, comment)
             return this
         }
