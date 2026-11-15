@@ -40,7 +40,7 @@ interface ConfigIO {
 
         inline fun eachCommentLine(option: ConfigOption<*>, action: (String, Int, Int) -> Unit) {
             eachCommentLine(option.comment, action)
-            if (option.flags != 0) {
+            if (option.flagId != 0) {
                 val line = getFlagsLine(option)
                 action(line, 0, line.length)
             }

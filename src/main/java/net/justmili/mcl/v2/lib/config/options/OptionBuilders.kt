@@ -18,7 +18,7 @@ import java.awt.Color
 
 abstract class OptionBuilder<O : Any, B : OptionBuilder<O, B>>(protected val loader: MConfigLoader, private val category: CategoryItem, protected val key: String, protected val codec: Codec<O>) {
     private var defaultValue: O? = null
-    protected var flagMask = 0
+    protected var flagId = 0
     private var attachedImage: ResourceLocation? = null
     private var comment: Component? = null
     private var oldKey: String? = null
@@ -35,11 +35,11 @@ abstract class OptionBuilder<O : Any, B : OptionBuilder<O, B>>(protected val loa
 
     protected open fun isText() = false
 
-    protected open fun create(value: O, limit: OptionBounds<O>?) = ConfigOption(key, value, codec, limit, flagMask, isText(), loader)
+    protected open fun create(value: O, limit: OptionBounds<O>?) = ConfigOption(key, value, codec, limit, flagId, isText(), loader)
 
     fun addFlags(vararg flags: OptionFlags): B {
         for (flag in flags) {
-            flagMask = flagMask or flag.flag
+            flagId = flagId or flag.flagId
         }
         return self()
     }
@@ -159,7 +159,7 @@ class ArgbOptionBuilder(loader: MConfigLoader, cat: CategoryItem, key: String) :
 
 class ListOptionBuilder<E : Any>(loader: MConfigLoader, cat: CategoryItem, key: String, codec: Codec<E>, private val collapse: Boolean) : OptionBuilder<@JvmSuppressWildcards List<E>, ListOptionBuilder<E>>(loader, cat, key, ListCodec.of(codec, collapse)) {
     override fun getLimit() = if (collapse) UniqueBounds<E>() else null
-    override fun create(value: List<E>, limit: OptionBounds<List<E>>?) = ListConfigOption(key, ListCodec.normalize(value, collapse), codec, limit, loader, flagMask, collapse)
+    override fun create(value: List<E>, limit: OptionBounds<List<E>>?) = ListConfigOption(key, ListCodec.normalize(value, collapse), codec, limit, flagId, loader, collapse)
     override fun buildOption() = super.buildOption() as ListConfigOption<E>
     fun setDefault(vararg elements: E) = setDefaultValue(elements.asList())
 }
@@ -168,7 +168,7 @@ class HolderSetOptionBuilder<T : Any>(loader: MConfigLoader, cat: CategoryItem, 
     private val defaults = ArrayList<TagOrElementLocation>()
 
     override fun getLimit() = UniqueBounds<TagOrElementLocation>()
-    override fun create(value: List<TagOrElementLocation>, limit: OptionBounds<List<TagOrElementLocation>>?) = HolderSetConfigOption(key, ListCodec.normalize(value, true), codec, limit, loader, flagMask, registry)
+    override fun create(value: List<TagOrElementLocation>, limit: OptionBounds<List<TagOrElementLocation>>?) = HolderSetConfigOption(key, ListCodec.normalize(value, true), codec, limit, flagId, loader, registry)
 
     override fun buildOption(): HolderSetConfigOption<T> {
         setDefaultValue(defaults.toList())

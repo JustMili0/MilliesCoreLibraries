@@ -15,7 +15,7 @@ import net.minecraft.util.ExtraCodecs.TagOrElementLocation
 import java.nio.file.Path
 import java.util.*
 
-open class ConfigOption<O : Any>(val key: String, val default: O, val codec: Codec<O>, val limit: OptionBounds<O>?, val flags: Int, private val isText: Boolean, private val loader: MConfigLoader) : ConfigItem {
+open class ConfigOption<O : Any>(val key: String, val default: O, val codec: Codec<O>, val limit: OptionBounds<O>?, val flagId: Int, private val isText: Boolean, private val loader: MConfigLoader) : ConfigItem {
     @Volatile protected var value: O = default
     @Volatile private var synced: O? = null
     var attachedImage: ResourceLocation? = null
@@ -45,7 +45,7 @@ open class ConfigOption<O : Any>(val key: String, val default: O, val codec: Cod
 
     fun isSynced() = synced != null
 
-    fun hasFlag(flag: OptionFlags) = (flags and flag.flag) != 0
+    fun hasFlag(flag: OptionFlags) = (flagId and flag.flagId) != 0
 
     fun <R> encode(ops: DynamicOps<R>): Optional<R> = codec.encodeStart(ops, value).resultOrPartial { error -> MConfigLogger.encodeFail(this, error) }
 
@@ -92,8 +92,8 @@ open class ConfigOption<O : Any>(val key: String, val default: O, val codec: Cod
     override fun toString() = "ConfigOption<$codec>($key)[$value]"
 }
 
-open class ListConfigOption<E : Any>(key: String, default: List<E>, codec: Codec<List<E>>, limit: OptionBounds<List<E>>?, loader: MConfigLoader, flags: Int, private val collapse: Boolean)
-    : ConfigOption<@JvmSuppressWildcards List<E>>(key, default, codec, limit, flags, false, loader) {
+open class ListConfigOption<E : Any>(key: String, default: List<E>, codec: Codec<List<E>>, limit: OptionBounds<List<E>>?, flagId: Int, loader: MConfigLoader, private val collapse: Boolean)
+    : ConfigOption<@JvmSuppressWildcards List<E>>(key, default, codec, limit, flagId, false, loader) {
     override fun toString() = "ListConfigOption<$codec>($key)[$value]"
     override fun set(value: List<E>) = super.set(ListCodec.normalize(value, collapse))
     override fun setSynced(value: List<E>) = super.setSynced(ListCodec.normalize(value, collapse))
@@ -111,8 +111,8 @@ open class ListConfigOption<E : Any>(key: String, default: List<E>, codec: Codec
     }
 }
 
-class HolderSetConfigOption<E : Any>(key: String, default: List<TagOrElementLocation>, codec: Codec<List<TagOrElementLocation>>, limit: OptionBounds<List<TagOrElementLocation>>?, loader: MConfigLoader, flags: Int, private val registry: Registry<E>)
-    : ListConfigOption<TagOrElementLocation>(key, default, codec, limit, loader, flags, true) {
+class HolderSetConfigOption<E : Any>(key: String, default: List<TagOrElementLocation>, codec: Codec<List<TagOrElementLocation>>, limit: OptionBounds<List<TagOrElementLocation>>?, flagId: Int, loader: MConfigLoader, private val registry: Registry<E>)
+    : ListConfigOption<TagOrElementLocation>(key, default, codec, limit, flagId, loader, true) {
     override fun toString() = "HolderSetConfigOption<$codec>($key)[$value]"
     fun contains(value: E) = contains(registry.wrapAsHolder(value))
     fun contains(holder: Holder<E>): Boolean {
