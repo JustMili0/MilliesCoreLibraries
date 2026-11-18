@@ -1,19 +1,20 @@
 package net.justmili.mcl.v2.lib.config.serializers
 
-import com.google.gson.*
+import com.google.gson.JsonPrimitive
 import com.mojang.serialization.JsonOps
 import net.justmili.mcl.v2.lib.config.MConfigLogger
 import net.justmili.mcl.v2.lib.config.codecs.ConfigCodec
 import net.justmili.mcl.v2.lib.config.items.*
 import net.justmili.mcl.v2.lib.config.options.ConfigOption
-import net.justmili.mcl.v2.lib.util.common.FileIO
+import net.justmili.mcl.v2.lib.util.common.*
 import java.io.IOException
 import java.io.Writer
 import java.nio.file.Path
 
-object JsonIO : ConfigIO {
-    private const val BLOCK_SEPARATOR = ",\n\n"
-    private const val LINE_SEPARATOR = ",\n"
+internal const val BLOCK_SEPARATOR = ",\n\n"
+internal const val LINE_SEPARATOR = ",\n"
+
+internal object JsonIO : ConfigIO {
 
     override fun write(path: Path, root: CategoryItem): Boolean {
         return FileIO.write(path) { writer ->
@@ -84,7 +85,7 @@ object JsonIO : ConfigIO {
     }
 }
 
-object Json5IO : ConfigIO {
+internal object Json5IO : ConfigIO {
 
     override fun write(path: Path, root: CategoryItem): Boolean {
         return FileIO.write(path) { writer ->
@@ -115,7 +116,7 @@ object Json5IO : ConfigIO {
                     ConfigIO.eachCommentLine(item) { text, from, to -> writeComment(writer, indent, text, from, to) }
                     writeKey(writer, indent, item.key)
                     SharedJsonIO.writeValue(writer, item)
-                    writer.write(if (isLastItem) "\n" else ",\n\n")
+                    writer.write(if (isLastItem) "\n" else BLOCK_SEPARATOR)
                 }
 
                 is CategoryItem -> {
@@ -124,7 +125,8 @@ object Json5IO : ConfigIO {
                     writer.write("{\n")
                     writeItems(writer, item.children, indent + ConfigIO.INDENT)
                     writer.write(indent)
-                    writer.write(if (isLastItem) "}\n" else "},\n\n")
+                    writer.write("}")
+                    writer.write(if (isLastItem) "\n" else BLOCK_SEPARATOR)
                 }
             }
         }
@@ -144,19 +146,10 @@ object Json5IO : ConfigIO {
     }
 }
 
-private object SharedJsonIO {
-    private const val HEX = "0123456789abcdef"
+internal object SharedJsonIO {
 
     fun load(path: Path, root: CategoryItem): Boolean {
-        return try {
-            FileIO.bufferedReader(path).use { reader -> ConfigCodec.of(root).parse(JsonOps.INSTANCE, JsonParser.parseReader(reader)).resultOrPartial { error -> MConfigLogger.readFail(path, error) }.isPresent }
-        } catch (e: IOException) {
-            MConfigLogger.readFail(path, e.message)
-            false
-        } catch (e: JsonParseException) {
-            MConfigLogger.readFail(path, e.message)
-            false
-        }
+        return JsonSerializer.read(path, ConfigCodec.of(root)) { message -> MConfigLogger.readFail(path, message) }.isPresent
     }
 
     @Throws(IOException::class)
@@ -186,7 +179,7 @@ private object SharedJsonIO {
                 c == '\t' -> "\\t"
                 c == '\b' -> "\\b"
                 c == '\u000c' -> "\\f"
-                c < ' ' -> "\\u00" + HEX[c.code shr 4] + HEX[c.code and 15]
+                c < ' ' -> "\\u00" + Colors.HEX[c.code shr 4] + Colors.HEX[c.code and 15]
                 c == '\u2028' -> "\\u2028"
                 c == '\u2029' -> "\\u2029"
                 else -> continue

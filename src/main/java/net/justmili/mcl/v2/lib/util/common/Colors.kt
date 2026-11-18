@@ -3,7 +3,7 @@ package net.justmili.mcl.v2.lib.util.common
 import java.awt.Color
 
 object Colors {
-    private const val HEX = "0123456789ABCDEF"
+    internal const val HEX = "0123456789ABCDEF"
     private const val OPAQUE = 0xFF000000.toInt()
     private const val INVALID = 0xFFFF00DC.toInt()
 

@@ -2,9 +2,9 @@ package net.justmili.mcl.v2.lib.util.common
 
 import net.justmili.mcl.CoreLibs
 import java.io.*
-import java.nio.file.*
-import kotlin.io.path.bufferedReader
-import kotlin.io.path.bufferedWriter
+import java.nio.file.Path
+import java.nio.file.StandardOpenOption
+import kotlin.io.path.*
 
 object FileIO {
 
@@ -28,7 +28,7 @@ object FileIO {
     fun write(path: Path, writing: Writing): Boolean {
         try {
             val parent = path.toAbsolutePath().parent
-            if (parent != null) Files.createDirectories(parent)
+            if (parent != null) parent.createDirectories()
 
             bufferedWriter(path).use { writer -> writing.accept(writer) }
             return true

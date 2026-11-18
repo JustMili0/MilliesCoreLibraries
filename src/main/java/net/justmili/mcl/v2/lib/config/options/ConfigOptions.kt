@@ -6,10 +6,7 @@ import net.justmili.mcl.v2.lib.codecs.ListCodec
 import net.justmili.mcl.v2.lib.config.MConfigLoader
 import net.justmili.mcl.v2.lib.config.MConfigLogger
 import net.justmili.mcl.v2.lib.config.items.ConfigItem
-import net.minecraft.core.Holder
-import net.minecraft.core.HolderGetter
-import net.minecraft.core.HolderSet
-import net.minecraft.core.Registry
+import net.minecraft.core.*
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey

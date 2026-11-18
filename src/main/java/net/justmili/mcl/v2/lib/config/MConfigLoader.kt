@@ -4,8 +4,8 @@ import net.justmili.mcl.v1.lib.util.Platform
 import net.justmili.mcl.v2.lib.config.converter.OldConfigLoader
 import net.justmili.mcl.v2.lib.config.items.CategoryItem
 import net.justmili.mcl.v2.lib.config.serializers.*
-import java.nio.file.Files
 import java.nio.file.Path
+import kotlin.io.path.exists
 
 class MConfigLoader(modId: String, customFileName: String?, configType: ConfigTypes, fileType: FileTypes, createSubDirectory: Boolean) {
     val path: Path
@@ -44,7 +44,7 @@ class MConfigLoader(modId: String, customFileName: String?, configType: ConfigTy
 
     fun reload(): Boolean {
         synchronized(path) {
-            if (Files.exists(path)) return tryRead()
+            if (path.exists()) return tryRead()
             tryWrite()
             return false
         }
@@ -53,7 +53,7 @@ class MConfigLoader(modId: String, customFileName: String?, configType: ConfigTy
     internal fun buildOrLoad() {
         synchronized(path) {
             serializer.validate(path, root)
-            if (Files.exists(path)) {
+            if (path.exists()) {
                 if (tryRead()) tryWrite()
             } else {
                 convertLoader?.importInto(root)
@@ -68,7 +68,7 @@ class MConfigLoader(modId: String, customFileName: String?, configType: ConfigTy
             FileTypes.JSON -> JsonIO
             FileTypes.JSON5 -> Json5IO
             FileTypes.PROPERTIES -> PropertiesIO
-            FileTypes.TOML -> throw UnsupportedOperationException("TOML support is not yet fully implemented.")
+            FileTypes.TOML -> TomlIO
         }
     }
 

@@ -5,7 +5,7 @@ import net.justmili.mcl.v2.lib.config.options.ConfigOption
 import net.justmili.mcl.v2.lib.config.options.OptionFlags
 import java.nio.file.Path
 
-interface ConfigIO {
+internal interface ConfigIO {
 
     fun write(path: Path, root: CategoryItem): Boolean
 

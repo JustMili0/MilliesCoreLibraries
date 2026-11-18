@@ -1,18 +1,16 @@
 package net.justmili.mcl.v2.lib.codecs
 
 import com.mojang.datafixers.util.Either
-import com.mojang.serialization.*
+import com.mojang.serialization.Codec
 import java.util.List.copyOf
 
 object ListCodec {
 
     @JvmStatic
     fun <E : Any> of(entry: Codec<E>, collapse: Boolean): Codec<List<E>> {
-        val lenientList = LenientListCodec(entry)
-
-        return Codec.either(lenientList, entry).xmap<List<E>>(
+        return Codec.either(LenientListCodec(entry), entry).xmap<List<E>>(
             { either -> normalize(either.map<List<E>>({ list -> list }, { single -> listOf(single) }), collapse) },
-            { list -> if (list.size == 1) Either.right(list[0]) else Either.left(list) }
+            { list -> Either.left(list) }
         )
     }
 

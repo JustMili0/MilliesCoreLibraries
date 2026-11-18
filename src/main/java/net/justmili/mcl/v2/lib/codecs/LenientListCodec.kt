@@ -1,11 +1,8 @@
 package net.justmili.mcl.v2.lib.codecs
 
 import com.mojang.datafixers.util.Pair
-import com.mojang.serialization.Codec
-import com.mojang.serialization.DataResult
-import com.mojang.serialization.DynamicOps
+import com.mojang.serialization.*
 
-// TODO: make a proper codec
 class LenientListCodec<E : Any>(private val entry: Codec<E>) : Codec<List<E>> {
     private val list = entry.listOf()
 
