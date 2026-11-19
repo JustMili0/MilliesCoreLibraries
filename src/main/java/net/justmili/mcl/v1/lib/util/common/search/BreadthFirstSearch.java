@@ -4,8 +4,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.*;
-import java.util.function.BiPredicate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Predicate;
 
 /**
@@ -31,10 +31,5 @@ public class BreadthFirstSearch implements SearchAlgorithm {
             return true;
         });
         return found;
-    }
-
-    @Override
-    public List<BlockPos> biSearch(Level level, Collection<BlockPos> origins, BiPredicate<BlockState, BlockState> canSpread, int maxSize) {
-        return List.of();
     }
 }

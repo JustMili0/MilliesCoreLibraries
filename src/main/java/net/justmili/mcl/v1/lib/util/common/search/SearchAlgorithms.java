@@ -4,9 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 public enum SearchAlgorithms {
@@ -23,9 +21,5 @@ public enum SearchAlgorithms {
 
     public List<BlockPos> search(Level level, BlockPos origin, Predicate<BlockState> stateMatch, int maxRadius, int maxSize) {
         return algorithm.search(level, origin, stateMatch, maxRadius, maxSize);
-    }
-
-    public List<BlockPos> biSearch(Level level, Collection<BlockPos> origins, BiPredicate<BlockState, BlockState> canSpread, int maxSize) {
-        return algorithm.biSearch(level, origins, canSpread, maxSize);
     }
 }

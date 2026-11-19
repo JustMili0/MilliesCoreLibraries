@@ -8,7 +8,6 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.*;
 import java.util.function.BiPredicate;
-import java.util.function.Predicate;
 
 /**
  * Spreads out from the origins one block at a time, through the 6 faces (no diagonals). A BiPredicate decides if it can go from one block to the next, so the answer can depend on both blocks (e.g. leaves only spreading further away from the logs).
@@ -16,11 +15,6 @@ import java.util.function.Predicate;
  * No radius, only the predicate and maxSize stop it. Origins are not included in the result. Only supports {@link #biSearch}.
  */
 public class SpreadSearch implements SearchAlgorithm {
-
-    @Override
-    public List<BlockPos> search(Level level, BlockPos origin, Predicate<BlockState> stateMatch, int maxRadius, int maxSize) {
-        return List.of();
-    }
 
     @Override
     public List<BlockPos> biSearch(Level level, Collection<BlockPos> origins, BiPredicate<BlockState, BlockState> canSpread, int maxSize) {
@@ -50,12 +44,5 @@ public class SpreadSearch implements SearchAlgorithm {
             }
         }
         return found;
-    }
-
-    /**
-     * Same as above but with a single origin. Not on {@link SearchAlgorithm}, so it can't be used through {@link SearchAlgorithms}.
-     */
-    public List<BlockPos> biSearch(Level level, BlockPos origin, BiPredicate<BlockState, BlockState> canSpread, int maxSize) {
-        return biSearch(level, List.of(origin), canSpread, maxSize);
     }
 }

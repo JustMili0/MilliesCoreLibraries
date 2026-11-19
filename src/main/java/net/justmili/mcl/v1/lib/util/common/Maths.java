@@ -717,12 +717,12 @@ public class Maths {
         return total == 0? 0 : (value / total) * 100.0;
     }
 
-    public static double smoothstep(double lowerEdge, double upperEdge, double value) {
+    public static double smoothStep(double lowerEdge, double upperEdge, double value) {
         double progress = clamp(inverseLerp(lowerEdge, upperEdge, value));
         return progress * progress * (3.0 - 2.0 * progress);
     }
 
-    public static double smootherstep(double lowerEdge, double upperEdge, double value) {
+    public static double smootherStep(double lowerEdge, double upperEdge, double value) {
         return Mth.smoothstep(clamp(inverseLerp(lowerEdge, upperEdge, value)));
     }
 

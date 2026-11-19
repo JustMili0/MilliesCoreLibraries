@@ -5,7 +5,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.*;
-import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 /**
@@ -26,10 +25,5 @@ public class CubeSearch implements SearchAlgorithm {
         // Sort by distance so the closest blocks are returned first
         found.sort(Comparator.comparingDouble(pos -> pos.distSqr(origin)));
         return found.size() > maxSize? new ArrayList<>(found.subList(0, maxSize)) : found;
-    }
-
-    @Override
-    public List<BlockPos> biSearch(Level level, Collection<BlockPos> origins, BiPredicate<BlockState, BlockState> canSpread, int maxSize) {
-        return List.of();
     }
 }
