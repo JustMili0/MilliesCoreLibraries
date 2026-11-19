@@ -3,37 +3,39 @@ package net.justmili.mcl.v1.lib.util.common
 import net.justmili.mcl.v1.lib.util.server.Servers
 import net.minecraft.ChatFormatting
 import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.contents.TranslatableContents
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
 
+@Suppress("UNUSED")
 object Text {
 
     @JvmStatic
     fun empty() = ""
 
     @JvmStatic
-    fun text(string: String, vararg args: Any?) = Component.literal(string.format(*args))
+    fun text(string: String, vararg args: Any?): MutableComponent = Component.literal(string.format(*args))
 
     @JvmStatic
-    fun obfuscate(string: String, vararg args: Any?) = Component.literal(string.format(*args)).withStyle(ChatFormatting.OBFUSCATED)
+    fun obfuscate(string: String, vararg args: Any?): MutableComponent = Component.literal(string.format(*args)).withStyle(ChatFormatting.OBFUSCATED)
 
     @JvmStatic
     fun listToString(list: List<String>) = list.joinToString(", ")
 
     @JvmStatic
-    fun translate(string: String, vararg args: Any?) = Component.translatable(string.format(*args))
+    fun translate(string: String, vararg args: Any?): MutableComponent = Component.translatable(string.format(*args))
 
     //? if >= 1.20.3 {
     /*@JvmStatic
-    fun safeTranslate(string: String, vararg args: Any?) = Component.translatableEscape(string, *args)*/
+    fun safeTranslate(string: String, vararg args: Any?): MutableComponent = Component.translatableEscape(string, *args)*/
     //?}
 
     @JvmStatic
-    fun translateWithFallback(string: String, fallback: String) = Component.translatableWithFallback(string, fallback, *TranslatableContents.NO_ARGS)
+    fun translateWithFallback(string: String, fallback: String): MutableComponent = Component.translatableWithFallback(string, fallback, *TranslatableContents.NO_ARGS)
 
     @JvmStatic
-    fun translateWithFallback(string: String, fallback: String, vararg args: Any?) = Component.translatableWithFallback(string, fallback, *args)
+    fun translateWithFallback(string: String, fallback: String, vararg args: Any?): MutableComponent = Component.translatableWithFallback(string, fallback, *args)
 
     @JvmStatic
     fun sendMessage(player: ServerPlayer, string: Component, overlay: Boolean = false) {
