@@ -60,6 +60,11 @@ public final class CompoundTags {
     public static final String BEE_FLOWER_POS = "FlowerPos";
     public static final String BEE_HAS_NECTAR = "HasNectar";
 
+    public boolean isAlwaysEdible(ItemStack stack) {
+        var props = stack.getItem().getFoodProperties();
+        return props != null && props.canAlwaysEat();
+    }
+
     public static final class AttributeModifier {
         public static final String ATTRIBUTE = "AttributeName";
         public static final String SLOT = "Slot";
@@ -91,10 +96,5 @@ public final class CompoundTags {
 
         private HideFlags() {
         }
-    }
-
-    public boolean isAlwaysEdible(ItemStack stack) {
-        var props = stack.getItem().getFoodProperties();
-        return props != null && props.canAlwaysEat();
     }
 }

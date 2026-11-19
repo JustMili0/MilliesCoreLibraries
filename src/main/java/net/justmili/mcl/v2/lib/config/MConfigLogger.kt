@@ -17,6 +17,7 @@ internal object MConfigLogger {
     fun invalidValue(option: ConfigOption<*>, key: String? = option.key) = LOGGER.warn("Invalid value for option '{}' in '{}'", key, getName(option.path))
     fun unsupportedElement(path: Path, element: String, reason: String) = dev("Unsupported element(s) '{}' in file '{}': {}", element, getName(path), reason)
     fun missingHolder(option: ConfigOption<*>, type: String, id: String) = dev("Missing {} '{}' for option '{}' of '{}'", type, id, option.key, getName(option.path))
+    fun syncFail(id: String, reason: String?) = LOGGER.error("Could not synchronize config '{}': {}", id, reason)
     fun pathInUse(path: Path) = dev("File name '{}' already in use by a different file. They will overwrite eachother.", getName(path))
 
     private fun dev(message: String, vararg arguments: Any?) = if (IS_DEBUG) LOGGER.warn(message, *arguments) else {

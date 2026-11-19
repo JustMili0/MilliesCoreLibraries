@@ -13,35 +13,30 @@ import net.minecraft.world.level.block.state.properties.*;
 import java.util.function.*;
 
 public class BlockAssetDatagen {
-    public record BlockRot(VariantProperty<VariantProperties.Rotation> axis, VariantProperties.Rotation rot) {
-    }
-
     public static final BlockRot Y_R90 = new BlockRot(VariantProperties.Y_ROT, VariantProperties.Rotation.R90);
     public static final BlockRot Y_R180 = new BlockRot(VariantProperties.Y_ROT, VariantProperties.Rotation.R180);
     public static final BlockRot Y_R270 = new BlockRot(VariantProperties.Y_ROT, VariantProperties.Rotation.R270);
     public static final BlockRot X_R90 = new BlockRot(VariantProperties.X_ROT, VariantProperties.Rotation.R90);
     public static final BlockRot X_R180 = new BlockRot(VariantProperties.X_ROT, VariantProperties.Rotation.R180);
     public static final BlockRot X_R270 = new BlockRot(VariantProperties.X_ROT, VariantProperties.Rotation.R270);
-
     private final BlockModelGenerators gen;
     private final BiConsumer<ResourceLocation, Supplier<JsonElement>> modelOutput;
     private final Consumer<BlockStateGenerator> stateOutput;
-
     public BlockAssetDatagen(BlockModelGenerators modelGenerators) {
         this.gen = modelGenerators;
         this.modelOutput = gen.modelOutput;
         this.stateOutput = gen.blockStateOutput;
     }
 
-    /* TODO:
-    - Redo the entire util, code every model generation + make non-standard models generatable
-    Remember to make it easy to port to newer versions later! Use lots of helpers!
-     */
-
     // Helpers
     public void create(BlockStateGenerator generator) {
         stateOutput.accept(generator);
     }
+
+    /* TODO:
+    - Redo the entire util, code every model generation + make non-standard models generatable
+    Remember to make it easy to port to newer versions later! Use lots of helpers!
+     */
 
     public void create(Block block, ResourceLocation template) {
         gen.delegateItemModel(block, template);
@@ -115,15 +110,6 @@ public class BlockAssetDatagen {
 
     public void doubleBlock(Block block, ResourceLocation topHalfModelId, ResourceLocation bottomHalfModelId) {
         gen.createDoubleBlock(block, topHalfModelId, bottomHalfModelId);
-    }
-
-    public enum PillarRotation {
-        NONE, // No rotation, just top, bottom and side textures
-        LOG_XYZ, // X/Y/Z rotation, one model rotated to fit the axis. Works for distinct end textures and for all 6 sides being the same texture
-        LOG_XYZ_HORIZONTAL, // Same as LOG_XYZ but with a separate model for side placement
-        LOG_XYZ_UV_LOCKED, // Same as LOG_XYZ but with a UV locked model per axis
-        LOG_XYZ_MIRRORED, // Same as LOG_XYZ but with randomly mirrored and rotated variants
-        ALL_DIRECTIONS // D/U/N/S/W/E facing, column shaped
     }
 
     public void pillar(Block block, TextureMapping mapping, PillarRotation rotation) {
@@ -512,6 +498,18 @@ public class BlockAssetDatagen {
 
     public void furnace(Block block, TexturedModel.Provider texturedModel) {
         gen.createFurnace(block, texturedModel);
+    }
+
+    public enum PillarRotation {
+        NONE, // No rotation, just top, bottom and side textures
+        LOG_XYZ, // X/Y/Z rotation, one model rotated to fit the axis. Works for distinct end textures and for all 6 sides being the same texture
+        LOG_XYZ_HORIZONTAL, // Same as LOG_XYZ but with a separate model for side placement
+        LOG_XYZ_UV_LOCKED, // Same as LOG_XYZ but with a UV locked model per axis
+        LOG_XYZ_MIRRORED, // Same as LOG_XYZ but with randomly mirrored and rotated variants
+        ALL_DIRECTIONS // D/U/N/S/W/E facing, column shaped
+    }
+
+    public record BlockRot(VariantProperty<VariantProperties.Rotation> axis, VariantProperties.Rotation rot) {
     }
 
     /*TODO

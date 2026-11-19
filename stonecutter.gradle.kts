@@ -22,6 +22,7 @@ stonecutter parameters {
 
         string(current.parsed >= "26.1") {
             replace("accessWidener v2 named", "accessWidener v2 official")
+            replace("playS2C", "clientboundPlay")
         }
     }
 }
