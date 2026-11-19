@@ -1,16 +1,22 @@
 package net.justmili.mcl.v1.lib.util.common;
 
-import net.justmili.mcl.v1.lib.util.server.ServerUtil;
+import net.justmili.mcl.v1.lib.util.server.Servers;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+//? if >= 1.21.11 {
+/*import net.minecraft.server.permissions.Permission;
+import net.minecraft.server.permissions.PermissionLevel;
+*///?}
 
 public class CommandUtil {
     // Replace "new" permission system with the good ol' numbers
-    //    public static boolean hasPerms(CommandSourceStack source, int level) {
-    //        return source.permissions().hasPermission(new Permission.HasCommandLevel(PermissionLevel.byId(level)));
-    //    }
+    //? if >= 1.21.11 {
+    /*public static boolean hasPerms(CommandSourceStack source, int level) {
+        return source.permissions().hasPermission(new Permission.HasCommandLevel(PermissionLevel.byId(level)));
+    }
+    *///?}
 
     // Command success/fail response
     public static void sendOk(CommandSourceStack source, Component message, boolean allowLogging) {
@@ -39,10 +45,10 @@ public class CommandUtil {
 
     // Other
     public static void runCommandAsPlayer(ServerPlayer player, String command) {
-        ServerUtil.runCommandAs(player.createCommandSourceStack(), command);
+        Servers.runCommandAs(player.createCommandSourceStack(), command);
     }
 
     public static void runCommandAsServer(MinecraftServer server, String command) {
-        ServerUtil.runCommandAsServer(server, command);
+        Servers.runCommandAsServer(server, command);
     }
 }

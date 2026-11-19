@@ -21,7 +21,7 @@ import net.minecraft.world.level.storage.WorldData;
 
 import java.util.*;
 
-public class ServerUtil {
+public class Servers {
 
     // Players
     public static PlayerList getPlayerList(MinecraftServer server) {

@@ -1,6 +1,6 @@
 package net.justmili.mcl.v1.lib.util.common;
 
-import net.justmili.mcl.v1.lib.util.server.ServerUtil;
+import net.justmili.mcl.v1.lib.util.server.Servers;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -67,7 +67,7 @@ public class Text {
     }
 
     public static void broadcastServer(MinecraftServer server, Component message, boolean showAboveHotbar) {
-        ServerUtil.broadcast(server, message, showAboveHotbar);
+        Servers.broadcast(server, message, showAboveHotbar);
     }
 
     public static void broadcastServer(MinecraftServer server, String message, boolean showAboveHotbar) {
@@ -75,7 +75,7 @@ public class Text {
     }
 
     public static void broadcastServer(MinecraftServer server, Component message) {
-        ServerUtil.broadcast(server, message, false);
+        Servers.broadcast(server, message, false);
     }
 
     public static void broadcastServer(MinecraftServer server, String message) {
