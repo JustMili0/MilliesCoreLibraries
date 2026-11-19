@@ -22,6 +22,7 @@ public class BlockAssetDatagen {
     private final BlockModelGenerators gen;
     private final BiConsumer<ResourceLocation, Supplier<JsonElement>> modelOutput;
     private final Consumer<BlockStateGenerator> stateOutput;
+
     public BlockAssetDatagen(BlockModelGenerators modelGenerators) {
         this.gen = modelGenerators;
         this.modelOutput = gen.modelOutput;

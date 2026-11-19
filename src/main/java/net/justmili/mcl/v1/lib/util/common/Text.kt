@@ -34,26 +34,31 @@ object Text {
     fun translateWithFallback(string: String, fallback: String, vararg args: Any?): MutableComponent = Component.translatableWithFallback(string, fallback, *args)
 
     @JvmStatic
+    @JvmOverloads
     fun sendMessage(player: ServerPlayer, component: Component, overlay: Boolean = false) {
         player.sendSystemMessage(component, overlay)
     }
 
     @JvmStatic
+    @JvmOverloads
     fun sendMessage(player: ServerPlayer, string: String, overlay: Boolean = false) {
         sendMessage(player, Component.literal(string), overlay)
     }
 
     @JvmStatic
+    @JvmOverloads
     fun sendFailTo(player: ServerPlayer, string: String, overlay: Boolean = false) {
         sendMessage(player, Component.literal(string).withStyle(ChatFormatting.RED), overlay)
     }
 
     @JvmStatic
+    @JvmOverloads
     fun broadcastServer(server: MinecraftServer, component: Component, overlay: Boolean = false) {
         Servers.broadcast(server, component, overlay)
     }
 
     @JvmStatic
+    @JvmOverloads
     fun broadcastServer(server: MinecraftServer, string: String, overlay: Boolean = false) {
         broadcastServer(server, Component.literal(string), overlay)
     }

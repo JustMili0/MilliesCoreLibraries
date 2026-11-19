@@ -16,6 +16,7 @@ import net.minecraft.world.level.material.PushReaction;
 import java.util.function.ToIntFunction;
 
 public class BlockBehaviorUtil {
+
     public static ToIntFunction<BlockState> litBlockEmission(int lightValue) {
         return (blockState) -> (Boolean) blockState.getValue(BlockStateProperties.LIT)? lightValue : 0;
     }
@@ -37,9 +38,6 @@ public class BlockBehaviorUtil {
     }
 
     public static BlockBehaviour.Properties log(MapColor topMapColor, MapColor sideMapColor) {
-        /** axis Y = topMapColor, other = sideMapColor
-         *  sound: SoundType.WOOD (default)
-         */
         return BlockBehaviour.Properties.of()
             .mapColor((blockState) -> blockState.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y? topMapColor : sideMapColor)
             .instrument(NoteBlockInstrument.BASS)
@@ -73,10 +71,7 @@ public class BlockBehaviorUtil {
     }
 
     public static BlockBehaviour.Properties button() {
-        /** wooden - BlockSetType.OAK, 30, true
-         *  stone - BlockSetType.STONE, 20, false
-         */
-
+        // Wood - "BlockSetType.OAK, 30, true", Stone - "BlockSetType.STONE, 20, false"
         return BlockBehaviour.Properties.of().noCollission().strength(0.5f).pushReaction(PushReaction.DESTROY);
     }
 
