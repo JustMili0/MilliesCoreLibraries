@@ -4,10 +4,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
 
-
+// TODO: Use stonecutter to have NbtUtil updated for 1.20.5+
 public final class NbtUtil {
-    private NbtUtil() {
-    }
 
     public static CustomDataBuilder custom() {
         return new CustomDataBuilder();

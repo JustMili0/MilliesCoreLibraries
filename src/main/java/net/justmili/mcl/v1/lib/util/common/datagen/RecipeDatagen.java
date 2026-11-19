@@ -1,6 +1,6 @@
 package net.justmili.mcl.v1.lib.util.common.datagen;
 
-import net.justmili.mcl.v1.lib.util.common.ResourceUtil;
+import net.justmili.mcl.v1.lib.util.common.IdUtil;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
@@ -38,15 +38,15 @@ public final class RecipeDatagen {
     }
 
     private ResourceLocation output(Item item) {
-        return ResourceUtil.parse(modId, getItemName(item));
+        return IdUtil.parse(modId, getItemName(item));
     }
 
     private ResourceLocation outputFrom(Item input, Item output) {
-        return ResourceUtil.parse(modId, getItemName(output) + "_from_" + getItemName(input));
+        return IdUtil.parse(modId, getItemName(output) + "_from_" + getItemName(input));
     }
 
     private ResourceLocation outputFromProcess(Item input, Item output, String processType) {
-        return ResourceUtil.parse(modId, getItemName(output) + "_from_" + getItemName(input) + processType);
+        return IdUtil.parse(modId, getItemName(output) + "_from_" + getItemName(input) + processType);
     }
 
     public void shapeless(RecipeCategory category, Item output, int outCount, Item... inputs) {
@@ -55,7 +55,7 @@ public final class RecipeDatagen {
             builder.requires(input);
         }
         var inputNames = Arrays.stream(inputs).map(RecipeProvider::getItemName).collect(Collectors.joining("_and_"));
-        builder.unlockedBy(hasItem(inputs[0]), has(inputs[0])).save(writer, ResourceUtil.parse(modId, getItemName(output) + "_from_" + inputNames));
+        builder.unlockedBy(hasItem(inputs[0]), has(inputs[0])).save(writer, IdUtil.parse(modId, getItemName(output) + "_from_" + inputNames));
     }
 
     public void shapeless(RecipeCategory category, Item output, Item... inputs) {
@@ -68,7 +68,7 @@ public final class RecipeDatagen {
             .pattern("##")
             .pattern("##")
             .unlockedBy(hasItem(material), has(material))
-            .save(writer, ResourceUtil.parse(modId, getItemName(output)));
+            .save(writer, IdUtil.parse(modId, getItemName(output)));
     }
 
     public void shaped3x3(RecipeCategory category, Item material, Item output, int outCount) {
@@ -78,14 +78,14 @@ public final class RecipeDatagen {
             .pattern("###")
             .pattern("###")
             .unlockedBy(hasItem(material), has(material))
-            .save(writer, ResourceUtil.parse(modId, getItemName(output)));
+            .save(writer, IdUtil.parse(modId, getItemName(output)));
     }
 
     public void planks(Item log, Item planks) {
         ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, planks, 4)
             .requires(log)
             .unlockedBy(hasItem(log), has(log))
-            .save(writer, ResourceUtil.parse(modId, getItemName(planks)));
+            .save(writer, IdUtil.parse(modId, getItemName(planks)));
     }
 
     public void planksFromLogs(Item log, Item planks) {
@@ -178,14 +178,14 @@ public final class RecipeDatagen {
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, dyed)
             .requires(item).requires(dye)
             .unlockedBy(hasItem(dye), has(dye))
-            .save(writer, ResourceUtil.parse(modId, getItemName(dyed) + "_from_dying"));
+            .save(writer, IdUtil.parse(modId, getItemName(dyed) + "_from_dying"));
     }
 
     public void dyeItem(TagKey<Item> items, Item dye, Item dyed) {
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, dyed)
             .requires(items).requires(dye)
             .unlockedBy(hasItem(dye), has(dye))
-            .save(writer, ResourceUtil.parse(modId, getItemName(dyed) + "_from_dying"));
+            .save(writer, IdUtil.parse(modId, getItemName(dyed) + "_from_dying"));
     }
 
     public void smelt(Item input, Item output, float exp, int cookingTime) {

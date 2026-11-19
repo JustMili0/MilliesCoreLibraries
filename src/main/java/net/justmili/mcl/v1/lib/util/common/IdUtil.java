@@ -2,7 +2,7 @@ package net.justmili.mcl.v1.lib.util.common;
 
 import net.minecraft.resources.ResourceLocation;
 
-public class ResourceUtil {
+public class IdUtil {
 
     public static ResourceLocation parse(String modId, String path) {
         return new ResourceLocation(modId, path);

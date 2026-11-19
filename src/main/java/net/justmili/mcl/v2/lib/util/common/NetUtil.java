@@ -1,9 +1,10 @@
-package net.justmili.mcl.v1.lib.util.common;
+package net.justmili.mcl.v2.lib.util.common;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.justmili.mcl.v1.lib.util.common.TickUtil;
 import net.justmili.mcl.v1.lib.util.server.Servers;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;

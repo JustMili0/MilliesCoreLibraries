@@ -1,6 +1,6 @@
 package net.justmili.mcl.v1.lib.util.client;
 
-import net.justmili.mcl.v1.lib.util.common.ResourceUtil;
+import net.justmili.mcl.v1.lib.util.common.IdUtil;
 import net.minecraft.data.models.model.ModelLocationUtils;
 import net.minecraft.data.models.model.TextureMapping;
 import net.minecraft.resources.ResourceLocation;
@@ -66,11 +66,11 @@ public class Assets {
     }
 
     public static ResourceLocation getBlockPath(String modId, String path) {
-        return ResourceUtil.parse(modId, "block/" + path);
+        return IdUtil.parse(modId, "block/" + path);
     }
 
     public static ResourceLocation getItemPath(String modId, String path) {
-        return ResourceUtil.parse(modId, "item/" + path);
+        return IdUtil.parse(modId, "item/" + path);
     }
 
     // Blocks

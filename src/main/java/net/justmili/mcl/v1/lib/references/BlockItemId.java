@@ -1,7 +1,7 @@
 //? if < 26.2 {
 package net.justmili.mcl.v1.lib.references;
 
-import net.justmili.mcl.v1.lib.util.common.ResourceUtil;
+import net.justmili.mcl.v1.lib.util.common.IdUtil;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -15,11 +15,11 @@ public record BlockItemId(ResourceKey<Block> block, ResourceKey<Item> item) {
     }
 
     public static BlockItemId create(final String blockName, final String itemName) {
-        return create(ResourceUtil.asMinecraft(blockName), ResourceUtil.asMinecraft(itemName));
+        return create(IdUtil.asMinecraft(blockName), IdUtil.asMinecraft(itemName));
     }
 
     public static BlockItemId create(final String name) {
-        var id = ResourceUtil.asMinecraft(name);
+        var id = IdUtil.asMinecraft(name);
         return create(id, id);
     }
 }
