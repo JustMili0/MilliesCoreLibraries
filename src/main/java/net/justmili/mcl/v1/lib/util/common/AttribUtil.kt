@@ -46,7 +46,7 @@ object AttribUtil {
         if (instance == null) return
         //? if >= 1.20.5 {
         /*instance.addOrUpdateTransientModifier(modifier)
-        */ //?} else {
+         *///?} else {
         instance.removeModifier(modifier)
         instance.addTransientModifier(modifier)
         //?}
@@ -57,7 +57,7 @@ object AttribUtil {
         if (instance == null) return
         //? if >= 1.20.5 {
         /*instance.addOrReplacePermanentModifier(modifier)
-        */ //?} else {
+         *///?} else {
         instance.removeModifier(modifier)
         instance.addPermanentModifier(modifier)
         //?}

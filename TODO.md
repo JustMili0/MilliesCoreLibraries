@@ -1,7 +1,7 @@
 ### Notes
 - ALWAYS USE MINECRAFT'S CLASSES WHEN AND AS MUCH POSSIBLE SO OPTIMIZATION MODS CAN TAKE THE WHEEL AFTER
 - Keep TODO updated
-- Dump mod version for every code change for every commit (In `stonecutter.properties.toml` and `CoreLibs.java`)
+- Bump mod version for every code change for every commit (In `stonecutter.properties.toml` and `CoreLibs.java`)
 - A lot of classes such as utils etc. can be copied from JustMili's other projects
 
 # FIRST-PRIORITY TODO (EARLY BETA)
