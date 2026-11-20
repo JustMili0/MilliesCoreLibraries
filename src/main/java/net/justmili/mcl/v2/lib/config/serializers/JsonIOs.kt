@@ -149,7 +149,7 @@ internal object Json5IO : ConfigIO {
 internal object SharedJsonIO {
 
     fun load(path: Path, root: CategoryItem): Boolean {
-        return JsonSerializer.read(path, ConfigCodec.of(root)) { message -> MConfigLogger.readFail(path, message) }.isPresent
+        return JsonSerializer.read(path, ConfigCodec.of(root), errorMsg = { message -> MConfigLogger.readFail(path, message) }).isPresent
     }
 
     @Throws(IOException::class)
