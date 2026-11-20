@@ -47,7 +47,7 @@ public class ExampleConfig {
         }
 
         // Log options for debug
-        for (var option : new ConfigOption<?>[]{
+        /* for (var option : new ConfigOption<?>[]{
             bool4, string4, stringLimited4,
             int4, intRanged4, intRangedNeg4,
             long4, longRanged4, longRangedNeg4,
@@ -58,7 +58,7 @@ public class ExampleConfig {
             blockSet4, itemSet4, entitySet4
         }) {
             CoreLibs.LOGGER.info("{}", option);
-        }
+        }*/
     }
 
     // Functions made only for purpose of this example
