@@ -4,11 +4,15 @@ import net.justmili.mcl.v1.lib.util.Platform
 import net.justmili.mcl.v2.lib.config.converter.OldConfigLoader
 import net.justmili.mcl.v2.lib.config.items.CategoryItem
 import net.justmili.mcl.v2.lib.config.serializers.*
+import net.justmili.mcl.v2.lib.config.sync.MConfigSync
+import net.justmili.mcl.v2.lib.config.sync.SyncPriorityConfigs
 import java.nio.file.Path
 import kotlin.io.path.exists
+import kotlin.io.path.nameWithoutExtension
 
 class MConfigLoader(modId: String, customFileName: String?, configType: ConfigTypes, fileType: FileTypes, createSubDirectory: Boolean) {
     val path: Path
+    val sync: MConfigSync?
     val root = CategoryItem("root", null)
     private val serializer = getSerializer(fileType)
     private var convertLoader: OldConfigLoader? = null
@@ -21,6 +25,9 @@ class MConfigLoader(modId: String, customFileName: String?, configType: ConfigTy
 
         this.path = getPath(directory, fileName, configType.type, fileType.extension, usesSuffix)
         if (!CLAIMED_PATHS.add(path)) MConfigLogger.pathInUse(path)
+
+        // The id is the same on both sides as long as both have the same mod and file name
+        this.sync = if (configType == ConfigTypes.COMMON_SERVER_PRIORITY) MConfigSync("$modId:${path.nameWithoutExtension}", root, path).also { SyncPriorityConfigs.register(it) } else null
     }
 
     internal fun addForConversion(oldPath: Path, deleteOldFile: Boolean) {
@@ -43,11 +50,15 @@ class MConfigLoader(modId: String, customFileName: String?, configType: ConfigTy
     }
 
     fun reload(): Boolean {
-        synchronized(path) {
-            if (path.exists()) return tryRead()
-            tryWrite()
-            return false
+        val read = synchronized(path) {
+            if (path.exists()) tryRead() else {
+                tryWrite()
+                false
+            }
         }
+        // Players on the server get updated values
+        if (read) sync?.let { SyncPriorityConfigs.sendToAll(it) }
+        return read
     }
 
     internal fun buildOrLoad() {

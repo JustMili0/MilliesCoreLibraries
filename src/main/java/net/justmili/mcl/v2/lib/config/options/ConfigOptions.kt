@@ -26,6 +26,8 @@ open class ConfigOption<O : Any>(val key: String, val default: O, val codec: Cod
     fun get() = synced ?: value
 
     open fun set(value: O): Boolean {
+        // Server's values are in control while synced
+        if (isSynced()) return false
         val clamped = clamp(value)
         if (this.value == clamped) return true
         this.value = clamped
@@ -53,6 +55,11 @@ open class ConfigOption<O : Any>(val key: String, val default: O, val codec: Cod
         val clamped = clamp(decoded)
         this.value = clamped
         return true
+    }
+
+    fun <R> loadSynced(ops: DynamicOps<R>, input: R): Boolean {
+        val decoded = codec.parse(ops, input).result().orElse(null) ?: return false
+        return setSynced(decoded)
     }
 
     fun toText() = textOf(value)

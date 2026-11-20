@@ -15,6 +15,16 @@ class CategoryItem(val name: String, var comment: String?) : ConfigItem {
         children.add(item)
     }
 
+    // All options in this category and its subcategories
+    fun getChildren(): Sequence<ConfigOption<*>> = children.asSequence().flatMap { item ->
+        when (item) {
+            is ConfigOption<*> -> sequenceOf(item)
+            is CategoryItem -> item.getChildren()
+            else -> emptySequence()
+        }
+    }
+
+    // Item name by type
     private fun getItemName(item: ConfigItem): String? {
         return when (item) {
             is ConfigOption<*> -> item.key

@@ -23,7 +23,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
  *///?} else {
 import net.minecraft.client.renderer.LevelRenderer;
     //?}
-    //? if >= 1.21.11 && < 26.2 {
+    //? if >= 1.21.11 < 26.2 {
 /*import net.minecraft.client.renderer.ShapeRenderer;
  *///?}
 
