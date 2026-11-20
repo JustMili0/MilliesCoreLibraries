@@ -7,7 +7,6 @@
 # FIRST-PRIORITY TODO (EARLY BETA)
 - [EVERYONE] Finish all the events
 - Rewrite config from `v1.config` to `v2.config`
-  - [MILLIE] Fix, rework and improve priority config synchronization
   - [APPELS] Add full TOML support (including for old file conversion)
 - [MILLIE] Finish reworking data generation utils
 - [EVERYONE] Port everything to all versions
