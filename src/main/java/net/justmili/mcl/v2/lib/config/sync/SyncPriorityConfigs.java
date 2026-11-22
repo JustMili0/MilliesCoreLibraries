@@ -15,9 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SyncPriorityConfigs {
     static final int MAX_ID_LENGTH = 256;
     static final int MAX_JSON_LENGTH = 1 << 18;
-
     private static final Map<String, MConfigSync> SYNCS = new ConcurrentHashMap<>();
-    private static volatile MinecraftServer server;
 
     public static void register(MConfigSync sync) {
         SYNCS.put(sync.getId(), sync);
@@ -26,10 +24,7 @@ public class SyncPriorityConfigs {
     public static void initS2C() {
         /*? if >= 1.20.5 {*//*NetUtil.registerS2C(SyncPriorityConfigPacket.TYPE, SyncPriorityConfigPacket.CODEC);*//*?}*/
 
-        ServerLifecycleEvents.SERVER_STARTING.register(started -> server = started);
-        ServerLifecycleEvents.SERVER_STOPPED.register(stopped -> server = null);
-
-        // Everything is sent on join, changes after that are sent by reload
+        // Everything is sent on join, anything after is sent on reload
         ServerPlayConnectionEvents.JOIN.register((handler, sender, joined) -> {
             var player = handler.getPlayer();
             for (var sync : SYNCS.values()) {
@@ -40,11 +35,10 @@ public class SyncPriorityConfigs {
     }
 
     // Sends the current values of the config to everyone online
-    public static void sendToAll(MConfigSync sync) {
-        var current = server;
-        if (current == null) return;
+    public static void sendToAll(MinecraftServer server, MConfigSync sync) {
+        if (server == null) return;
         var packet = packetOf(sync, sync.toChangedJson());
-        if (packet != null) NetUtil.sendToAll(current, packet);
+        if (packet != null) NetUtil.sendToAll(server, packet);
     }
 
     // Applies the values received from the server

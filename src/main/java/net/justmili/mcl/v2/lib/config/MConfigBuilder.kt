@@ -6,6 +6,7 @@ import net.justmili.mcl.v2.lib.config.items.CommentItem
 import net.justmili.mcl.v2.lib.config.options.*
 import net.justmili.mcl.v2.lib.config.serializers.ConfigIO
 import net.minecraft.core.Registry
+import net.minecraft.server.MinecraftServer
 import java.nio.file.Path
 import java.util.function.Consumer
 
@@ -24,7 +25,7 @@ class MConfigBuilder @JvmOverloads constructor(val modId: String, val customFile
         return root
     }
 
-    fun reload() = loader.reload()
+    fun reload(server: MinecraftServer?) = loader.reload(server)
 
     @JvmOverloads fun tryConvertOldConfig(oldPath: String, deleteOldFile: Boolean = true): MConfigBuilder {
         loader.addForConversion(Path.of(oldPath), deleteOldFile)

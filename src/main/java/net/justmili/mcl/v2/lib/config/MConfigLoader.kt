@@ -6,6 +6,7 @@ import net.justmili.mcl.v2.lib.config.items.CategoryItem
 import net.justmili.mcl.v2.lib.config.serializers.*
 import net.justmili.mcl.v2.lib.config.sync.MConfigSync
 import net.justmili.mcl.v2.lib.config.sync.SyncPriorityConfigs
+import net.minecraft.server.MinecraftServer
 import java.nio.file.Path
 import kotlin.io.path.exists
 import kotlin.io.path.nameWithoutExtension
@@ -49,7 +50,7 @@ class MConfigLoader(modId: String, customFileName: String?, configType: ConfigTy
         }
     }
 
-    fun reload(): Boolean {
+    fun reload(server: MinecraftServer?): Boolean {
         val read = synchronized(path) {
             if (path.exists()) tryRead() else {
                 tryWrite()
@@ -57,7 +58,7 @@ class MConfigLoader(modId: String, customFileName: String?, configType: ConfigTy
             }
         }
         // Players on the server get updated values
-        if (read) sync?.let { SyncPriorityConfigs.sendToAll(it) }
+        if (read) sync?.let { SyncPriorityConfigs.sendToAll(server, it) }
         return read
     }
 
