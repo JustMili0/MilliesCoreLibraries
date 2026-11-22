@@ -1,6 +1,5 @@
 package net.justmili.mcl.v2.lib.config.sync;
 
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.justmili.mcl.CoreLibs;
 import net.justmili.mcl.v2.lib.util.common.NetUtil;

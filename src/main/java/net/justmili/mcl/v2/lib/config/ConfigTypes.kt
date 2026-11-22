@@ -1,10 +1,20 @@
 package net.justmili.mcl.v2.lib.config
 
+import net.minecraft.server.MinecraftServer;
+
+/**
+ * Config type defines the environment the config is used in and what it's capable of.
+ *
+ * It also tells what file name or suffix is used in the creation, writing and reading of the config file.
+ */
 enum class ConfigTypes(val type: String) {
+
     /**
      * Client-only configuration.
      *
-     * Only exists on the client. Never synchronized with or modified by the server.
+     * Only exists on the client.
+     *
+     * Never synchronized with or modified by the server.
      *
      * File name ends in `client`.
      */
@@ -13,7 +23,9 @@ enum class ConfigTypes(val type: String) {
     /**
      * Server-only configuration.
      *
-     * Only exists on the server. Never synchronized with or modified by clients.
+     * Only exists on the [MinecraftServer] (Dedicated, Singleplayer and LAN).
+     *
+     * Never synchronized with or modified by any client.
      *
      * File name ends in `server`.
      */
@@ -22,20 +34,24 @@ enum class ConfigTypes(val type: String) {
     /**
      * Common configuration available on both client and server.
      *
-     * Both sides have their own file and use their own values,
-     * so the values can differ. Nothing is synchronized.
+     * For options that aren't specific to either side.
+     * Both sides keep their own values, and which ones are used differs on the environment.
+     *
+     * Never synchronized across client and server.
      *
      * File name ends in `common`.
      */
     COMMON("common"),
 
     /**
-     * Common configuration for settings that only affect what a player sees or hears.
+     * Common configuration where the client's values take priority.
      *
-     * Both sides have their own file, but the server never reads or overrides the client's values.
-     * Clients with the mod apply their own values, everyone else gets the server's values.
+     * Meant for mods with an optional client install.
      *
-     * Recommended only for settings that don't change gameplay, like particles and sound volume.
+     * Clients with the mod use their own values, separate from the server's.
+     * Clients without it use the server's values instead.
+     *
+     * The client can send its values to the [MinecraftServer], which then only applies them to that player.
      *
      * File name ends in `common-client`.
      */
@@ -44,11 +60,11 @@ enum class ConfigTypes(val type: String) {
     /**
      * Common configuration where the server's values take priority.
      *
-     * Both sides have their own file, but when connected, the server's values
-     * override the client's values in memory (the client's file is not modified).
-     * Values are synchronized when joining.
+     * Meant for mods that need the same values on both sides, without players having to match their config by hand.
      *
-     * Recommended only for settings that have to match on both client and server.
+     * The [MinecraftServer] sends its values to the client on join, and sends updates on [MConfigLoader.reload].
+     *
+     * Synchronized values only replace the client's in memory. The client's file is never changed.
      *
      * File name ends in `common-server`.
      */

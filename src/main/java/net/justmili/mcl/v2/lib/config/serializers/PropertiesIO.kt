@@ -12,7 +12,6 @@ import java.util.*
 internal object PropertiesIO : ConfigIO {
 
     override fun validate(path: Path, root: CategoryItem) {
-        if (root.children.any { it is CategoryItem }) MConfigLogger.unsupportedElement(path, "categories", "element not supported in this format")
         checkForDupedKeys(path, root.children, HashSet())
     }
 

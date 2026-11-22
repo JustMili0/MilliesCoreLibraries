@@ -36,9 +36,9 @@ abstract class OptionBuilder<O : Any, B : OptionBuilder<O, B>>(protected val loa
 
     protected open fun create(value: O, limit: OptionBounds<O>?) = ConfigOption(key, value, codec, limit, flagId, isText(), loader)
 
-    fun addFlags(vararg flags: Int): B {
+    fun addFlags(vararg flags: OptionFlags): B {
         for (flag in flags) {
-            flagId = flagId or flag
+            flagId = flagId or flag.id
         }
         return self()
     }

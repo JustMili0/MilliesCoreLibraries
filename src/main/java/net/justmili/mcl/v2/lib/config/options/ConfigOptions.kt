@@ -15,54 +15,52 @@ import java.nio.file.Path
 import java.util.*
 
 open class ConfigOption<O : Any>(val key: String, val default: O, val codec: Codec<O>, val limit: OptionBounds<O>?, val flagId: Int, private val isText: Boolean, private val loader: MConfigLoader) : ConfigItem {
-    @Volatile protected var value: O = default
-    @Volatile private var synced: O? = null
+    @Volatile protected var defaultValue: O = default
+    @Volatile protected var syncedValue: O? = null
     var attachedImage: ResourceLocation? = null
     var comment: String? = null
     var oldKey: String? = null
     val path: Path get() = loader.path
     val bounds: String? get() = limit?.info()
 
-    fun get() = synced ?: value
+    fun get() = syncedValue ?: defaultValue
 
-    open fun set(value: O): Boolean {
-        // Server's values are in control while synced
-        if (isSynced()) return false
+    @JvmOverloads open fun set(value: O, sync: Boolean = false): Boolean {
         val clamped = clamp(value)
-        if (this.value == clamped) return true
-        this.value = clamped
+        if (sync) {
+            this.syncedValue = clamped
+            return true
+        }
+
+        if (this.defaultValue == clamped) return true
+        this.defaultValue = clamped
         loader.tryWrite()
         return true
     }
 
-    open fun setSynced(value: O): Boolean {
-        this.synced = clamp(value)
-        return true
-    }
+    fun isSynced() = syncedValue != null
 
     fun clearSynced() {
-        this.synced = null
+        this.syncedValue = null
     }
 
-    fun isSynced() = synced != null
+    fun hasFlag(flag: OptionFlags) = (flagId and flag.id) != 0
 
-    fun hasFlag(flag: Int) = (flagId and flag) != 0
-
-    fun <R> encode(ops: DynamicOps<R>): Optional<R> = codec.encodeStart(ops, value).resultOrPartial { error -> MConfigLogger.encodeFail(this, error) }
+    fun <R> encode(ops: DynamicOps<R>): Optional<R> = codec.encodeStart(ops, defaultValue).resultOrPartial { error -> MConfigLogger.encodeFail(this, error) }
 
     fun <R> load(ops: DynamicOps<R>, input: R): Boolean {
         val decoded = codec.parse(ops, input).result().orElse(null) ?: return false
         val clamped = clamp(decoded)
-        this.value = clamped
+        this.defaultValue = clamped
         return true
     }
 
     fun <R> loadSynced(ops: DynamicOps<R>, input: R): Boolean {
         val decoded = codec.parse(ops, input).result().orElse(null) ?: return false
-        return setSynced(decoded)
+        return set(decoded, true)
     }
 
-    fun toText() = textOf(value)
+    fun toText() = textOf(defaultValue)
 
     fun textOf(value: O): String {
         val element = codec.encodeStart(JsonOps.INSTANCE, value).resultOrPartial { error -> MConfigLogger.encodeFail(this, error) }.orElse(null) ?: return ""
@@ -96,27 +94,26 @@ open class ConfigOption<O : Any>(val key: String, val default: O, val codec: Cod
     }
 
     // Boolean, String with no limit, numbers with no set range and other just print their value, the rest get their limit info from their bounds
-    override fun toString() = "ConfigOption<$codec>($key)[value=${toText()}${limit?.info(value)?.let { ", $it" } ?: ""}]"
+    override fun toString() = "ConfigOption<$codec>($key)[value=${toText()}${limit?.info(defaultValue)?.let { ", $it" } ?: ""}]"
 }
 
 open class ListConfigOption<E : Any>(key: String, default: List<E>, codec: Codec<List<E>>, limit: OptionBounds<List<E>>?, flagId: Int, loader: MConfigLoader, val collapse: Boolean)
     : ConfigOption<@JvmSuppressWildcards List<E>>(key, default, codec, limit, flagId, false, loader) {
-    override fun set(value: List<E>) = super.set(ListCodec.normalize(value, collapse))
-    override fun setSynced(value: List<E>) = super.setSynced(ListCodec.normalize(value, collapse))
+    override fun set(value: List<E>, sync: Boolean) = super.set(ListCodec.normalize(value, collapse), sync)
 
     fun addToList(vararg elements: E) {
         synchronized(this) {
-            set(value + elements)
+            set(defaultValue + elements)
         }
     }
 
     fun removeFromList(vararg elements: E) {
         synchronized(this) {
-            set(value - elements.toSet())
+            set(defaultValue - elements.toSet())
         }
     }
 
-    override fun toString() = "${javaClass.simpleName}<$codec>($key)[collapse=$collapse, value=$value]"
+    override fun toString() = "${javaClass.simpleName}<$codec>($key)[collapse=$collapse, value=$defaultValue]"
 }
 
 class HolderSetConfigOption<E : Any>(key: String, default: List<TagOrElementLocation>, codec: Codec<List<TagOrElementLocation>>, limit: OptionBounds<List<TagOrElementLocation>>?, flagId: Int, loader: MConfigLoader, private val registry: Registry<E>)
