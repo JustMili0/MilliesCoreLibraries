@@ -2,12 +2,11 @@ package net.justmili.mcl.v2.lib.config.converter
 
 import com.google.gson.*
 import net.justmili.mcl.v2.lib.config.MConfigLogger
-import net.justmili.mcl.v2.lib.util.common.FileIO
+import net.justmili.mcl.v2.lib.config.serializers.SharedPropertiesIO
 import net.justmili.mcl.v2.lib.util.common.JsonSerializer
 import java.io.IOException
 import java.lang.ref.SoftReference
 import java.nio.file.Path
-import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.io.path.deleteIfExists
 import kotlin.io.path.isRegularFile
@@ -50,15 +49,7 @@ class OldConfigConverter(val path: Path, val deleteAfter: Boolean) {
     }
 
     private fun readProperties(): Boolean {
-        val properties = Properties()
-        try {
-            FileIO.bufferedReader(path).use { reader -> properties.load(reader) }
-        } catch (e: IOException) {
-            return fail(e.message)
-        } catch (e: IllegalArgumentException) {
-            return fail(e.message)
-        }
-
+        val properties = SharedPropertiesIO.read(path) { reason -> fail(reason) } ?: return false
         finder = { key -> properties.getProperty(key)?.let { JsonPrimitive(it) } }
         return true
     }

@@ -9,8 +9,8 @@ import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.resources.ResourceLocation;
-import org.spongepowered.asm.mixin.injection.At;*/
-//?}
+import org.spongepowered.asm.mixin.injection.At;
+*///?}
 
 @Mixin(SharedSuggestionProvider.class)
 public interface SharedSuggestionProviderMixin {
@@ -24,6 +24,6 @@ public interface SharedSuggestionProviderMixin {
     @ModifyExpressionValue(method = "filterResources(Ljava/lang/Iterable;Ljava/lang/String;Ljava/util/function/Function;Ljava/util/function/Consumer;)V", at = @At("MIXINEXTRAS:EXPRESSION"))
     private static boolean corelibs$alwaysAllowSuggestion(boolean original) {
         return true;
-    }*/
-    //?}
+    }
+    *///?}
 }

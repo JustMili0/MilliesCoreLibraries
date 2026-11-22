@@ -4,7 +4,6 @@ import net.justmili.mcl.v2.lib.config.MConfigLogger
 import net.justmili.mcl.v2.lib.config.items.*
 import net.justmili.mcl.v2.lib.config.options.ConfigOption
 import net.justmili.mcl.v2.lib.util.common.FileIO
-import java.io.IOException
 import java.io.Writer
 import java.nio.file.Path
 import java.util.*
@@ -12,7 +11,12 @@ import java.util.*
 internal object PropertiesIO : ConfigIO {
 
     override fun validate(path: Path, root: CategoryItem) {
-        checkForDupedKeys(path, root.children, HashSet())
+        val keys = HashSet<String>()
+        for (option in root.getChildren()) {
+            require(keys.add(option.key)) {
+                "Duplicate config option '${option.key}' detected in '${path.fileName}' after flattening categories."
+            }
+        }
     }
 
     override fun write(path: Path, root: CategoryItem): Boolean {
@@ -25,31 +29,13 @@ internal object PropertiesIO : ConfigIO {
     }
 
     override fun read(path: Path, root: CategoryItem): Boolean {
-        val properties = Properties()
-        try {
-            FileIO.bufferedReader(path).use { reader -> properties.load(reader) }
-        } catch (e: IOException) {
-            MConfigLogger.readFail(path, e.message)
-            return false
-        } catch (e: IllegalArgumentException) {
-            MConfigLogger.readFail(path, e.message)
-            return false
-        }
+        val properties = SharedPropertiesIO.read(path) { reason -> MConfigLogger.readFail(path, reason) } ?: return false
 
-        loadItems(properties, root.children)
+        for (option in root.getChildren()) {
+            val raw = properties.getProperty(option.key) ?: continue
+            if (!option.loadText(raw)) MConfigLogger.invalidValue(option)
+        }
         return true
-    }
-
-    private fun checkForDupedKeys(path: Path, items: List<ConfigItem>, keys: MutableSet<String>) {
-        for (item in items) {
-            if (item is CategoryItem) {
-                checkForDupedKeys(path, item.children, keys)
-            } else if (item is ConfigOption<*>) {
-                require(keys.add(item.key)) {
-                    "Duplicate config option '${item.key}' detected in '${path.fileName}' after flattening categories."
-                }
-            }
-        }
     }
 
     private fun writeItems(writer: Writer, items: List<ConfigItem>) {
@@ -89,6 +75,9 @@ internal object PropertiesIO : ConfigIO {
                 '\\' -> "\\\\"
                 '\n' -> "\\n"
                 '\r' -> "\\r"
+                '\t' -> "\\t"
+                '\u000c' -> "\\f"
+                ' ' -> if (i == 0) "\\ " else continue
                 else -> continue
             }
             if (last < i) writer.write(text, last, i - last)
@@ -97,15 +86,11 @@ internal object PropertiesIO : ConfigIO {
         }
         if (last < text.length) writer.write(text, last, text.length - last)
     }
+}
 
-    private fun loadItems(properties: Properties, items: List<ConfigItem>) {
-        for (item in items) {
-            if (item is CategoryItem) {
-                loadItems(properties, item.children)
-            } else if (item is ConfigOption<*>) {
-                val raw = properties.getProperty(item.key) ?: continue
-                if (!item.loadText(raw)) MConfigLogger.invalidValue(item)
-            }
-        }
+internal object SharedPropertiesIO {
+
+    fun read(path: Path, exception: (String?) -> Unit): Properties? {
+        return FileIO.read(path, exception) { reader -> Properties().apply { load(reader) } }
     }
 }

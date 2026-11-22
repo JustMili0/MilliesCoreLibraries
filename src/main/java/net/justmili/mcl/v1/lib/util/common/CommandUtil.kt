@@ -8,7 +8,7 @@ import net.minecraft.server.MinecraftServer
 //? if >= 1.21.11 {
 /*import net.minecraft.server.permissions.Permission;
 import net.minecraft.server.permissions.PermissionLevel;
-*/ //?}
+ *///?}
 
 object CommandUtil {
 
@@ -16,7 +16,7 @@ object CommandUtil {
     //? if >= 1.21.11 {
     /*@JvmStatic
     fun hasPerms(source: CommandSourceStack, level: Int) = source.permissions().hasPermission(Permission.HasCommandLevel(PermissionLevel.byId(level)))
-    */ //?}
+     *///?}
 
     // Command success/fail response
     @JvmStatic

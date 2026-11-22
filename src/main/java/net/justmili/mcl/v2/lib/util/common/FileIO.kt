@@ -1,5 +1,6 @@
 package net.justmili.mcl.v2.lib.util.common
 
+import com.google.gson.JsonParseException
 import net.justmili.mcl.CoreLibs
 import java.io.*
 import java.nio.file.Path
@@ -35,6 +36,22 @@ object FileIO {
         } catch (e: IOException) {
             CoreLibs.LOGGER.error("Failed to write '{}': {}", path, e.message)
             return false
+        }
+    }
+
+    @JvmStatic
+    fun <T : Any> read(path: Path, exception: (String?) -> Unit, reader: (BufferedReader) -> T): T? {
+        return try {
+            path.bufferedReader(options = READ_ONLY).use(reader)
+        } catch (e: IOException) {
+            exception(e.message)
+            null
+        } catch (e: JsonParseException) {
+            exception(e.message)
+            null
+        } catch (e: IllegalArgumentException) {
+            exception(e.message)
+            null
         }
     }
 

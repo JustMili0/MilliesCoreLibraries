@@ -29,16 +29,11 @@ class OldConfigLoader {
         }
     }
 
-    private fun importValues(category: CategoryItem) {
-        for (item in category.children) {
-            if (item is CategoryItem) {
-                importValues(item)
-            } else if (item is ConfigOption<*>) {
-                val oldKey = item.oldKey ?: continue
-                val value = findValue(oldKey) ?: continue
-
-                if (!loadOldValue(item, value)) MConfigLogger.invalidValue(item, oldKey)
-            }
+    private fun importValues(root: CategoryItem) {
+        for (option in root.getChildren()) {
+            val oldKey = option.oldKey ?: continue
+            val value = findValue(oldKey) ?: continue
+            if (!loadOldValue(option, value)) MConfigLogger.invalidValue(option, oldKey)
         }
     }
 

@@ -1,6 +1,6 @@
 package net.justmili.mcl.v2.lib.config
 
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.MinecraftServer
 
 /**
  * Config type defines the environment the config is used in and what it's capable of.

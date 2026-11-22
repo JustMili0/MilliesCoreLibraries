@@ -72,7 +72,7 @@ public class ExampleConfig {
             root.addComment("2nd root comment");
             root.addComment("3rd root comment\nwith two lines");
             root.addComment("4th root comment\nwith three\nlines");
-            root.addComment("Stacked root comment").addComment("Foo").addComment("bar");
+            root.addComment("Stacked root comment").addComment("mmmmm").addComment("monkey");
             root.addComment("""
                 Text block root comment
                 Hello world
