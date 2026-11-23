@@ -4,8 +4,8 @@ import net.justmili.mcl.v1.lib.util.Platform
 import net.justmili.mcl.v2.lib.config.converter.OldConfigLoader
 import net.justmili.mcl.v2.lib.config.items.CategoryItem
 import net.justmili.mcl.v2.lib.config.serializers.*
+import net.justmili.mcl.v2.lib.config.sync.ConfigSync
 import net.justmili.mcl.v2.lib.config.sync.MConfigSync
-import net.justmili.mcl.v2.lib.config.sync.SyncPriorityConfigs
 import net.minecraft.server.MinecraftServer
 import java.nio.file.Path
 import kotlin.io.path.exists
@@ -28,7 +28,7 @@ class MConfigLoader(modId: String, customFileName: String?, configType: ConfigTy
         if (!CLAIMED_PATHS.add(path)) MConfigLogger.pathInUse(path)
 
         // The id is the same on both sides as long as both have the same mod and file name
-        this.sync = if (configType == ConfigTypes.COMMON_SERVER_PRIORITY) MConfigSync("$modId:${path.nameWithoutExtension}", root, path).also { SyncPriorityConfigs.register(it) } else null
+        this.sync = if (configType == ConfigTypes.COMMON_SERVER_PRIORITY) MConfigSync("$modId:${path.nameWithoutExtension}", root, path).also { ConfigSync.register(it) } else null
     }
 
     internal fun addForConversion(oldPath: Path, deleteOldFile: Boolean) {
@@ -58,7 +58,7 @@ class MConfigLoader(modId: String, customFileName: String?, configType: ConfigTy
             }
         }
         // Players on the server get updated values
-        if (read) sync?.let { SyncPriorityConfigs.sendToAll(server, it) }
+        if (read) sync?.let { ConfigSync.sendToAll(server, it) }
         return read
     }
 

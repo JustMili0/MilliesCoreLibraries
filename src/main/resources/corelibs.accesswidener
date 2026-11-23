@@ -1,5 +1,8 @@
 accessWidener v2 named
 
+accessible field net/minecraft/network/protocol/game/ClientboundCustomPayloadPacket MAX_PAYLOAD_SIZE I
+accessible field net/minecraft/network/protocol/game/ServerboundCustomPayloadPacket MAX_PAYLOAD_SIZE I
+
 accessible field net/minecraft/data/models/BlockModelGenerators blockStateOutput Ljava/util/function/Consumer;
 accessible field net/minecraft/data/models/BlockModelGenerators modelOutput Ljava/util/function/BiConsumer;
 accessible method net/minecraft/data/models/BlockModelGenerators delegateItemModel (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/resources/ResourceLocation;)V

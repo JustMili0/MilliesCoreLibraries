@@ -7,7 +7,7 @@ import net.justmili.mcl.v1.api.events.bridge.ServerEventsBridge;
 import net.justmili.mcl.v1.lib.util.ModUtil;
 import net.justmili.mcl.v1.lib.util.common.IdUtil;
 import net.justmili.mcl.v1.lib.util.common.TickUtil;
-import net.justmili.mcl.v2.lib.config.sync.SyncPriorityConfigs;
+import net.justmili.mcl.v2.lib.config.sync.ConfigSync;
 import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +16,7 @@ public class CoreLibs implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(CoreLibs.class);
     public static final String ID = "corelibs";
     public static final String NAME = "Millie's Core Libraries";
-    public static final String BUILD = "0.3.21b";
+    public static final String BUILD = "0.3.22b";
 
     @Override
     public void onInitialize() {
@@ -26,7 +26,7 @@ public class CoreLibs implements ModInitializer {
         ExampleConfig.initCommon();
 
         ServerEventsBridge.init();
-        SyncPriorityConfigs.initS2C();
+        ConfigSync.initS2C();
 
         TickUtil.initProcessQueue();
     }

@@ -5,10 +5,10 @@
 - A lot of classes such as utils etc. can be copied from JustMili's other projects
 
 # FIRST-PRIORITY TODO (EARLY BETA)
-- [EVERYONE] Finish all the events
 - Rewrite config from `v1.config` to `v2.config`
-  - [MILLIE] Add Client-to-Server packet for `COMMON_CLIENT_PRIORITY` special uses
-  - [APPELS] Add full TOML support (including for old file conversion)
+    - [MILLIE, WIP] Add Client-to-Server packet for `COMMON_CLIENT_PRIORITY` special uses
+    - [APPELS, WIP] Add full TOML support (including for old file conversion)
+- [EVERYONE] Finish all the events
 - [MILLIE] Finish reworking data generation utils
 - [EVERYONE] Port everything to all versions
   - Additionally exclude some files from being included in some jars at all

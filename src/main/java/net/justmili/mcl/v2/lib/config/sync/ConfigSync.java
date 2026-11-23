@@ -3,17 +3,20 @@ package net.justmili.mcl.v2.lib.config.sync;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.justmili.mcl.CoreLibs;
 import net.justmili.mcl.v2.lib.util.common.NetUtil;
+import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
+import net.minecraft.network.protocol.game.ServerboundCustomPayloadPacket;
 import net.minecraft.server.MinecraftServer;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Keeps the server's {@link net.justmili.mcl.v2.lib.config.ConfigTypes#COMMON_SERVER_PRIORITY} configs in sync with the clients. Common side, the client side is in {@link SyncPriorityConfigsClient}.
+ * Keeps the server's {@link net.justmili.mcl.v2.lib.config.ConfigTypes#COMMON_SERVER_PRIORITY} configs in sync with the clients. Common side, the client side is in {@link ConfigSyncClient}.
  */
-public class SyncPriorityConfigs {
+public class ConfigSync {
     static final int MAX_ID_LENGTH = 256;
-    static final int MAX_JSON_LENGTH = 1 << 18;
+    static final int MAX_S2C_SIZE = ClientboundCustomPayloadPacket.MAX_PAYLOAD_SIZE;
+    static final int MAX_C2S_SIZE = ServerboundCustomPayloadPacket.MAX_PAYLOAD_SIZE;
     private static final Map<String, MConfigSync> SYNCS = new ConcurrentHashMap<>();
 
     public static void register(MConfigSync sync) {
@@ -21,7 +24,7 @@ public class SyncPriorityConfigs {
     }
 
     public static void initS2C() {
-        /*? if >= 1.20.5 {*//*NetUtil.registerS2C(SyncPriorityConfigPacket.TYPE, SyncPriorityConfigPacket.CODEC);*//*?}*/
+        ConfigSyncPacket.CHANNEL.registerS2C();
 
         // Everything is sent on join, anything after is sent on reload
         ServerPlayConnectionEvents.JOIN.register((handler, sender, joined) -> {
@@ -51,12 +54,12 @@ public class SyncPriorityConfigs {
         SYNCS.values().forEach(MConfigSync::clear);
     }
 
-    private static SyncPriorityConfigPacket packetOf(MConfigSync sync, String json) {
+    private static ConfigSyncPacket packetOf(MConfigSync sync, String json) {
         if (json == null) return null;
-        if (json.length() > MAX_JSON_LENGTH) {
-            CoreLibs.LOGGER.error("Could not sync config '{}': too large ({} > {} characters)", sync.getId(), json.length(), MAX_JSON_LENGTH);
+        if (json.length() > MAX_S2C_SIZE) {
+            CoreLibs.LOGGER.error("Could not sync config '{}': too large ({} > {} characters)", sync.getId(), json.length(), MAX_S2C_SIZE);
             return null;
         }
-        return new SyncPriorityConfigPacket(sync.getId(), json);
+        return new ConfigSyncPacket(sync.getId(), json);
     }
 }
