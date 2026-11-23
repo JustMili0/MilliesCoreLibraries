@@ -2,6 +2,7 @@ package net.justmili.mcl.v2.lib.config.sync;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.justmili.mcl.CoreLibs;
+import net.justmili.mcl.v2.api.events.server.MConfigEvents;
 import net.justmili.mcl.v2.lib.util.common.NetUtil;
 import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
 import net.minecraft.network.protocol.game.ServerboundCustomPayloadPacket;
@@ -19,12 +20,12 @@ public class ConfigSync {
     static final int MAX_C2S_SIZE = ServerboundCustomPayloadPacket.MAX_PAYLOAD_SIZE;
     private static final Map<String, MConfigSync> SYNCS = new ConcurrentHashMap<>();
 
-    public static void register(MConfigSync sync) {
+    public static void init(MConfigSync sync) {
         SYNCS.put(sync.getId(), sync);
     }
 
     public static void initS2C() {
-        ConfigSyncPacket.CHANNEL.registerS2C();
+        ConfigSyncPacket.CHANNEL.initServerboundPayload();
 
         // Everything is sent on join, anything after is sent on reload
         ServerPlayConnectionEvents.JOIN.register((handler, sender, joined) -> {
@@ -37,10 +38,11 @@ public class ConfigSync {
     }
 
     // Sends the current values of the config to everyone online
-    public static void sendToAll(MinecraftServer server, MConfigSync sync) {
+    public static void sendToAll(MConfigSync sync, MinecraftServer server) {
         if (server == null) return;
         var packet = packetOf(sync, sync.toChangedJson());
         if (packet != null) NetUtil.sendToAll(server, packet);
+        MConfigEvents.SYNC_CLIENTBOUND.invoker().onSync(sync, server);
     }
 
     // Applies the values received from the server

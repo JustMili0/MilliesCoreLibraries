@@ -1,6 +1,7 @@
 package net.justmili.mcl.v2.lib.config
 
 import net.justmili.mcl.v1.lib.util.Platform
+import net.justmili.mcl.v2.api.events.server.MConfigEvents
 import net.justmili.mcl.v2.lib.config.converter.OldConfigLoader
 import net.justmili.mcl.v2.lib.config.items.CategoryItem
 import net.justmili.mcl.v2.lib.config.serializers.*
@@ -11,7 +12,7 @@ import java.nio.file.Path
 import kotlin.io.path.exists
 import kotlin.io.path.nameWithoutExtension
 
-class MConfigLoader(modId: String, customFileName: String?, configType: ConfigTypes, fileType: FileTypes, createSubDirectory: Boolean) {
+class MConfigLoader(val modId: String, val customFileName: String?, val configType: ConfigTypes, val fileType: FileTypes, val createSubDirectory: Boolean) {
     val path: Path
     val sync: MConfigSync?
     val root = CategoryItem("root", null)
@@ -28,7 +29,7 @@ class MConfigLoader(modId: String, customFileName: String?, configType: ConfigTy
         if (!CLAIMED_PATHS.add(path)) MConfigLogger.pathInUse(path)
 
         // The id is the same on both sides as long as both have the same mod and file name
-        this.sync = if (configType == ConfigTypes.COMMON_SERVER_PRIORITY) MConfigSync("$modId:${path.nameWithoutExtension}", root, path).also { ConfigSync.register(it) } else null
+        this.sync = if (configType == ConfigTypes.COMMON_SERVER_PRIORITY) MConfigSync("$modId:${path.nameWithoutExtension}", root, path).also { ConfigSync.init(it) } else null
     }
 
     internal fun addForConversion(oldPath: Path, deleteOldFile: Boolean) {
@@ -39,14 +40,18 @@ class MConfigLoader(modId: String, customFileName: String?, configType: ConfigTy
     internal fun tryWrite(): Boolean {
         synchronized(path) {
             // FileIO write logs write issues, tryWrite() doesn't have to
-            return serializer.write(path, root)
+            val write = serializer.write(path, root)
+            MConfigEvents.WRITE.invoker().onWrite(this, write)
+            return write
         }
     }
 
     internal fun tryRead(): Boolean {
         synchronized(path) {
             // Serializers log read issues, tryRead() doesn't have to
-            return serializer.read(path, root)
+            val read = serializer.read(path, root)
+            MConfigEvents.READ.invoker().onRead(this, read)
+            return read
         }
     }
 
@@ -57,8 +62,10 @@ class MConfigLoader(modId: String, customFileName: String?, configType: ConfigTy
                 false
             }
         }
-        // Players on the server get updated values
-        if (read) sync?.let { ConfigSync.sendToAll(server, it) }
+        MConfigEvents.RELOAD.invoker().onReload(this, read)
+
+        // Send updated values to players
+        if (read) sync?.let { ConfigSync.sendToAll(it, server) }
         return read
     }
 
@@ -72,6 +79,7 @@ class MConfigLoader(modId: String, customFileName: String?, configType: ConfigTy
                 if (tryWrite()) convertLoader?.deleteConverted()
             }
             convertLoader = null
+            MConfigEvents.LOAD.invoker().onLoad(this)
         }
     }
 
