@@ -1,7 +1,7 @@
 package net.justmili.mcl.v2.lib.config
 
 import net.justmili.mcl.v1.lib.util.Platform
-import net.justmili.mcl.v2.api.events.server.MConfigEvents
+import net.justmili.mcl.v2.api.events.common.MConfigEvents
 import net.justmili.mcl.v2.lib.config.converter.OldConfigLoader
 import net.justmili.mcl.v2.lib.config.items.CategoryItem
 import net.justmili.mcl.v2.lib.config.serializers.*

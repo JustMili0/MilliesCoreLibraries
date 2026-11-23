@@ -1,4 +1,4 @@
-package net.justmili.mcl.v1.api.events.server;
+package net.justmili.mcl.v1.api.events.common;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;

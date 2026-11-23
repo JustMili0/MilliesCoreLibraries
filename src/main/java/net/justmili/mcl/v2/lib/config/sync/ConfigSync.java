@@ -2,7 +2,8 @@ package net.justmili.mcl.v2.lib.config.sync;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.justmili.mcl.CoreLibs;
-import net.justmili.mcl.v2.api.events.server.MConfigEvents;
+import net.justmili.mcl.v2.api.events.common.MConfigEvents;
+import net.justmili.mcl.v2.lib.config.ConfigTypes;
 import net.justmili.mcl.v2.lib.util.common.NetUtil;
 import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
 import net.minecraft.network.protocol.game.ServerboundCustomPayloadPacket;
@@ -12,7 +13,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Keeps the server's {@link net.justmili.mcl.v2.lib.config.ConfigTypes#COMMON_SERVER_PRIORITY} configs in sync with the clients. Common side, the client side is in {@link ConfigSyncClient}.
+ * Keeps the server's {@link ConfigTypes#COMMON_SERVER_PRIORITY} configs in sync with the clients. Common side, the client side is in {@link ConfigSyncClient}.
  */
 public class ConfigSync {
     static final int MAX_ID_LENGTH = 256;
@@ -24,15 +25,15 @@ public class ConfigSync {
         SYNCS.put(sync.getId(), sync);
     }
 
-    public static void initS2C() {
-        ConfigSyncPacket.CHANNEL.initServerboundPayload();
+    public static void initClientbound() {
+        ConfigSyncPacket.CHANNEL.initClientboundPayload();
 
         // Everything is sent on join, anything after is sent on reload
-        ServerPlayConnectionEvents.JOIN.register((handler, sender, joined) -> {
+        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
             var player = handler.getPlayer();
             for (var sync : SYNCS.values()) {
                 var packet = packetOf(sync, sync.toJson());
-                if (packet != null) NetUtil.trySend(player, packet);
+                if (packet != null && NetUtil.trySend(player, packet)) MConfigEvents.SYNC_CLIENTBOUND.invoker().onSync(sync, player);
             }
         });
     }
@@ -41,8 +42,9 @@ public class ConfigSync {
     public static void sendToAll(MConfigSync sync, MinecraftServer server) {
         if (server == null) return;
         var packet = packetOf(sync, sync.toChangedJson());
-        if (packet != null) NetUtil.sendToAll(server, packet);
-        MConfigEvents.SYNC_CLIENTBOUND.invoker().onSync(sync, server);
+        if (packet == null) return;
+        NetUtil.sendToAll(server, packet);
+        MConfigEvents.SYNC_ALL_CLIENTBOUND.invoker().onSync(sync, server);
     }
 
     // Applies the values received from the server

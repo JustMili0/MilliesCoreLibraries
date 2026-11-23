@@ -1,10 +1,11 @@
-package net.justmili.mcl.v2.api.events.server;
+package net.justmili.mcl.v2.api.events.common;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.justmili.mcl.v2.lib.config.MConfigLoader;
 import net.justmili.mcl.v2.lib.config.sync.MConfigSync;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 
 /**
  * Events related to Millie's Core Libraries' config library on the server and common side.
@@ -35,7 +36,13 @@ public class MConfigEvents {
         }
     });
 
-    public static final Event<Sync> SYNC_CLIENTBOUND = EventFactory.createArrayBacked(Sync.class, callbacks -> (synchronizer, server) -> {
+    public static final Event<Sync> SYNC_CLIENTBOUND = EventFactory.createArrayBacked(Sync.class, callbacks -> (synchronizer, player) -> {
+        for (var event : callbacks) {
+            event.onSync(synchronizer, player);
+        }
+    });
+
+    public static final Event<SyncAll> SYNC_ALL_CLIENTBOUND = EventFactory.createArrayBacked(SyncAll.class, callbacks -> (synchronizer, server) -> {
         for (var event : callbacks) {
             event.onSync(synchronizer, server);
         }
@@ -63,6 +70,11 @@ public class MConfigEvents {
 
     @FunctionalInterface
     public interface Sync {
+        void onSync(MConfigSync synchronizer, ServerPlayer player);
+    }
+
+    @FunctionalInterface
+    public interface SyncAll {
         void onSync(MConfigSync synchronizer, MinecraftServer server);
     }
 }
