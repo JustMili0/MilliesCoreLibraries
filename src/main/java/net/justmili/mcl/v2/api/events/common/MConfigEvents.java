@@ -8,7 +8,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
 /**
- * Events related to Millie's Core Libraries' config library on the server and common side.
+ * Events related to Millie's Core Libraries' config library.
  */
 public class MConfigEvents {
 

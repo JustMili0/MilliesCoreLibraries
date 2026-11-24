@@ -38,29 +38,21 @@ class MConfigLoader(val modId: String, val customFileName: String?, val configTy
     }
 
     internal fun tryWrite(): Boolean {
-        synchronized(path) {
-            // FileIO write logs write issues, tryWrite() doesn't have to
-            val write = serializer.write(path, root)
-            MConfigEvents.WRITE.invoker().onWrite(this, write)
-            return write
-        }
+        val write = synchronized(path) { serializer.write(path, root) }
+        MConfigEvents.WRITE.invoker().onWrite(this, write)
+        return write
     }
 
     internal fun tryRead(): Boolean {
-        synchronized(path) {
-            // Serializers log read issues, tryRead() doesn't have to
-            val read = serializer.read(path, root)
-            MConfigEvents.READ.invoker().onRead(this, read)
-            return read
-        }
+        val read = synchronized(path) { serializer.read(path, root) }
+        MConfigEvents.READ.invoker().onRead(this, read)
+        return read
     }
 
     fun reload(server: MinecraftServer?): Boolean {
-        val read = synchronized(path) {
-            if (path.exists()) tryRead() else {
-                tryWrite()
-                false
-            }
+        val read = if (path.exists()) tryRead() else {
+            tryWrite()
+            false
         }
         MConfigEvents.RELOAD.invoker().onReload(this, read)
 
@@ -70,17 +62,15 @@ class MConfigLoader(val modId: String, val customFileName: String?, val configTy
     }
 
     internal fun buildOrLoad() {
-        synchronized(path) {
-            serializer.validate(path, root)
-            if (path.exists()) {
-                if (tryRead()) tryWrite()
-            } else {
-                convertLoader?.importInto(root)
-                if (tryWrite()) convertLoader?.deleteConverted()
-            }
-            convertLoader = null
-            MConfigEvents.LOAD.invoker().onLoad(this)
+        serializer.validate(path, root)
+        if (path.exists()) {
+            if (tryRead()) tryWrite()
+        } else {
+            convertLoader?.importInto(root)
+            if (tryWrite()) convertLoader?.deleteConverted()
         }
+        convertLoader = null
+        MConfigEvents.LOAD.invoker().onLoad(this)
     }
 
     private fun getSerializer(fileType: FileTypes): ConfigIO {
