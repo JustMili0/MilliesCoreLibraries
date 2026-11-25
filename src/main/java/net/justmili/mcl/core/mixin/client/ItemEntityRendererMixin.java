@@ -1,7 +1,7 @@
 package net.justmili.mcl.core.mixin.client;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import net.justmili.mcl.v1.api.events.client.ItemRenderEvents;
+import net.justmili.mcl.v1.api.event.client.ItemRenderEvents;
 import net.minecraft.client.renderer.entity.ItemEntityRenderer;
 import net.minecraft.world.entity.item.ItemEntity;
 import org.joml.Quaternionf;

@@ -1,6 +1,6 @@
 package net.justmili.mcl.core.mixin;
 
-import net.justmili.mcl.v1.api.events.server.TickEvents;
+import net.justmili.mcl.v1.api.event.server.TickEvents;
 import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

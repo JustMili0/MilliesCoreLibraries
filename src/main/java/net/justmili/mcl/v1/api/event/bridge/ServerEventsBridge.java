@@ -1,11 +1,11 @@
-package net.justmili.mcl.v1.api.events.bridge;
+package net.justmili.mcl.v1.api.event.bridge;
 
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.*;
-import net.justmili.mcl.v1.api.events.common.PlayerEvents;
-import net.justmili.mcl.v1.api.events.common.UseEvents;
-import net.justmili.mcl.v1.api.events.server.TickEvents;
+import net.justmili.mcl.v1.api.event.common.PlayerEvents;
+import net.justmili.mcl.v1.api.event.common.UseEvents;
+import net.justmili.mcl.v1.api.event.server.TickEvents;
 import net.minecraft.world.InteractionResultHolder;
 
 public final class ServerEventsBridge {

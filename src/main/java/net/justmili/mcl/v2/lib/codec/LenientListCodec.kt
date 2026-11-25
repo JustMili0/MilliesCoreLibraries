@@ -1,4 +1,4 @@
-package net.justmili.mcl.v2.lib.codecs
+package net.justmili.mcl.v2.lib.codec
 
 import com.mojang.datafixers.util.Pair
 import com.mojang.serialization.*

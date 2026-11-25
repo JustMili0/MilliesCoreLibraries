@@ -1,4 +1,4 @@
-package net.justmili.mcl.v2.lib.codecs
+package net.justmili.mcl.v2.lib.codec
 
 import com.mojang.serialization.Codec
 import net.justmili.mcl.v2.lib.util.common.Colors

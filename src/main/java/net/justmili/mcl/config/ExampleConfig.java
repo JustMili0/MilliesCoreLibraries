@@ -1,9 +1,8 @@
 package net.justmili.mcl.config;
 
 import com.mojang.serialization.Codec;
-import net.justmili.mcl.CoreLibs;
-import net.justmili.mcl.v2.lib.codecs.ColorCodec;
-import net.justmili.mcl.v2.lib.codecs.EnumCodec;
+import net.justmili.mcl.v2.lib.codec.ColorCodec;
+import net.justmili.mcl.v2.lib.codec.EnumCodec;
 import net.justmili.mcl.v2.lib.config.*;
 import net.justmili.mcl.v2.lib.config.options.*;
 import net.minecraft.core.registries.BuiltInRegistries;

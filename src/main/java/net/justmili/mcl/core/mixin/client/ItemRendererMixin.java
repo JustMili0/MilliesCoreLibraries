@@ -2,7 +2,7 @@ package net.justmili.mcl.core.mixin.client;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.justmili.mcl.v1.api.events.client.ItemRenderEvents;
+import net.justmili.mcl.v1.api.event.client.ItemRenderEvents;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;

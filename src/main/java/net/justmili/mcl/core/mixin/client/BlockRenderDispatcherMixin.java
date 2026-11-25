@@ -1,7 +1,7 @@
 package net.justmili.mcl.core.mixin.client;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import net.justmili.mcl.v1.api.events.client.BlockRenderEvents;
+import net.justmili.mcl.v1.api.event.client.BlockRenderEvents;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;

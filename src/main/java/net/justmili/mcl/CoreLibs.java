@@ -3,7 +3,7 @@ package net.justmili.mcl;
 import net.fabricmc.api.ModInitializer;
 import net.justmili.mcl.config.Config;
 import net.justmili.mcl.config.ExampleConfig;
-import net.justmili.mcl.v1.api.events.bridge.ServerEventsBridge;
+import net.justmili.mcl.v1.api.event.bridge.ServerEventsBridge;
 import net.justmili.mcl.v1.lib.util.ModUtil;
 import net.justmili.mcl.v1.lib.util.common.IdUtil;
 import net.justmili.mcl.v1.lib.util.common.TickUtil;
@@ -16,7 +16,7 @@ public class CoreLibs implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(CoreLibs.class);
     public static final String ID = "corelibs";
     public static final String NAME = "Millie's Core Libraries";
-    public static final String BUILD = "0.3.24b";
+    public static final String BUILD = "0.3.25b";
 
     @Override
     public void onInitialize() {

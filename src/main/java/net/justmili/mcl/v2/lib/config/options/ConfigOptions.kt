@@ -2,7 +2,7 @@ package net.justmili.mcl.v2.lib.config.options
 
 import com.google.gson.*
 import com.mojang.serialization.*
-import net.justmili.mcl.v2.lib.codecs.ListCodec
+import net.justmili.mcl.v2.lib.codec.ListCodec
 import net.justmili.mcl.v2.lib.config.MConfigLoader
 import net.justmili.mcl.v2.lib.config.MConfigLogger
 import net.justmili.mcl.v2.lib.config.items.ConfigItem

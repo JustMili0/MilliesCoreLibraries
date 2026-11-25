@@ -1,4 +1,4 @@
-package net.justmili.mcl.v1.api.events.client;
+package net.justmili.mcl.v1.api.event.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.fabricmc.fabric.api.event.Event;

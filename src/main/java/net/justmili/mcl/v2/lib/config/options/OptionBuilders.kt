@@ -3,7 +3,7 @@ package net.justmili.mcl.v2.lib.config.options
 import com.google.gson.JsonPrimitive
 import com.mojang.serialization.Codec
 import com.mojang.serialization.JsonOps
-import net.justmili.mcl.v2.lib.codecs.*
+import net.justmili.mcl.v2.lib.codec.*
 import net.justmili.mcl.v2.lib.config.MConfigLoader
 import net.justmili.mcl.v2.lib.config.items.CategoryItem
 import net.justmili.mcl.v2.lib.config.serializers.ConfigIO

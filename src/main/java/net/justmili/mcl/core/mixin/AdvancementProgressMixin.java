@@ -1,6 +1,6 @@
 package net.justmili.mcl.core.mixin;
 
-import net.justmili.mcl.v1.api.events.server.AdvancementEvents;
+import net.justmili.mcl.v1.api.event.server.AdvancementEvents;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.advancements.Criterion;
 import org.spongepowered.asm.mixin.Mixin;

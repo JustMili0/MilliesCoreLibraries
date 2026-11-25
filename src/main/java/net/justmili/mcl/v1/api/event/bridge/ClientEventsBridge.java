@@ -1,6 +1,6 @@
-package net.justmili.mcl.v1.api.events.bridge;
+package net.justmili.mcl.v1.api.event.bridge;
 
-import net.justmili.mcl.v1.api.events.client.BlockOutlineRenderEvent;
+import net.justmili.mcl.v1.api.event.client.BlockOutlineRenderEvent;
 
 //? if >= 26.2 {
 /*import net.fabricmc.fabric.api.client.rendering.v1.level.LevelExtractionEvents;

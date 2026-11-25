@@ -1,4 +1,4 @@
-package net.justmili.mcl.v2.lib.screens.widgets
+package net.justmili.mcl.v2.lib.screen.widgets
 
 abstract class WidgetBuilder
 

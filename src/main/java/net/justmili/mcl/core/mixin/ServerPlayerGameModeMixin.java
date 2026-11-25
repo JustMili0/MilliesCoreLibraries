@@ -2,7 +2,7 @@ package net.justmili.mcl.core.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import net.justmili.mcl.v1.api.events.common.PlayerEvents;
+import net.justmili.mcl.v1.api.event.common.PlayerEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.*;
 import org.spongepowered.asm.mixin.*;

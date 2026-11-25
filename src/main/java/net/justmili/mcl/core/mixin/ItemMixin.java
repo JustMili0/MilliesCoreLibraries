@@ -1,6 +1,6 @@
 package net.justmili.mcl.core.mixin;
 
-import net.justmili.mcl.v1.api.events.common.UseEvents;
+import net.justmili.mcl.v1.api.event.common.UseEvents;
 import net.minecraft.world.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;

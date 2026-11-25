@@ -2,7 +2,7 @@ package net.justmili.mcl.v2.lib.config.sync;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.justmili.mcl.CoreLibs;
-import net.justmili.mcl.v2.api.events.common.MConfigEvents;
+import net.justmili.mcl.v2.api.event.common.MConfigEvents;
 import net.justmili.mcl.v2.lib.config.ConfigTypes;
 import net.justmili.mcl.v2.lib.util.common.NetUtil;
 import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;

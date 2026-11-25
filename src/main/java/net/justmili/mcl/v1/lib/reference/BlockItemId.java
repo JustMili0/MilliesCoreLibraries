@@ -1,5 +1,5 @@
 //? if < 26.2 {
-package net.justmili.mcl.v1.lib.references;
+package net.justmili.mcl.v1.lib.reference;
 
 import net.justmili.mcl.v1.lib.util.common.IdUtil;
 import net.minecraft.core.registries.Registries;
