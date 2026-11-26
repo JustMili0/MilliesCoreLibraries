@@ -51,8 +51,6 @@ enum class ConfigTypes(val type: String) {
      * Clients with the mod use their own values, separate from the server's.
      * Clients without it use the server's values instead.
      *
-     * The client can send its values to the [MinecraftServer], which then only applies them to that player.
-     *
      * File name ends in `common-client`.
      */
     COMMON_CLIENT_PRIORITY("common-client"),
@@ -64,7 +62,7 @@ enum class ConfigTypes(val type: String) {
      *
      * The [MinecraftServer] sends its values to the client on join, and sends updates on [MConfigLoader.reload].
      *
-     * Synchronized values only replace the client's in memory. The client's file is never changed.
+     * Synchronized values only replace the client's in memory. The client's file is never modified.
      *
      * File name ends in `common-server`.
      */

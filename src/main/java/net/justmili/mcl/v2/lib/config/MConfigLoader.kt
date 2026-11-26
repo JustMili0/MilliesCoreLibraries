@@ -5,7 +5,6 @@ import net.justmili.mcl.v2.api.event.common.MConfigEvents
 import net.justmili.mcl.v2.lib.config.converter.OldConfigLoader
 import net.justmili.mcl.v2.lib.config.items.CategoryItem
 import net.justmili.mcl.v2.lib.config.serializers.*
-import net.justmili.mcl.v2.lib.config.sync.ConfigSync
 import net.justmili.mcl.v2.lib.config.sync.MConfigSync
 import net.minecraft.server.MinecraftServer
 import java.nio.file.Path
@@ -29,7 +28,7 @@ class MConfigLoader(val modId: String, val customFileName: String?, val configTy
         if (!CLAIMED_PATHS.add(path)) MConfigLogger.pathInUse(path)
 
         // The id is the same on both sides as long as both have the same mod and file name
-        this.sync = if (configType == ConfigTypes.COMMON_SERVER_PRIORITY) MConfigSync("$modId:${path.nameWithoutExtension}", root, path).also { ConfigSync.init(it) } else null
+        this.sync = if (configType == ConfigTypes.COMMON_SERVER_PRIORITY) MConfigSync("$modId:${path.nameWithoutExtension}", root, path) else null
     }
 
     internal fun addForConversion(oldPath: Path, deleteOldFile: Boolean) {
@@ -57,7 +56,7 @@ class MConfigLoader(val modId: String, val customFileName: String?, val configTy
         MConfigEvents.RELOAD.invoker().onReload(this, read)
 
         // Send updated values to players
-        if (read) sync?.let { ConfigSync.sendToAll(it, server) }
+        if (read) sync?.sendToAll(server)
         return read
     }
 

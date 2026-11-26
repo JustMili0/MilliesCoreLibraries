@@ -6,7 +6,6 @@
 
 # FIRST-PRIORITY TODO (EARLY BETA)
 - Rewrite config from `v1.config` to `v2.config`
-    - [MILLIE, WIP] Add Client-to-Server packet for `COMMON_CLIENT_PRIORITY` special uses
     - [APPELS, WIP] Add full TOML support (including for old file conversion)
 - [EVERYONE] Finish all the events
 - [MILLIE] Finish reworking data generation utils
